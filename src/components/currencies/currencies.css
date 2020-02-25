@@ -1,0 +1,36 @@
+.currencies {
+    position: absolute;
+    top: 0;
+    width: 90px;
+    height: 75px;
+    padding: 10px;
+    background-image: url(./../../reasorces/images/sign0.png);
+}
+.currencies-love {
+    position: absolute;
+    top: 34px;
+    left: 20px;
+    right: 25px;
+    height: 30px;
+    color: black;
+    display: flex;
+    flex-direction: row;
+}
+.currencies-love-icon {
+    display: flex;
+    flex: 2;
+    background-image: url(/static/media/love.d9eba70f.png);
+    background-position: center;
+}
+.currencies-love-value {
+    flex: 5;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    font-size: 13px;
+    padding-bottom: 2px;
+    -webkit-user-select: none; /* Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+}

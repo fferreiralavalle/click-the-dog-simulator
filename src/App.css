@@ -1,16 +1,16 @@
+body *{
+  background-size: contain;
+  background-repeat: no-repeat;
+}
 .App {
   text-align: center;
 }
 
-.App-logo {
+.doggie {
   height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+  width: 80px;
+  cursor: pointer;
+  background-image: url(reasorces/images/doggie.png);
 }
 
 .App-header {
@@ -22,17 +22,4 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
