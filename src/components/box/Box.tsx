@@ -8,7 +8,7 @@ import ids from '../../game/VariableId'
 import GameManager from '../../game/GameManager'
 import { Variable } from '../../game/Variables'
 
-import {toFormat} from '../../utils/numberFormat'
+import {toFormat} from '../../utils/uiUtil'
 
 interface IRecipeProps {
     productId?: string
@@ -22,7 +22,7 @@ interface IState {
     plusCurrencies: any;
 }
 
-const boxBase = 200;
+const boxBase = 250;
 
 class Box extends Component<IRecipeProps,IState> {
 
@@ -56,15 +56,14 @@ class Box extends Component<IRecipeProps,IState> {
         } 
         return (
             <div className={`product-box ${showHidden && 'hide-overflow'}`} style={style}>
-                {children}
-                {showHidden &&
+                {showHidden ? 
                 <div className='product-hidden'>
                     <div className="product-level-up-price">
                         <span className="product-level-up-value">{levelUpPrice}</span>
                         <div className="product-level-up-icon"/>
                     </div>
                     <button disabled={!!!canLevelUp} className="product-unlock" onClick={this.unlockProduct}>Buy</button>
-                </div>}
+                </div> : children}
             </div>
         )
     }

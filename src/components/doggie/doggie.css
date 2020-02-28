@@ -37,40 +37,33 @@
     top: -10px;
     right: 0;
     left: 0;
-    height: 45px;
+    height: 55px;
     background-position: center;
     background-image: url(../../reasorces/images/Tag.png);
 }
 .doggie-name {
-    width: 60px;
-    height: 30px;
+    width: 65px;
+    height: 38px;
     background: transparent;
     border: none;
     margin: auto;
     margin-top: 7px;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 500;
     display: flex;
     justify-content: center;
     text-align: center;
     align-items: center;
 }
-.plus-currency {
-    display: flex;
-    align-items: center;
-    position: absolute;
-    animation-name: fade-up;
-    animation-duration: 4s;
-    animation-fill-mode: forwards;
-    user-select: none;
-    font-size: 20px;
-    text-shadow: 0px 0px 10px #FFFFFF;
+
+.doggie-plus .plus-currency {
+    width: 100%;
 }
 .plus-currency-icon {
     background-image: url(../../reasorces/images/love.png);
     background-position: center;
-    width: 15px;
-    height: 15px;
+    width: 1em;
+    height: 1em;
     margin-left: 2px;
 }
 

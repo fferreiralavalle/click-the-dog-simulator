@@ -2,9 +2,10 @@
     position: relative;
     display: flex;
     border-width: 10px;
-    border-image: url(http://blogrope.com/wp-content/uploads/2013/06/003-wood-melamine-subttle-pattern-background-pat.jpg) 30 30 stretch;
+    border-image: url(../../reasorces/images/wood.jpg) 30 30 stretch;
     border-style: solid;
     margin: 10px;
+    animation: appear 2s;
 }
 .product-hidden {
     position: absolute;
@@ -48,4 +49,23 @@
     width: 25px;
     margin-left: 2px;
     background-image: url(../../reasorces/images/love.png);
+}
+
+
+@keyframes appear {
+    0% {
+        transform: scale(0);
+        opacity: 0; 
+        
+    }
+    75% {
+        transform: scale(0.975);
+        opacity: 1 	
+    }
+    95% {
+        transform: scale(0.95);
+    }
+    100%{
+        transform: scale(1);
+    }
 }

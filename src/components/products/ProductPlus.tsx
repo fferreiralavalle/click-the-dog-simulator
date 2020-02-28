@@ -1,0 +1,78 @@
+import React, {Component} from 'react'
+import { connect } from 'react-redux'
+import './product.css'
+
+import {selecters} from '../../reducers/GameVariables'
+import ids from '../../game/VariableId'
+
+import { Variable } from '../../game/Variables'
+
+import {toFormat} from '../../utils/uiUtil'
+
+interface IRecipeProps {
+    plusCurrencies: Array<plusCurrency>;
+}
+
+export interface plusCurrency {
+    value: string,
+    key: string,
+    x: string,
+    y: string,
+    size: number,
+    className: string
+}
+
+interface IState {
+    plusCurrencies: Array<plusCurrency>
+}
+
+class Currencies extends Component<IRecipeProps, IState> {
+    constructor(props:any){
+        super(props)
+        this.state = {
+            plusCurrencies: []
+        }
+    }
+
+    componentWillReceiveProps(nextProps:any) {
+        const {plusCurrencies} = nextProps
+        if (plusCurrencies){
+            this.setState({
+                plusCurrencies
+            });
+        }
+    }
+
+    render(){
+        return (
+        <div className="plus-currencies">
+            {this.renderPlusCurrencies()}
+        </div>
+        )
+    }
+
+    renderPlusCurrencies(){
+        const currencies = [...this.state.plusCurrencies]
+        const plusCurrencies = currencies.map((c,i)=>{
+            const style= {
+                top: c.y,
+                left: c.x,
+                fontSize: `${c.size * 18}px`,
+                zIndex: c.size
+            }
+            return (
+                <div className="plus-currency" style={style} key={c.key}>
+                    {c.value}
+                    <div className={"plus-currency-icon "+c.className}/>
+                </div>
+            )
+        })
+        return plusCurrencies;
+    } 
+}
+
+const mapStateToProps = (state:any) => ({
+  currency: selecters.getVariable(state, ids.currency)
+})
+
+export default connect(mapStateToProps)(Currencies);

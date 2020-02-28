@@ -10,6 +10,9 @@ const variables = {
     product1Level: 'product1Level',
     product2Level: 'product2Level',
     product3Level: 'product3Level',
+    /* Progress */
+    product1Progress: 'product1Progress',
+    product1Event: 'product1Event'
     /* Upgrades */
 
     /* Relics */

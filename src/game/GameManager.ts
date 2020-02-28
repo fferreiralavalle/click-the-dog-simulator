@@ -7,6 +7,11 @@ import {Variable} from './Variables'
 import { Currency } from './products/Product';
 import { PetPetting } from './products/PetPetting';
 
+import Cookies from 'js-cookie' 
+
+const devMegaPetMult = 100
+const saveEvery = 0.5
+const saveVarName = "variables"
 //Game Manager
 class GameManager  {
     timeManger: TimeManager
@@ -17,6 +22,9 @@ class GameManager  {
         this.timeManger = new TimeManager()
         this.productManager = new ProductManager(this.timeManger)
         this.variables = initializeVariables()
+        setInterval(()=>{
+            saveGame(this.variables)
+        }, saveEvery * 60 * 1000)
     }
 
     initializeUI(){
@@ -29,10 +37,10 @@ class GameManager  {
     }
 
     addToVariable (add: number, variableId: string): void {
-        const newValue = this.variables[variableId].value + add
+        const newValue = this.variables[variableId].getValue() + add
         const newVariables: VariableStructure = {
             ...this.variables,
-            [variableId]:  new Variable(variableId, newValue)
+            [variableId]:  new Variable({id:variableId, value:newValue})
         }
         this.variables = newVariables
     }
@@ -40,7 +48,7 @@ class GameManager  {
     setVariable (value: any, variableId: string): void {
         const newVariables: VariableStructure = {
             ...this.variables,
-            [variableId]:  new Variable(variableId, value)
+            [variableId]:  new Variable({id:variableId, value:value})
         }
         this.variables = newVariables
     }
@@ -59,7 +67,7 @@ class GameManager  {
     
     onClickedDog(): Currency{
         const PetPetting = this.productManager.getProduct(variableIds.product0Level) as PetPetting
-        const baseClickCurrency = PetPetting.getCurrencyPerPet().currency
+        const baseClickCurrency = PetPetting.getCurrencyPerPet().currency * devMegaPetMult
         const currencyEarned: Currency = {
             currency: baseClickCurrency,
             treats: 0
@@ -87,12 +95,29 @@ export default (()=> {
 export interface VariableStructure {
     [key: string]: Variable;
 }
-
 const initializeVariables = () => {
     let variablesObject:VariableStructure = {}
     Object.keys(variableIds).map((id:string) => {
-        variablesObject[id] = new Variable(id, null)
+        variablesObject[id] = new Variable({id, value:null})
     })
-     console.log(variablesObject)
-     return variablesObject;
+    variablesObject = loadSavedData(variablesObject)
+    console.log(variablesObject)
+    return variablesObject;
+}
+
+const loadSavedData = (variablesObject:VariableStructure):VariableStructure => {
+    const savedVariables = Cookies.getJSON(saveVarName) as VariableStructure
+    if (savedVariables){
+        Object.keys(savedVariables).map((id:string) => {
+            variablesObject[id] = new Variable(savedVariables[id].properties)
+        })
+        console.log("data loaded", variablesObject)
+    }
+    return variablesObject
+}
+
+
+const saveGame = (variables: VariableStructure)=> {
+    Cookies.set(saveVarName, JSON.stringify(variables))
+    console.log('saved gamed', variables)
 }

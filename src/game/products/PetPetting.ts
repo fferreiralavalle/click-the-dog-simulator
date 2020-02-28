@@ -1,14 +1,16 @@
-import { Product, Currency } from './Product'
+import { Product, Currency, CurrencySubscriber } from './Product'
 import variables from '../VariableId';
 import GameManager from '../GameManager'
 
 export class PetPetting implements Product {
+    currencySubscribers: CurrencySubscriber[];
     variableId: string;
     isUnlocked: boolean;
     
     constructor(variableId: string, isUnlocked: boolean){
         this.variableId = variableId
         this.isUnlocked = isUnlocked
+        this.currencySubscribers = []
         this.onTimePassed = this.onTimePassed.bind(this)
     }
     getCurrencyPerSecond(): Currency {
@@ -31,18 +33,29 @@ export class PetPetting implements Product {
             treats: 0
         }
     }
+    subscribeToCurrency(cs: CurrencySubscriber): void {
+        const alreadySubscribed = !this.currencySubscribers.filter(sub => sub.id === cs.id)
+        if (!alreadySubscribed){
+            this.currencySubscribers.push(cs)
+            console.log("Subscribed to Petting: ", cs.id)
+        }
+    }
     onTimePassed(timePassed: number): void {
         const add:Currency = this.getCurrencyPerSecond();
-        GameManager.getInstance().
-        addToVariable(add.currency * timePassed,variables.currency)
+        add.currency *= timePassed
+        GameManager.getInstance().addToVariable(add.currency,variables.currency)
+        this.currencySubscribers.forEach((sub)=>{
+            sub.onCurrency(add)
+        })
     }
+
     canUnlock(): boolean{
         return true 
     }
     getLevelUpPrice(): Currency {
         const basePrice:number = 5;
         const currentLevel:number = GameManager.getInstance().getVariable(this.variableId).getValue()
-        const finalPrice = (currentLevel + 1) * Math.pow(basePrice,(currentLevel/3+1))
+        const finalPrice = Math.pow(basePrice,(currentLevel/3+1))
         return {
             currency: Math.floor(finalPrice),
             treats: 0

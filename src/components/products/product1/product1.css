@@ -4,10 +4,33 @@
     padding: 5px;
 }
 .product1-building{
-    height: 100%;
+    height: 95%;
     width: 150px;
-    background-image: url(../../../reasorces/images/petCenter.png);
+    background-image: url(../../../reasorces/images/Shiba.png);
     position: absolute;
     left: 5px;
-    bottom: -10px;
+    bottom: 0px;
+}
+.product1-title{
+    position: absolute;
+    top: 0;
+    background-image: url(../../../reasorces/images/sign1.png);
+    background-position: bottom;
+    padding: 10px 30px;
+    padding-top: 30px;
+    background-size: 110%;
+    color: black;
+    font-weight: 500;
+    font-size: 20px;
+}
+
+.progress-bar {
+    background-color: rgba(46, 160, 103, 0.5);
+}
+.product1 .plus-currencies {
+    position: absolute;
+    top: 0%;
+    bottom: 0;
+    right: 0%;
+    width: 35%;
 }

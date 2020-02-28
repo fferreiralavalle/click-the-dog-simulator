@@ -1,21 +1,22 @@
-
-export class Variable {
-    variableId: string = ""
+export interface VariableProperties {
+    id: string
     value: any
+}
+export class Variable {
+    properties: VariableProperties
 
-    constructor(variableId: string, value: any) {
-        this.variableId = variableId;
-        this.value = value;
+    constructor(property: VariableProperties) {
+        this.properties = property
     }
 
     getValue(){
-        return this.value
+        return this.properties.value
     }
     setValue(newValue: number){
-        this.value = newValue
+        this.properties.value = newValue
     }
     addValue(add: number):number {
-        this.value += add
-        return this.value
+        this.properties.value += add
+        return this.properties.value
     }
 }

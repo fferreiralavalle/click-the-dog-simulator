@@ -12,13 +12,13 @@
     background-color: rgba(255, 255, 255, 0.9);
     border: 1px solid rgba(0, 0, 0, 0.8);
     cursor: pointer;
+    z-index: 500;
 }
 .product-upgrade.disabled {
     background-color: rgba(255, 255, 255, 0.5);
     color: #fd0000;
     font-weight: bold;
 }
-
 .product-level {
     position: absolute;
     top: 80px;
@@ -33,4 +33,62 @@
     justify-content: center;
     align-items: center;
     font-weight: bold;
+}
+.progress-bar {
+    position: absolute;
+    height: 30px;
+    width: 100px;
+    border-radius: 10px;
+    bottom: 30px;
+    border: 1px solid black;
+    display: flex;
+    justify-content: flex-start;
+    overflow: hidden;
+}
+.progress-bar-progress {
+    display: flex;
+    height: 100%;
+    flex: 0 1;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+.progress-bar-value {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.product-upgrade {
+    position: absolute;
+    bottom: -20px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: flex;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.8);
+}
+.product-upgrade.disabled {
+    background-color: rgba(255, 255, 255, 0.5);
+    color: #fd0000;
+    font-weight: bold;
+}
+.plus-currencies {
+    position: absolute;
+    bottom: 0;
+    top: 0;
+    width: 30%;
+    overflow: hidden;
+}
+.plus-currency {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    animation-name: fade-up;
+    animation-duration: 4s;
+    animation-fill-mode: forwards;
+    user-select: none;
+    font-size: 20px;
+    text-shadow: 0px 0px 10px #FFFFFF;
 }

@@ -7,7 +7,7 @@ import ids from '../../game/VariableId'
 
 import { Variable } from '../../game/Variables'
 
-import {toFormat} from '../../utils/numberFormat'
+import {toFormat} from '../../utils/uiUtil'
 
 interface IRecipeProps {
     currency: Variable;
@@ -18,7 +18,7 @@ class Currencies extends Component<IRecipeProps> {
 
   render(){
     const {currency} = this.props;
-    const currencyUnits = toFormat(Math.floor(currency?.value))
+    const currencyUnits = toFormat(Math.floor(currency?.getValue()))
     return (
       <div className="currencies">
           <div className="currencies-love">

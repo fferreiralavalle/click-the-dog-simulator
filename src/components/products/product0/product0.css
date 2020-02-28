@@ -5,7 +5,7 @@
 }
 .product0-building {
     height: 70%;
-    background-image: url(https://www.freepnglogos.com/uploads/hand-png/decor-hand-reliable-psd-39.png);
+    background-image: url(../../../reasorces/images/Hand.png);
     background-size: 90%;
     background-position: bottom;
     position: absolute;
@@ -41,12 +41,13 @@
     display: flex;
     flex-direction: column;
     animation: fadein 1s;
+    z-index: 100;
 }
 .highlight-field {
     display: flex;
     width: 100%;
     height: auto;
-    padding: 10px;
+    padding: 5px;
 }
 .highlight-attribute {
     flex: 1 1;
@@ -80,6 +81,11 @@
     background-color: rgba(255, 255, 255, 0.5);
     color: #fd0000;
     font-weight: bold;
+}
+.product0 .plus-currencies {
+    width: 80%;
+    top: 50%;
+    bottom:10%;
 }
 @keyframes fadein {
     from { opacity: 0; }

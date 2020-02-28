@@ -7,13 +7,8 @@ import ids from '../../game/VariableId'
 
 import GameManager from '../../game/GameManager'
 import { Variable } from '../../game/Variables'
-
-interface plusCurrency {
-    value: string,
-    key: string,
-    x: number,
-    y: number
-}
+import {toFormat, clearPluses} from '../../utils/uiUtil'
+import ProductPlus, { plusCurrency } from '../products/ProductPlus'
 
 interface IRecipeProps {
     dogName: Variable;
@@ -38,6 +33,12 @@ class Doggies extends Component<IRecipeProps,IState> {
             isPetted: false
         }
         this.petTimeout = null
+        setInterval(()=>{
+            const newPlus = clearPluses(this.state.plusCurrencies)
+            this.setState({
+              plusCurrencies: newPlus
+            })
+          },5 * 1000)
     }
 
     onClickedDog(event:any){
@@ -55,33 +56,19 @@ class Doggies extends Component<IRecipeProps,IState> {
         }, 100)
     }
 
-    renderPlusCurrencies(){
-        const currencies = [...this.state.plusCurrencies]
-        const plusCurrencies = currencies.map((c,i)=>{
-            const style= {
-                top: c.y,
-                left: c.x
-            }
-            return (
-                <div className="plus-currency" style={style} key={c.key}>
-                    {c.value}
-                    <div className="plus-currency-icon"/>
-                </div>
-            )
-        })
-        return plusCurrencies;
-    } 
-
     plusCurrencyEffect(earned: number, e:any){
         const currencies = [...this.state.plusCurrencies]
         var rect = e.target.getBoundingClientRect();
         const x = e.clientX - rect.left; //x position within the element.
         const y = e.clientY - rect.top;  //y position within the element.
-        const plus = {
+        const plus :plusCurrency= {
             value: "+"+earned,
             key: (new Date).toString()+(Math.random()),
-            x: x,
-            y: y
+            x: x+"px",
+            y: y+"px",
+            className:"",
+            size: (1 + Math.random() * 0.25)
+
         }
         currencies.push(plus)
         this.setState({
@@ -102,12 +89,12 @@ class Doggies extends Component<IRecipeProps,IState> {
 
     render(){
         const {dogName} = this.props
-        const {isPetted} = this.state
+        const {isPetted, plusCurrencies} = this.state
         return (
             <div className="doggie-background boxed">
                 <div className={`doggie ${isPetted ? "petted": ""}`}>
                     <div className="doggie-plus">
-                        {this.renderPlusCurrencies()}
+                        {<ProductPlus plusCurrencies={plusCurrencies}/>}
                     </div>
                     <div className="doggie-click" onClick={(e)=>this.onClickedDog(e)}>
                 </div>
