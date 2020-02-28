@@ -23,22 +23,36 @@ interface IRecipeProps {
 interface IState {
     isHover: boolean;
     plusCurrencies: Array<plusCurrency>
+    isPetted: boolean
 }
 
 class Doggies extends Component<IRecipeProps,IState> {
+
+    petTimeout: any
 
     constructor(props:any){
         super(props)
         this.state = {
             isHover: false,
-            plusCurrencies: []
+            plusCurrencies: [],
+            isPetted: false
         }
+        this.petTimeout = null
     }
 
     onClickedDog(event:any){
         const earned = GameManager.getInstance().onClickedDog()
         this.props.dispatch(actions.updateVariables())
         this.plusCurrencyEffect(earned.currency, event)
+        this.setState({
+            isPetted: true
+        })
+        clearTimeout(this.petTimeout)
+        this.petTimeout = setTimeout(()=>{
+            this.setState({
+                isPetted: false
+            })
+        }, 100)
     }
 
     renderPlusCurrencies(){
@@ -88,9 +102,10 @@ class Doggies extends Component<IRecipeProps,IState> {
 
     render(){
         const {dogName} = this.props
+        const {isPetted} = this.state
         return (
             <div className="doggie-background boxed">
-                <div className="doggie">
+                <div className={`doggie ${isPetted ? "petted": ""}`}>
                     <div className="doggie-plus">
                         {this.renderPlusCurrencies()}
                     </div>

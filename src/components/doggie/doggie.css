@@ -12,6 +12,12 @@
     height: 90%;
     margin-top: 10%;
 }
+.doggie.petted {
+    animation-name: get-happy;
+    animation-duration: 0.05s;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+}
 .doggie-plus {
     position: absolute;
     top: 0;
@@ -76,5 +82,17 @@
     100%{
         transform: translateY(-80px);
         opacity: 0; 		
+    }
+}
+
+@keyframes get-happy {
+    0% {
+        transform: translate(0px);
+    }
+    25% {
+        transform: translate(-3px);
+    }
+    100%{
+        transform: translate(3px);; 		
     }
 }
