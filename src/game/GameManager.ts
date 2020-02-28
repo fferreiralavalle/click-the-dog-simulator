@@ -4,6 +4,7 @@ import { TimeManager } from "./TimeManager";
 import ProductManager from './ProductManager';
 import variableIds from './VariableId'
 import {Variable} from './Variables'
+import { Currency } from './products/Product';
 
 //Game Manager
 class GameManager  {
@@ -35,6 +36,14 @@ class GameManager  {
         this.variables = newVariables
     }
 
+    setVariable (value: any, variableId: string): void {
+        const newVariables: VariableStructure = {
+            ...this.variables,
+            [variableId]:  new Variable(variableId, value)
+        }
+        this.variables = newVariables
+    }
+    
     getVariable(variableId: string): Variable {
         return this.variables[variableId]
     }
@@ -42,10 +51,19 @@ class GameManager  {
     getTimeManager(): TimeManager {
         return this.timeManger
     }
+
+    getProductManager(): ProductManager {
+        return this.productManager
+    }
     
-    onClickedDog(){
+    onClickedDog(): Currency{
         const baseClickCurrency = 1;
+        const currencyEarned: Currency = {
+            currency: baseClickCurrency,
+            treats: 0
+        }
         this.addToVariable(baseClickCurrency, variableIds.currency)
+        return currencyEarned
     }
 }
 
@@ -71,7 +89,7 @@ export interface VariableStructure {
 const initializeVariables = () => {
     let variablesObject:VariableStructure = {}
     Object.keys(variableIds).map((id:string) => {
-        variablesObject[id] = new Variable(id, 0)
+        variablesObject[id] = new Variable(id, null)
     })
      console.log(variablesObject)
      return variablesObject;

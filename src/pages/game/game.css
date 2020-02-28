@@ -2,5 +2,11 @@
     width: 100%;
     min-height: 100vh;
     position: relative;
-    padding: 100px;
+    padding-top: 100px;
+    background-image: url(../../reasorces/images/park.jpg);
+    background-size: cover;
+}
+.product-list {
+    display: inline-flex;
+    flex-wrap: wrap;
 }

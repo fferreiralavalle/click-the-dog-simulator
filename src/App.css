@@ -1,25 +1,12 @@
 body *{
   background-size: contain;
   background-repeat: no-repeat;
+  box-sizing: border-box;
 }
 .App {
   text-align: center;
 }
 
-.doggie {
-  height: 40vmin;
-  width: 80px;
-  cursor: pointer;
-  background-image: url(reasorces/images/doggie.png);
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.hide-overflow{
+  overflow: hidden;
 }

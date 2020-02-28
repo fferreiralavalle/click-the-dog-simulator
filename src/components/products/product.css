@@ -1,0 +1,36 @@
+.product {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+.product-upgrade {
+    position: absolute;
+    bottom: -20px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: flex;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    cursor: pointer;
+}
+.product-upgrade.disabled {
+    background-color: rgba(255, 255, 255, 0.5);
+    color: #fd0000;
+    font-weight: bold;
+}
+
+.product-level {
+    position: absolute;
+    top: 80px;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255,255,255,0.7);
+    border: 1px solid rgba(0, 0, 0, 0.7);
+    border-radius: 50%;
+    padding: 5px;
+    padding-bottom: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}

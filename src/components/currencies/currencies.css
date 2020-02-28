@@ -1,16 +1,16 @@
 .currencies {
     position: absolute;
     top: 0;
-    width: 90px;
-    height: 75px;
+    width: 140px;
+    height: 110px;
     padding: 10px;
     background-image: url(./../../reasorces/images/sign0.png);
 }
 .currencies-love {
     position: absolute;
-    top: 34px;
-    left: 20px;
-    right: 25px;
+    top: 45px;
+    left: 30px;
+    right: 30px;
     height: 30px;
     color: black;
     display: flex;
@@ -19,18 +19,16 @@
 .currencies-love-icon {
     display: flex;
     flex: 2;
-    background-image: url(/static/media/love.d9eba70f.png);
+    background-image: url(./../../reasorces/images/love.png);
     background-position: center;
+    margin-left: 4px;
 }
 .currencies-love-value {
-    flex: 5;
+    flex: 5 1;
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    font-size: 13px;
+    font-size: 20px;
     padding-bottom: 2px;
-    -webkit-user-select: none; /* Safari */        
-    -moz-user-select: none; /* Firefox */
-    -ms-user-select: none; /* IE10+/Edge */
-    user-select: none; /* Standard */
+    user-select: none;
 }

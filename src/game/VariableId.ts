@@ -4,6 +4,7 @@ const variables = {
     treats: 'treats',
     turboSpeed: 'turboSpeed',
     turboTimeLeft: 'turboTimeLeft',
+    dogName: 'dogName',
     /* Products */
     product0Level: 'product0Level',
     product1Level: 'product1Level',

@@ -12,4 +12,6 @@ export interface Product {
     canUnlock(): boolean
     getLevelUpPrice(): Currency
     getLevel(): number
+    levelUp(): boolean
+    canLevelUp(): boolean 
 }

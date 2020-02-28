@@ -1,0 +1,13 @@
+.product1 {
+    background-image: url(../../../reasorces/images/farm.jpg);
+    background-size: cover;
+    padding: 5px;
+}
+.product1-building{
+    height: 100%;
+    width: 150px;
+    background-image: url(../../../reasorces/images/petCenter.png);
+    position: absolute;
+    left: 5px;
+    bottom: -10px;
+}

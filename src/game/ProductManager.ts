@@ -1,5 +1,6 @@
 import { Product } from "./products/Product"
-import { Product0 } from "./products/Product0"
+import { PetAppreciationCenter } from "./products/PetAppreciationCenter"
+import { PetPetting } from "./products/PetPetting"
 import VariableIds from './VariableId'
 import { TimeManager } from "./TimeManager"
 import GameManager from './GameManager'
@@ -41,10 +42,27 @@ export default class ProductManager {
             })
         })   
     }
+
+    getProduct(productId: string): Product {
+        const prod = this.products.filter((p) =>{
+            return p.variableId === productId
+        })
+        return prod[0]
+    }
+
+    levelUpProduct(productId: string): boolean{
+        const p:Product = this.getProduct(productId)
+        const result = p.levelUp()
+        console.log({
+            result
+        })
+        return result
+    }
 }
 
 function initializeProducts(): Array<Product> {
     return [
-        new Product0(VariableIds.product0Level, false)
+        new PetPetting(VariableIds.product0Level, false),
+        new PetAppreciationCenter(VariableIds.product1Level, false)
     ]
 }
