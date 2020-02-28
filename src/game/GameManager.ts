@@ -5,6 +5,7 @@ import ProductManager from './ProductManager';
 import variableIds from './VariableId'
 import {Variable} from './Variables'
 import { Currency } from './products/Product';
+import { PetPetting } from './products/PetPetting';
 
 //Game Manager
 class GameManager  {
@@ -57,7 +58,8 @@ class GameManager  {
     }
     
     onClickedDog(): Currency{
-        const baseClickCurrency = 1;
+        const PetPetting = this.productManager.getProduct(variableIds.product0Level) as PetPetting
+        const baseClickCurrency = PetPetting.getCurrencyPerPet().currency
         const currencyEarned: Currency = {
             currency: baseClickCurrency,
             treats: 0

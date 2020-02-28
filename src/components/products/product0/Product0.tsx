@@ -10,6 +10,7 @@ import { Variable } from '../../../game/Variables'
 import ids from '../../../game/VariableId'
 import GameManager from '../../../game/GameManager'
 import {toFormat} from '../../../utils/numberFormat'
+import { PetPetting } from '../../../game/products/PetPetting'
 
 interface IRecipeProps {
   level: Variable
@@ -75,14 +76,22 @@ class Product0 extends Component<IRecipeProps,IState> {
   }
 
   renderHighlight(){
-    const product = GameManager.getInstance().getProductManager().getProduct(ids.product0Level)
+    const product = GameManager.getInstance().getProductManager().getProduct(ids.product0Level) as PetPetting
     const lps = toFormat(product.getCurrencyPerSecond().currency)
+    const petPow = toFormat(product.getCurrencyPerPet(product.getLevel()).currency)
     return (
       <div className="highlight">
         <div className="highlight-field">
           <div className="highlight-attribute">LPS</div>
           <div className="highlight-value">
             {lps}
+            <div className="highlight-love-icon"/>
+          </div>
+        </div>
+        <div className="highlight-field">
+          <div className="highlight-attribute">Pet Pow</div>
+          <div className="highlight-value">
+            {petPow}
             <div className="highlight-love-icon"/>
           </div>
         </div>

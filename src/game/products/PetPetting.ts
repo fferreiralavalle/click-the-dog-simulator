@@ -14,9 +14,20 @@ export class PetPetting implements Product {
     getCurrencyPerSecond(): Currency {
         const base:number = 0.1;
         const currentLevel:number = GameManager.getInstance().getVariable(this.variableId).getValue()
-        const currencyPerSecond = base * currentLevel
+        const currencyWithPow = base * this.getCurrencyPerPet(currentLevel).currency
+        const currencyPerSecond = currencyWithPow * currentLevel
         return {
             currency: currencyPerSecond,
+            treats: 0
+        }
+    }
+
+    getCurrencyPerPet(level?: number): Currency {
+        const lvl = level ? level : GameManager.getInstance().getVariable(this.variableId).getValue()
+        const base:number = 1
+        const final = base * (1+lvl/10)
+        return {
+            currency: final,
             treats: 0
         }
     }
@@ -31,7 +42,7 @@ export class PetPetting implements Product {
     getLevelUpPrice(): Currency {
         const basePrice:number = 5;
         const currentLevel:number = GameManager.getInstance().getVariable(this.variableId).getValue()
-        const finalPrice = (currentLevel + 1) * Math.pow(basePrice,(currentLevel/2+1))
+        const finalPrice = (currentLevel + 1) * Math.pow(basePrice,(currentLevel/3+1))
         return {
             currency: Math.floor(finalPrice),
             treats: 0
