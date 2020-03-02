@@ -9,7 +9,7 @@ import { PetPetting } from './products/PetPetting';
 
 import Cookies from 'js-cookie' 
 
-const devMegaPetMult = 100
+const devMegaPetMult = 1
 const saveEvery = 0.5
 const saveVarName = "variables"
 //Game Manager
@@ -75,6 +75,14 @@ class GameManager  {
         this.addToVariable(baseClickCurrency, variableIds.currency)
         return currencyEarned
     }
+
+    saveGame(){
+        saveGame(this.variables)
+    }
+
+    resetGame(){
+        resetGameSave()
+    }
 }
 
 //Get Instance
@@ -116,8 +124,11 @@ const loadSavedData = (variablesObject:VariableStructure):VariableStructure => {
     return variablesObject
 }
 
-
 const saveGame = (variables: VariableStructure)=> {
     Cookies.set(saveVarName, JSON.stringify(variables))
     console.log('saved gamed', variables)
+}
+
+const resetGameSave = () => {
+    Cookies.remove(saveVarName)
 }

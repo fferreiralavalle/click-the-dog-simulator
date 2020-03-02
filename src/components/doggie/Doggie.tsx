@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
+import '../products/product.css'
 import './doggie.css'
 
 import {selecters, actions} from '../../reducers/GameVariables'
@@ -62,7 +63,7 @@ class Doggies extends Component<IRecipeProps,IState> {
         const x = e.clientX - rect.left; //x position within the element.
         const y = e.clientY - rect.top;  //y position within the element.
         const plus :plusCurrency= {
-            value: "+"+earned,
+            value: "+"+toFormat(earned),
             key: (new Date).toString()+(Math.random()),
             x: x+"px",
             y: y+"px",

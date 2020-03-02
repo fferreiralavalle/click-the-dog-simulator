@@ -25,6 +25,9 @@
     left: 0;
     bottom: 0;
 }
+.plus-currencies{
+    width:100%;
+}
 .doggie-click {
     position: absolute;
     top: 0;

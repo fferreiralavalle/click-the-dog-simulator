@@ -9,6 +9,7 @@ import GameManager from '../../game/GameManager'
 import { Variable } from '../../game/Variables'
 
 import Currencies from '../../components/currencies/Currencies'
+import SaveManager from '../../components/saveManager/SaveManager'
 import Box from '../../components/box/Box'
 import Doggie from '../../components/doggie/Doggie'
 import Product0 from '../../components/products/product0/Product0'
@@ -50,6 +51,7 @@ class Game extends Component<IRecipeProps> {
         return (
         <div className="game">
             <Currencies/>
+            <SaveManager/>
             <div className="product-list">
                 <Box><Doggie/></Box>
                 {this.renderProducts()}

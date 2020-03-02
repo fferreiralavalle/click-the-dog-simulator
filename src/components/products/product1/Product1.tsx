@@ -10,7 +10,7 @@ import {TimeSubscriber} from '../../../game/TimeManager'
 import variableIds from  '../../../game/VariableId'
 import { Variable } from '../../../game/Variables'
 import GameManager from '../../../game/GameManager'
-import { PetAppreciationCenter, RewardResult } from '../../../game/products/PetAppreciationCenter'
+import { PetAppreciationCenter, RewardResult, events } from '../../../game/products/PetAppreciationCenter'
 import LevelUpButton from '../LevelUpButton'
 import ProductPlus, {plusCurrency} from '../ProductPlus'
 import { CurrencySubscriber, Currency } from '../../../game/products/Product'
@@ -19,6 +19,7 @@ import { toFormat, clearPluses } from '../../../utils/uiUtil'
 interface IRecipeProps {
   level: Variable;
   progress: Variable
+  eventId: Variable
 }
 
 interface IState {
@@ -51,10 +52,16 @@ class Product1 extends Component<IRecipeProps, IState> {
   }
 
   onEventReward = (result:RewardResult)=> {
-    const x = (10+Math.random() * 50)+"%"
-    const y = (30+Math.random() * 50)+"%"
+    const {eventId} = this.props;
+    const x = (10+Math.random() * 30)+"%"
+    const y = (30+Math.random() * 40)+"%"
+    let value = ('+'+toFormat(result.currencyReward.currency))
+    switch(eventId.getValue()){
+      case events.pettingTraining.id:
+        value = 'PET PARTY!'
+    }
     const plusCurrency:plusCurrency = {
-      value: ('+'+toFormat(result.currencyReward.currency)),
+      value: value,
       key: Date.UTC.toString()+(Math.random()),
       x,
       y,
@@ -84,15 +91,42 @@ class Product1 extends Component<IRecipeProps, IState> {
     })
   }
 
+  renderCurrentEvent = () => {
+    const {eventId} = this.props
+    const eventData = this.getEventData(eventId.getValue())
+    return (<div className="event-type">{eventData.name}</div>)
+  }
+
+  getEventData= (eventId: string)=> {
+    switch (eventId){
+      case events.pettingTraining.id:
+        return {
+          name:"Petting Party!", 
+          description: "Makes petting more efficient for some time, effects stack."
+        }
+      default:
+        return {
+          name:"Belly Rub Day", 
+          description: "People come to belly rub your good boys, produces tons of love!"
+        }
+    }
+  }
+
+  onHover = (isHover: boolean) => () => {
+    this.setState({
+      isHover
+    })
+  }
+
   render(){
     const {level, progress} = this.props;
-    const {plusCurrencies} = this.state
+    const {plusCurrencies, isHover} = this.state
     const product = GameManager.getInstance().getProductManager().getProduct(ids.product1Level) as PetAppreciationCenter
     const progressStyle = {
       flex: `${progress.getValue()/product.getProgressGoal()} 1`
     }
     return (
-      <div className="product product1 boxed">
+      <div className="product product1 boxed" onMouseEnter={this.onHover(true)} onMouseLeave={this.onHover(false)}>
         <div className="product1-building">
         </div>
         <div className="product-level">
@@ -101,6 +135,7 @@ class Product1 extends Component<IRecipeProps, IState> {
         <div className="product1-title">
           Pet Farm
         </div>
+        {this.renderCurrentEvent()}
         <div className="progress-bar">
           <div className="progress-bar-progress" style={progressStyle}></div>
           <div className="progress-bar-value">
@@ -109,14 +144,122 @@ class Product1 extends Component<IRecipeProps, IState> {
         </div>
         <ProductPlus plusCurrencies={plusCurrencies}/>
         <LevelUpButton productId={ids.product1Level}></LevelUpButton>
+        {isHover && this.renderHighlight()}
       </div>
     )
+  }
+
+  renderHighlight(){
+    const product = GameManager.getInstance().getProductManager().getProduct(ids.product1Level) as PetAppreciationCenter
+    const lps = toFormat(product.getCurrencyPerSecond().currency)
+    const progressPS = toFormat(product.getProgressPerSecond())
+    const {eventId} = this.props
+    const {description} = this.getEventData(eventId.getValue())
+    return (
+      <div className="highlight">
+        <div className="highlight-section">
+          <div className="highlight-field title">
+            Farm
+          </div>
+          <div className="highlight-field">
+            <div className="highlight-attribute">Love</div>
+            <div className="highlight-value">
+              {lps}/s
+              <div className="highlight-love-icon"/>
+            </div>
+          </div>
+          <div className="highlight-field">
+            <div className="highlight-attribute">Progress</div>
+            <div className="highlight-value">
+              {progressPS}/s
+              <div className="highlight-love-icon"/>
+            </div>
+          </div>
+          {this.renderEventStatistic(product)}
+        </div>
+        <div className="highlight-section">
+          <div className="highlight-field title">
+            Events
+          </div>
+          {this.renderEventOptions(product)}
+        </div>
+        <div className="highlight-section">
+          <div className="highlight-field title">
+            Info
+          </div>
+          <div className="highlight-field">
+            Shelters lost pets in a cozy home. It also prepares activities for them!
+          </div>
+          <div className="highlight-field title">
+            Event Info
+          </div>
+          <div className="highlight-field">
+            {description}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  renderEventStatistic(product: PetAppreciationCenter) {
+    const eventId = product.getEvent().id
+    const {name} = this.getEventData(eventId)
+    const {petMultiplier, duration} = product.getPettingTrainingData()
+    const title = (
+      <div className="highlight-field title">{name}</div>
+    )
+    console.log("event UI name",name)
+    switch (eventId){
+      case events.bellyRub.id:
+        return (
+          <React.Fragment>
+            {title}
+            <div className="highlight-field">
+              <div className="highlight-attribute">Love</div>
+              <div className="highlight-value">
+                {product.getEventReward(eventId).currencyReward.currency}
+                <div className="highlight-love-icon"/>
+                </div>
+            </div>
+          </React.Fragment>
+        )
+      default:
+        return (
+          <React.Fragment>
+            {title}
+            <div className="highlight-field">
+              <div className="highlight-attribute">Pet Mult</div>
+              <div className="highlight-value">{petMultiplier}</div>
+            </div>
+            <div className="highlight-field">
+              <div className="highlight-attribute">Duration</div>
+              <div className="highlight-value">{duration}s</div>
+            </div>
+          </React.Fragment>
+        )
+    }
+  }
+
+  renderEventOptions(product: PetAppreciationCenter) {
+    const events = product.getAvailableEvents()
+    return events.map((e)=>{
+      return (
+        <div className="highlight-field highlight-event-select" onClick={this.selectEvent(e.id)}>
+          {this.getEventData(e.id).name}
+        </div>)
+    }
+    )
+  }
+  
+  selectEvent = (eventId: string) => () =>{
+    GameManager.getInstance().setVariable(eventId, variableIds.product1Event)
   }
 }
 
 const mapStateToProps = (state:any) => ({
   level: selecters.getVariable(state, ids.product1Level),
   progress: selecters.getVariable(state, ids.product1Progress),
+  eventId: selecters.getVariable(state, ids.product1Event),
 })
 
 export default connect(mapStateToProps)(Product1);

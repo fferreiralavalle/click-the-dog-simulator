@@ -1,0 +1,12 @@
+.save-option {
+    position: absolute;
+    top: 0;
+    left: 150px;
+    display: flex;
+    padding: 5px;
+    padding-top: 40px;
+}
+.button-save, .button-reset {
+    position: initial;
+    margin: 5px;
+}

@@ -25,7 +25,7 @@
 }
 
 .progress-bar {
-    background-color: rgba(46, 160, 103, 0.5);
+    background-color: rgba(64, 255, 159, 0.5)
 }
 .product1 .plus-currencies {
     position: absolute;
@@ -33,4 +33,7 @@
     bottom: 0;
     right: 0%;
     width: 35%;
+}
+.highlight{
+    flex-direction: row;
 }

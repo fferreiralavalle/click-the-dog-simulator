@@ -58,7 +58,7 @@ class Currencies extends Component<IRecipeProps, IState> {
                 top: c.y,
                 left: c.x,
                 fontSize: `${c.size * 18}px`,
-                zIndex: c.size
+                zIndex: c.size * 2
             }
             return (
                 <div className="plus-currency" style={style} key={c.key}>

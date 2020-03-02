@@ -117,22 +117,24 @@ class Product0 extends Component<IRecipeProps,IState> {
     const petPow = toFormat(product.getCurrencyPerPet(product.getLevel()).currency)
     return (
       <div className="highlight">
-        <div className="highlight-field">
-          <div className="highlight-attribute">LPS</div>
-          <div className="highlight-value">
-            {lps}
-            <div className="highlight-love-icon"/>
+        <div className="highlight-section">
+          <div className="highlight-field">
+            <div className="highlight-attribute">LPS</div>
+            <div className="highlight-value">
+              {lps}
+              <div className="highlight-love-icon"/>
+            </div>
           </div>
-        </div>
-        <div className="highlight-field">
-          <div className="highlight-attribute">Pet Pow</div>
-          <div className="highlight-value">
-            {petPow}
-            <div className="highlight-love-icon"/>
+          <div className="highlight-field">
+            <div className="highlight-attribute">Pet Pow</div>
+            <div className="highlight-value">
+              {petPow}
+              <div className="highlight-love-icon"/>
+            </div>
           </div>
-        </div>
-        <div className="highlight-field">
-          Commands the Divine Forces from far away to pet your beautiful doggos.
+          <div className="highlight-field">
+            Commands the Divine Forces from far away to pet your beautiful doggos.
+          </div>
         </div>
       </div>
     )

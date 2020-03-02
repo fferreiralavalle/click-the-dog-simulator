@@ -1,6 +1,8 @@
 import { Product, Currency, CurrencySubscriber } from './Product'
 import variables from '../VariableId';
 import GameManager from '../GameManager'
+import ProductManager from '../ProductManager';
+import { PetAppreciationCenter } from './PetAppreciationCenter';
 
 export class PetPetting implements Product {
     currencySubscribers: CurrencySubscriber[];
@@ -27,7 +29,11 @@ export class PetPetting implements Product {
     getCurrencyPerPet(level?: number): Currency {
         const lvl = level ? level : GameManager.getInstance().getVariable(this.variableId).getValue()
         const base:number = 1
-        const final = base * (1+lvl/10)
+        //Pet Training bBnus
+        const pac = GameManager.getInstance().getProductManager().getProduct(variables.product1Level) as PetAppreciationCenter
+        const petTrainingMult = pac.getPettingTrainingCurrentBonus()
+        //Final Gain
+        const final = base * (1+lvl/10) * petTrainingMult
         return {
             currency: final,
             treats: 0

@@ -30,58 +30,6 @@
     display: flex;
     margin: auto;
 }
-.highlight {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    padding: 10px;
-    background-color: rgba(255, 255, 255, 0.7);
-    display: flex;
-    flex-direction: column;
-    animation: fadein 1s;
-    z-index: 100;
-}
-.highlight-field {
-    display: flex;
-    width: 100%;
-    height: auto;
-    padding: 5px;
-}
-.highlight-attribute {
-    flex: 1 1;
-    height: auto;
-    text-align: left;
-}
-.highlight-value {
-    flex: 1 1;
-    height: auto;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-}
-.highlight-love-icon {
-    display: flex;
-    height: 25px;
-    width: 25px;
-    background-image: url(../../../reasorces/images/love.png);
-    margin-left: 3px;
-}
-.product-upgrade {
-    position: absolute;
-    bottom: -20px;
-    padding: 5px 10px;
-    border-radius: 5px;
-    display: flex;
-    background-color: rgba(255, 255, 255, 0.9);
-    border: 1px solid rgba(0, 0, 0, 0.8);
-}
-.product-upgrade.disabled {
-    background-color: rgba(255, 255, 255, 0.5);
-    color: #fd0000;
-    font-weight: bold;
-}
 .product0 .plus-currencies {
     width: 80%;
     top: 50%;
