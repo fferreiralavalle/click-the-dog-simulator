@@ -13,6 +13,7 @@ import {toFormat, clearPluses} from '../../../utils/uiUtil'
 import { PetPetting } from '../../../game/products/PetPetting'
 import ProductPlus, { plusCurrency } from '../ProductPlus'
 import { Currency } from '../../../game/products/Product'
+import LevelUpButton from '../LevelUpButton'
 
 interface IRecipeProps {
   level: Variable
@@ -23,6 +24,7 @@ interface IRecipeProps {
 interface IState {
   isHover: boolean;
   plusCurrencies: Array<plusCurrency>
+  hoverLevel: boolean
 }
 
 class Product0 extends Component<IRecipeProps,IState> {
@@ -31,7 +33,8 @@ class Product0 extends Component<IRecipeProps,IState> {
     super(props)
     this.state = {
       isHover: false,
-      plusCurrencies: []
+      plusCurrencies: [],
+      hoverLevel: false
     }
     const product = GameManager.getInstance().getProductManager().getProduct(ids.product0Level) as PetPetting
     product.subscribeToCurrency({
@@ -65,7 +68,6 @@ class Product0 extends Component<IRecipeProps,IState> {
     })
   }
 
-
   onHover = (isHover: boolean) => () => {
     this.setState({
       isHover
@@ -75,6 +77,12 @@ class Product0 extends Component<IRecipeProps,IState> {
   levelup = () => () => {
     GameManager.getInstance().getProductManager().levelUpProduct(ids.product0Level)
     this.props.dispatch(actions.updateVariables())
+  }
+
+  onLevelHover = (hoverLevel:boolean)=>()=> {
+    this.setState({
+      hoverLevel
+    })
   }
   
   render(){
@@ -87,10 +95,9 @@ class Product0 extends Component<IRecipeProps,IState> {
         onMouseEnter={this.onHover(true)}
         onMouseLeave={this.onHover(false)}>
         {isHover ? this.renderHighlight() : this.renderContent()}
-        <div className={`product-upgrade ${!canLevelUp && "disabled"}`} onClick={this.levelup()}>
-          {levelUpPrice}
-          <div className="highlight-love-icon"/>
-        </div>
+        <LevelUpButton productId={ids.product0Level} 
+          onMouseEnter={this.onLevelHover(true)}
+          onMouseLeave={this.onLevelHover(false)}/>
         <ProductPlus plusCurrencies={plusCurrencies}/>
       </div>
     )
@@ -113,10 +120,13 @@ class Product0 extends Component<IRecipeProps,IState> {
 
   renderHighlight(){
     const product = GameManager.getInstance().getProductManager().getProduct(ids.product0Level) as PetPetting
-    const lps = toFormat(product.getCurrencyPerSecond().currency)
-    const petPow = toFormat(product.getCurrencyPerPet(product.getLevel()).currency)
+    const {level} = this.props
+    const usedLevel:number = level.getValue() + (this.state.hoverLevel ? 1 : 0)
+    const lps = toFormat(product.getCurrencyPerSecond(usedLevel).currency)
+    const petPow = toFormat(product.getCurrencyPerPet(usedLevel).currency)
+    const levelClass = this.state.hoverLevel ? " hover-level" : ""
     return (
-      <div className="highlight">
+      <div className={"highlight "+levelClass}>
         <div className="highlight-section">
           <div className="highlight-field">
             <div className="highlight-attribute">LPS</div>

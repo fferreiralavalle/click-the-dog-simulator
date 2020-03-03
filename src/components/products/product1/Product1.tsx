@@ -25,6 +25,7 @@ interface IRecipeProps {
 interface IState {
   isHover: boolean;
   plusCurrencies: Array<plusCurrency>
+  hoverLevel: boolean
 }
 
 class Product1 extends Component<IRecipeProps, IState> {
@@ -33,6 +34,7 @@ class Product1 extends Component<IRecipeProps, IState> {
     this.state = {
       isHover: false,
       plusCurrencies: [],
+      hoverLevel: false
     }
     const product = GameManager.getInstance().getProductManager().getProduct(ids.product1Level) as PetAppreciationCenter
     product.subscribeToReward({
@@ -118,6 +120,12 @@ class Product1 extends Component<IRecipeProps, IState> {
     })
   }
 
+  onLevelHover = (hoverLevel:boolean)=>()=> {
+    this.setState({
+      hoverLevel
+    })
+  }
+
   render(){
     const {level, progress} = this.props;
     const {plusCurrencies, isHover} = this.state
@@ -143,7 +151,9 @@ class Product1 extends Component<IRecipeProps, IState> {
           </div>
         </div>
         <ProductPlus plusCurrencies={plusCurrencies}/>
-        <LevelUpButton productId={ids.product1Level}></LevelUpButton>
+        <LevelUpButton productId={ids.product1Level} 
+          onMouseEnter={this.onLevelHover(true)}
+          onMouseLeave={this.onLevelHover(false)}/>
         {isHover && this.renderHighlight()}
       </div>
     )
@@ -151,12 +161,15 @@ class Product1 extends Component<IRecipeProps, IState> {
 
   renderHighlight(){
     const product = GameManager.getInstance().getProductManager().getProduct(ids.product1Level) as PetAppreciationCenter
-    const lps = toFormat(product.getCurrencyPerSecond().currency)
-    const progressPS = toFormat(product.getProgressPerSecond())
+    const {level} = this.props
+    const usedLevel:number = level.getValue() + (this.state.hoverLevel ? 1 : 0)
+    const lps = toFormat(product.getCurrencyPerSecond(usedLevel).currency)
+    const progressPS = toFormat(product.getProgressPerSecond(usedLevel))
     const {eventId} = this.props
     const {description} = this.getEventData(eventId.getValue())
+    const levelClass = this.state.hoverLevel ? " hover-level" : ""
     return (
-      <div className="highlight">
+      <div className={"highlight "+levelClass}>
         <div className="highlight-section">
           <div className="highlight-field title">
             Farm
@@ -175,7 +188,7 @@ class Product1 extends Component<IRecipeProps, IState> {
               <div className="highlight-love-icon"/>
             </div>
           </div>
-          {this.renderEventStatistic(product)}
+          {this.renderEventStatistic(product,usedLevel)}
         </div>
         <div className="highlight-section">
           <div className="highlight-field title">
@@ -188,7 +201,7 @@ class Product1 extends Component<IRecipeProps, IState> {
             Info
           </div>
           <div className="highlight-field">
-            Shelters lost pets in a cozy home. It also prepares activities for them!
+            Shelters lost pets in a cozy home. It also prepares EVENTS for them!
           </div>
           <div className="highlight-field title">
             Event Info
@@ -201,10 +214,10 @@ class Product1 extends Component<IRecipeProps, IState> {
     )
   }
 
-  renderEventStatistic(product: PetAppreciationCenter) {
+  renderEventStatistic(product: PetAppreciationCenter, level:number) {
     const eventId = product.getEvent().id
     const {name} = this.getEventData(eventId)
-    const {petMultiplier, duration} = product.getPettingTrainingData()
+    const {petMultiplier, duration} = product.getPettingTrainingData(level)
     const title = (
       <div className="highlight-field title">{name}</div>
     )
@@ -217,7 +230,7 @@ class Product1 extends Component<IRecipeProps, IState> {
             <div className="highlight-field">
               <div className="highlight-attribute">Love</div>
               <div className="highlight-value">
-                {product.getEventReward(eventId).currencyReward.currency}
+                {product.getEventReward(eventId,level).currencyReward.currency}
                 <div className="highlight-love-icon"/>
                 </div>
             </div>

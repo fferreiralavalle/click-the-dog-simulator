@@ -15,9 +15,9 @@ export class PetPetting implements Product {
         this.currencySubscribers = []
         this.onTimePassed = this.onTimePassed.bind(this)
     }
-    getCurrencyPerSecond(): Currency {
+    getCurrencyPerSecond(level?: number): Currency {
         const base:number = 0.1;
-        const currentLevel:number = GameManager.getInstance().getVariable(this.variableId).getValue()
+        const currentLevel:number = level ? level : GameManager.getInstance().getVariable(this.variableId).getValue()
         const currencyWithPow = base * this.getCurrencyPerPet(currentLevel).currency
         const currencyPerSecond = currencyWithPow * currentLevel
         return {
