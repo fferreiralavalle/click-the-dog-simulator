@@ -1,3 +1,6 @@
+body{
+  font-size: 15px;
+}
 body *{
   background-size: contain;
   background-repeat: no-repeat;
@@ -9,4 +12,11 @@ body *{
 
 .hide-overflow{
   overflow: hidden;
+}
+
+.treat-icon {
+  height: 1em;
+  width: 1em;
+  margin-left: 3px;
+  background-image: url(./reasorces/images/treat_8.png);
 }

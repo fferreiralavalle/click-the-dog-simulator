@@ -13,7 +13,8 @@ import {toFormat} from '../../utils/uiUtil'
 
 interface IRecipeProps {
     productId: string,
-    dispatch: Function
+    dispatch: Function,
+    [key: string]: any
 }
 
 class LevelUpButton extends Component<IRecipeProps> {
@@ -25,12 +26,12 @@ class LevelUpButton extends Component<IRecipeProps> {
     }
 
     render(){
-        const {productId} = this.props;
+        const {productId, ...rest} = this.props;
         const product = GameManager.getInstance().getProductManager().getProduct(productId)
         const canLevelUp = product.canLevelUp()
         const levelUpPrice = toFormat(product.getLevelUpPrice().currency)
         return (
-            <div className={`product-upgrade ${!canLevelUp && "disabled"}`} onClick={this.levelup()}>
+            <div className={`product-upgrade ${!canLevelUp && "disabled"}`} onClick={this.levelup()} {...rest}>
             {levelUpPrice}
             <div className="highlight-love-icon"/>
             </div>

@@ -1,4 +1,6 @@
-const tickTime = 0.5
+import { isMobile } from "../utils/uiUtil"
+
+const tickTime = isMobile() ? 1 : 0.5
 const modTimeFast = 0.5
 let modTime = 1
 

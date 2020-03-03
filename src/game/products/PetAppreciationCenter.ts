@@ -23,7 +23,7 @@ export const events:EventTypes = {
     pettingTraining: {
         id: 'pettingTraining',
         progressNeeded: 200,
-        baseReward: 2,
+        baseReward: 5,
         unlockLevel: 5
     }
 
@@ -61,17 +61,17 @@ export class PetAppreciationCenter implements Product {
         this.currencySubscribers = []
         this.subscribers = []
     }
-    getCurrencyPerSecond(): Currency {
+    getCurrencyPerSecond(level?: number): Currency {
         const base:number = 1;
-        const currentLevel:number = GameManager.getInstance().getVariable(this.variableId).getValue()
+        const currentLevel:number = level ? level : GameManager.getInstance().getVariable(this.variableId).getValue()
         const currencyPerSecond = base * currentLevel
         return {
             currency: currencyPerSecond,
             treats: 0
         }
     }
-    getProgressPerSecond(): number {
-        const currentLevel:number = GameManager.getInstance().getVariable(this.variableId).getValue()
+    getProgressPerSecond(level?: number): number {
+        const currentLevel:number = level ? level : GameManager.getInstance().getVariable(this.variableId).getValue()
         const baseProgress = currentLevel > 0 ? 1 : 0
         const progressPerSecond = baseProgress * ((1+currentLevel)/2)
         return progressPerSecond
@@ -171,13 +171,14 @@ export class PetAppreciationCenter implements Product {
 
     canUnlock(): boolean{
         const previousProductLevel:number = GameManager.getInstance().getVariable(variables.product0Level).getValue()
-        const needdedLevel:number = 3
+        const needdedLevel:number = 5
         return needdedLevel <= previousProductLevel 
     }
     getLevelUpPrice(): Currency {
-        const basePrice:number = 15;
+        const basePrice:number = 12;
+        const initialPrice:number = 18;
         const currentLevel:number = GameManager.getInstance().getVariable(this.variableId).getValue()
-        const finalPrice = Math.pow(basePrice,currentLevel/2+1)
+        const finalPrice = initialPrice + Math.pow(basePrice,currentLevel/3+1)
         return {
             currency: finalPrice,
             treats: 0
@@ -236,7 +237,7 @@ export class PetAppreciationCenter implements Product {
 
     getPettingTrainingData(currentLevel?: number): PettingTrainingData{
         const level = currentLevel ? currentLevel : this.getLevel()
-        const petMultiplier = events.pettingTraining.baseReward*(1+0.25*level)
+        const petMultiplier = events.pettingTraining.baseReward*(1+0.5*level)
         const duration = 8
         return {
             petMultiplier,

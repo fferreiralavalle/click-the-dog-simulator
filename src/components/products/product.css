@@ -127,6 +127,10 @@
     flex-direction: row;
     justify-content: flex-end;
 }
+.hover-level .highlight-value {
+    color: #1abf18;
+    font-weight: bold;
+}
 .highlight-love-icon {
     display: flex;
     height: 25px;
@@ -144,4 +148,8 @@
 }
 .highlight-event-select:hover {
     font-weight: 600;
+}
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }

@@ -1,24 +1,23 @@
 .currencies {
-    position: absolute;
-    top: 0;
-    width: 140px;
-    height: 110px;
-    padding: 10px;
-    background-image: url(./../../reasorces/images/sign0.png);
+    display: flex;
 }
 .currencies-love {
-    position: absolute;
-    top: 45px;
-    left: 30px;
-    right: 30px;
-    height: 30px;
+    position: relative;
     color: black;
     display: flex;
     flex-direction: row;
+    align-items: center;
+    width: 140px;
+    height: 110px;
+    padding: 20px;
+    padding-top: 30px;
+    background-image: url(./../../reasorces/images/sign0.png);
+    animation: appear-top 2s;
 }
 .currencies-love-icon {
     display: flex;
-    flex: 2;
+    width: 1.5em;
+    height: 1.5em;
     background-image: url(./../../reasorces/images/love.png);
     background-position: center;
     margin-left: 4px;
@@ -31,4 +30,24 @@
     font-size: 15px;
     padding-top: 2px;
     user-select: none;
+}
+.treat-icon{
+    height: 1.5em;
+    width: 1.5em;
+    background-position: center;
+}
+
+@keyframes appear-top {
+    0%{
+        transform: translateY(-180px);
+    }
+    75%{
+        transform: translateY(-5px);
+    }
+    95%{
+        transform: translateY(-10px);
+    }
+    100%{
+        transform: translateY(0px);
+    }
 }
