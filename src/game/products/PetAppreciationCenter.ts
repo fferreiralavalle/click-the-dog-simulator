@@ -89,8 +89,8 @@ export class PetAppreciationCenter implements Product {
     
     checkForProgressCompletion(){
         const goal = this.getProgressGoal();
-        const progress = GameManager.getInstance().getVariable(variables.product1Progress).getValue()
-        if (progress >= goal){
+        let progress = GameManager.getInstance().getVariable(variables.product1Progress).getValue()
+        while (progress >= goal){
             const event = this.getEvent()
             let reward:RewardResult = {
                 currencyReward: {currency:0, treats: 0}
@@ -111,7 +111,8 @@ export class PetAppreciationCenter implements Product {
                     break
                 }
             GameManager.getInstance().addToVariable(reward.currencyReward.currency, variables.currency)
-            GameManager.getInstance().addToVariable(-goal, variables.product1Progress)
+            progress -= goal
+            GameManager.getInstance().setVariable(progress, variables.product1Progress)
             this.onReward(reward)
         }
     }
