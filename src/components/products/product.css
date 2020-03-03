@@ -149,3 +149,7 @@
 .highlight-event-select:hover {
     font-weight: 600;
 }
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}

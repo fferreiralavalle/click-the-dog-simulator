@@ -6,8 +6,7 @@ import {selecters} from '../../reducers/GameVariables'
 import ids from '../../game/VariableId'
 
 import { Variable } from '../../game/Variables'
-
-import {toFormat} from '../../utils/uiUtil'
+import { isMobile } from '../../utils/uiUtil'
 
 interface IRecipeProps {
     plusCurrencies: Array<plusCurrency>;

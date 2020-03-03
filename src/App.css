@@ -13,3 +13,10 @@ body *{
 .hide-overflow{
   overflow: hidden;
 }
+
+.treat-icon {
+  height: 1em;
+  width: 1em;
+  margin-left: 3px;
+  background-image: url(./reasorces/images/treat_8.png);
+}

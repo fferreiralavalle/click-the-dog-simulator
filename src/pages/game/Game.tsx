@@ -50,8 +50,10 @@ class Game extends Component<IRecipeProps> {
     render(){
         return (
         <div className="game">
-            <Currencies/>
-            <SaveManager/>
+            <div className="game-header">
+                <Currencies/>
+                <SaveManager/>
+            </div>
             <div className="product-list">
                 <Box><Doggie/></Box>
                 {this.renderProducts()}

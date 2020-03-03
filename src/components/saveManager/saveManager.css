@@ -1,7 +1,4 @@
 .save-option {
-    position: absolute;
-    top: 0;
-    left: 150px;
     display: flex;
     padding: 5px;
     padding-top: 40px;
