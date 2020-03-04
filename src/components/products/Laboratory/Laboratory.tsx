@@ -144,6 +144,7 @@ class LaboratoryUI extends Component<IRecipeProps, IState> {
     const progressStyle = {
       flex: `${progress.getValue()/product.getProgressGoal()} 1`
     }
+    const freePoints = product.getAvailablePoints()
     return (
       <div className="product laboratory boxed" onMouseEnter={this.onHover(true)} onMouseLeave={this.onHover(false)}>
         <div className="laboratory-building">
@@ -154,6 +155,8 @@ class LaboratoryUI extends Component<IRecipeProps, IState> {
         <div className="product1-title">
           LABoratory
         </div>
+        <div className="event-type">Artificial Treats</div>
+        {freePoints>0 && <div className="available-points">{freePoints} Unspent Points</div>}
         <div className="progress-bar">
           <div className="progress-bar-progress" style={progressStyle}></div>
           <div className="progress-bar-value">
@@ -178,6 +181,7 @@ class LaboratoryUI extends Component<IRecipeProps, IState> {
     const progressPS = toFormat(product.getProgressPerSecond(usedLevel))
     const levelClass = hoverLevel ? " hover-level" : ""
     const upgradeClass = buyUpgradeHoverValue ? " hover-level" : ""
+    const currentPointsClass = product.getAvailablePoints(usedLevel) > 0 ? "lab-text-positive" : "lab-text-negative"
     return (
       <div className={"highlight "}>
         <div className="highlight-section">
@@ -193,7 +197,7 @@ class LaboratoryUI extends Component<IRecipeProps, IState> {
           <div className={"highlight-field"+levelClass}>
             <div className="highlight-attribute">Points</div>
             <div className="highlight-value">
-              {currentPoints}/{points}
+              <span className={currentPointsClass}>{currentPoints}</span>/{points}
             </div>
           </div>
           <div className="highlight-field">

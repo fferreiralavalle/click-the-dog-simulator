@@ -123,13 +123,27 @@ export class Laboratory implements Product {
     getUpgradePrice(upgradeId: string, plusLevels?:number): number{
         let finalPrice = 0
         const plusLvl = plusLevels ? plusLevels : 1
-        for (let i=0;i<plusLvl;i++){
-            const currentLevel = GameManager.getInstance().getVariable(upgradeId)?.getValue()
-            const requestedLevel = Math.max(plusLvl + (currentLevel ? currentLevel : 0),0)
-            const points = 1 + Math.floor(requestedLevel/5)
+        const currentLevel = GameManager.getInstance().getVariable(upgradeId)?.getValue()
+        for (let i=1;i<=plusLvl;i++){
+            const requestedLevel = Math.max(i + (currentLevel ? currentLevel : 0),0)
+            const points = this.getUpgradeSigleLevelCost(upgradeId, requestedLevel)
             finalPrice += points
         }
         return finalPrice
+    }
+
+    getUpgradeSigleLevelCost(upgradeId: string, requestedLevel: number){
+        const points = 1 + Math.floor(requestedLevel/10)
+        return points
+    }
+
+    getUpgradePointsTaken(upgradeId: string): number {
+        const upgradeLevel = this.getUpgradeLevel(upgradeId)
+        let totalPointsTaken = 0
+        for (let i=1;i<=upgradeLevel;i++){
+            totalPointsTaken += this.getUpgradeSigleLevelCost(upgradeId,i)
+        }
+        return totalPointsTaken
     }
 
     canBuyUpgrade(upgradeId: string, plusLevels:number): boolean {

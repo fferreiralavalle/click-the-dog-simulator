@@ -190,10 +190,10 @@ export class PetAppreciationCenter implements Product {
         return needdedLevel <= previousProductLevel 
     }
     getLevelUpPrice(): Currency {
-        const basePrice:number = 12;
-        const initialPrice:number = 18;
+        const basePrice:number = 13;
+        const initialPrice:number = 17;
         const currentLevel:number = GameManager.getInstance().getVariable(this.variableId).getValue()
-        const finalPrice = initialPrice + Math.pow(basePrice,currentLevel/3+1)
+        const finalPrice = initialPrice + basePrice * currentLevel + Math.pow(basePrice,currentLevel/4+1)
         return {
             currency: finalPrice,
             treats: 0
