@@ -79,7 +79,7 @@ export class PetAppreciationCenter implements Product {
     }
     getProgressPerSecond(level?: number): number {
         const currentLevel:number = level ? level : GameManager.getInstance().getVariable(this.variableId).getValue()
-        const baseProgress = 1
+        const baseProgress = !currentLevel ? 0 : 1
         const progressPerSecond = baseProgress + currentLevel/2
         return progressPerSecond
     }
