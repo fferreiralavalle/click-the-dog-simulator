@@ -74,7 +74,7 @@ export class Laboratory implements Product {
         const alreadySubscribed = !this.currencySubscribers.filter(sub => sub.id === cs.id)
         if (!alreadySubscribed){
             this.currencySubscribers.push(cs)
-            console.log("Subscribed to Farm: ", cs.id)
+            console.log("Subscribed to Lab: ", cs.id)
         }
     }
 
@@ -142,10 +142,8 @@ export class Laboratory implements Product {
     buyUpgrade(upgradeId: string, plusLevels?:number):boolean{
         const finalPlusLevels = plusLevels ? plusLevels : 1
         if (this.canBuyUpgrade(upgradeId,finalPlusLevels)){
-            const price = this.getUpgradePrice(upgradeId,finalPlusLevels)
             const upgradeLevel = this.getUpgradeLevel(upgradeId)
             const result = Math.max(upgradeLevel+plusLevels,0)
-            GameManager.getInstance().addToVariable(-price, ids.treats)
             GameManager.getInstance().setVariable(result, upgradeId)
             return true
         }

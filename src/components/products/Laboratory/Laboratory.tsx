@@ -30,7 +30,7 @@ interface IState {
   buyUpgradeHoverValue: number
 }
 
-class Product1 extends Component<IRecipeProps, IState> {
+class LaboratoryUI extends Component<IRecipeProps, IState> {
   constructor(props:any){
     super(props)
     this.state = {
@@ -40,7 +40,11 @@ class Product1 extends Component<IRecipeProps, IState> {
       chosenUpgrade: variableIds.labUpgradeTier1A,
       buyUpgradeHoverValue: 0
     }
-    const product = GameManager.getInstance().getProductManager().getProduct(ids.product1Level) as Laboratory
+    const product = GameManager.getInstance().getProductManager().getProduct(ids.product2Level) as Laboratory
+    product.subscribeToCurrency({
+      id: 'UiLaboratory',
+      onCurrency: (currency:Currency)=> this.onEventReward(currency)
+    })
     setInterval(()=>{
       const newPlus = clearPluses(this.state.plusCurrencies)
       this.setState({
@@ -49,17 +53,19 @@ class Product1 extends Component<IRecipeProps, IState> {
     },5 * 1000)
   }
 
-  onEventReward = (result:any)=> {
-    const {eventId} = this.props;
+  onEventReward = (result:Currency)=> {
+    
+    if (result.treats<=0)
+      return
     const x = (10+Math.random() * 30)+"%"
     const y = (30+Math.random() * 40)+"%"
-    let value = ('+'+toFormat(result.currencyReward.currency))
+    let value = ('+'+toFormat(result.treats))
     const plusCurrency:plusCurrency = {
       value: value,
       key: Date.UTC.toString()+(Math.random()),
       x,
       y,
-      className:'currency-plus-icon',
+      className:'treat-icon',
       size: 1.5
     }
     this.addPlusCurrency(plusCurrency)
@@ -182,7 +188,7 @@ class Product1 extends Component<IRecipeProps, IState> {
             The LABoratory is where our brightest puppers use their smarts for science.
           </div>
           <div className="highlight-field title">
-            Lab Stas
+            Lab Stats
           </div>
           <div className={"highlight-field"+levelClass}>
             <div className="highlight-attribute">Points</div>
@@ -194,7 +200,7 @@ class Product1 extends Component<IRecipeProps, IState> {
             <div className="highlight-attribute">Progress</div>
             <div className="highlight-value">
               {progressPS}/s
-              <div className="highlight-love-icon"/>
+              <div className="treat-icon"/>
             </div>
           </div>
         </div>
@@ -324,4 +330,4 @@ const mapStateToProps = (state:any) => ({
   eventId: selecters.getVariable(state, ids.product1Event),
 })
 
-export default connect(mapStateToProps)(Product1);
+export default connect(mapStateToProps)(LaboratoryUI);

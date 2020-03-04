@@ -12,6 +12,10 @@
     left: 5px;
     bottom: 0px;
 }
+.laboratory .plus-currencies {
+    width: 30%;
+    right: 0;
+}
 .lab-upgrade-level {
     position: absolute;
     bottom: -10px;
