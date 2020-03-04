@@ -57,7 +57,7 @@ class Product0 extends Component<IRecipeProps,IState> {
       key: Date.UTC.toString()+(Math.random()),
       x,
       y,
-      className:'currency-plus-icon',
+      className:'love-icon',
       size: 1
     }
     this.addPlusCurrency(plusCurrency)
@@ -136,14 +136,15 @@ class Product0 extends Component<IRecipeProps,IState> {
             </div>
           </div>
           <div className="highlight-field">
-            <div className="highlight-attribute">Pet Pow</div>
+            <div className="highlight-attribute">Petting Power</div>
             <div className="highlight-value">
               {petPow}
               <div className="highlight-love-icon"/>
             </div>
           </div>
           <div className="highlight-field">
-            Commands the Divine Forces from far away to pet your beautiful doggos.
+            Commands the Divine Forces from far away to pet your beautiful boy. 
+            <br/>👋 - Increases your Petting Power every 5 levels.
           </div>
         </div>
       </div>

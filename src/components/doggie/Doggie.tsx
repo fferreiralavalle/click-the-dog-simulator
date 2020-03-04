@@ -67,7 +67,7 @@ class Doggies extends Component<IRecipeProps,IState> {
             key: (new Date).toString()+(Math.random()),
             x: x+"px",
             y: y+"px",
-            className:"",
+            className:"love-icon",
             size: (1 + Math.random() * 0.25)
 
         }

@@ -1,6 +1,7 @@
 import { Product, Currency, CurrencySubscriber } from './Product'
 import variables from '../VariableId';
 import GameManager from '../GameManager'
+import { Laboratory } from './Laboratory';
 
 export interface EventType{
     id: string,
@@ -24,6 +25,12 @@ export const events:EventTypes = {
         id: 'pettingTraining',
         progressNeeded: 200,
         baseReward: 5,
+        unlockLevel: 10
+    },
+    donationCampaign: {
+        id: 'donationCampaign',
+        progressNeeded: 120,
+        baseReward: 1,
         unlockLevel: 5
     }
 
@@ -72,8 +79,8 @@ export class PetAppreciationCenter implements Product {
     }
     getProgressPerSecond(level?: number): number {
         const currentLevel:number = level ? level : GameManager.getInstance().getVariable(this.variableId).getValue()
-        const baseProgress = currentLevel > 0 ? 1 : 0
-        const progressPerSecond = baseProgress * ((1+currentLevel)/2)
+        const baseProgress = 1
+        const progressPerSecond = baseProgress + currentLevel/2
         return progressPerSecond
     }
     onTimePassed(timePassed: number): void {
@@ -93,7 +100,7 @@ export class PetAppreciationCenter implements Product {
         while (progress >= goal){
             const event = this.getEvent()
             let reward:RewardResult = {
-                currencyReward: {currency:0, treats: 0}
+                currencyReward: this.getEventReward(event.id).currencyReward
             }
             switch(event.id){
                 case events.pettingTraining.id:
@@ -107,11 +114,11 @@ export class PetAppreciationCenter implements Product {
                     console.log("Party Bonus added",pts, reward)
                     break
                 default:
-                    reward.currencyReward = this.getEventReward(event.id).currencyReward
                     break
                 }
-            GameManager.getInstance().addToVariable(reward.currencyReward.currency, variables.currency)
             progress -= goal
+            GameManager.getInstance().addToVariable(reward.currencyReward.currency, variables.currency)
+            GameManager.getInstance().addToVariable(reward.currencyReward.treats, variables.treats)
             GameManager.getInstance().setVariable(progress, variables.product1Progress)
             this.onReward(reward)
         }
@@ -133,6 +140,13 @@ export class PetAppreciationCenter implements Product {
         const finalLevel = level ? level : this.getLevel()
         const event = this.getEvent(eventId)
         switch (event.id){
+            case events.donationCampaign.id:
+                return {
+                    currencyReward: {
+                        currency: 0,
+                        treats: this.getEvent(eventId).baseReward + Math.floor(finalLevel/5-1),
+                    }
+                }
             default:
                 return {
                     currencyReward: {
@@ -209,8 +223,11 @@ export class PetAppreciationCenter implements Product {
     }
 
     getProgressGoal(): number {
-        const event = GameManager.getInstance().getVariable(variables.product1Event).getValue()
-        const goal = this.getEvent().progressNeeded
+        //Lab BOnus
+        const lab = GameManager.getInstance().getProductManager().getProduct(variables.product2Level) as Laboratory
+        const labMult = lab.getUpgradeBonus(variables.labUpgradeTier1B).baseBonus
+        //Final Goal
+        const goal = this.getEvent().progressNeeded * labMult
         return goal
     }
 
@@ -229,6 +246,9 @@ export class PetAppreciationCenter implements Product {
         const availableEvents:EventType[] = []
         if (events.bellyRub.unlockLevel <= level){
             availableEvents.push(events.bellyRub)
+        }
+        if (events.donationCampaign.unlockLevel <= level){
+            availableEvents.push(events.donationCampaign)
         }
         if (events.pettingTraining.unlockLevel <= level){
             availableEvents.push(events.pettingTraining)

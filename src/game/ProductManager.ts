@@ -4,6 +4,7 @@ import { PetPetting } from "./products/PetPetting"
 import VariableIds from './VariableId'
 import { TimeManager } from "./TimeManager"
 import GameManager from './GameManager'
+import { Laboratory } from "./products/Laboratory"
 
 export default class ProductManager {
     products: Array<Product>
@@ -63,6 +64,7 @@ export default class ProductManager {
 function initializeProducts(): Array<Product> {
     return [
         new PetPetting(VariableIds.product0Level, false),
-        new PetAppreciationCenter(VariableIds.product1Level, false)
+        new PetAppreciationCenter(VariableIds.product1Level, false),
+        new Laboratory(VariableIds.product2Level, false)
     ]
 }

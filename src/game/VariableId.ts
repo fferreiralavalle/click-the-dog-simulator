@@ -13,9 +13,12 @@ const variables = {
     /* Progress */
     product1Progress: 'product1Progress',
     product1Event: 'product1Event',
-    product1EventPettingTrainingDurations: 'product1EventPettingTrainingDuration'
+    product1EventPettingTrainingDurations: 'product1EventPettingTrainingDuration',
+    product2Progress: 'product2Progress',
     /* Upgrades */
-
+    labUpgradeTier1A: 'labUpgradeTier1A',
+    labUpgradeTier1B: 'labUpgradeTier1B',
+    labUpgradeTier1C: 'labUpgradeTier1C',
     /* Relics */
 }
 

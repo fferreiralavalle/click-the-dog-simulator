@@ -1,0 +1,74 @@
+.laboratory {
+    background-image: url(https://images.pexels.com/photos/248152/pexels-photo-248152.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260);
+    background-size: cover;
+    padding: 5px;
+}
+.laboratory-building{
+    height: 95%;
+    width: 150px;
+    background-image: url(../../../reasorces/images/Lab.png);
+    background-position: bottom;
+    position: absolute;
+    left: 5px;
+    bottom: 0px;
+}
+.lab-upgrade-level {
+    position: absolute;
+    bottom: -10px;
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+    padding: 0px 5px;
+    border: 1px solid rgb(17, 13, 255);
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 5px;
+}
+.lab-icon {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: 2.5em;
+    height: 2.5em;
+    border: 1px solid rgb(13, 76, 255);
+    border-radius: 50%;
+    background-position: center;
+    background-color: rgba(35, 224, 220, 0.5);
+    background-size: 90%;
+    cursor: pointer;
+    transition: transform 1s;
+}
+.lab-icon:hover {
+    transform: scale(1.1);
+}
+.lab-icon-1A{
+    background-image: url(../../../reasorces/images/Hand.png);
+    background-position: bottom;
+}
+.lab-icon-1B{
+    background-image: url(../../../reasorces/images/Shiba.png);
+    background-size: 55%;
+    background-position: bottom;
+}
+.lab-icon-1C{
+    background-image: url(../../../reasorces/images/Lab.png);
+    background-size: 70%;
+    background-position: bottom;
+}
+.lab-button {
+    padding: 3px;
+    border-radius: 3px;
+    border: 1px solid black;
+    margin: 0px 5px;
+    font-size: 12px;
+    font-weight: 500;
+    justify-content: center;
+    display: flex;
+    flex: 1 1;
+    cursor: pointer;
+}
+.lab-button.upgrade {
+    background-color: rgba(0, 239, 0, 0.7);
+}
+.lab-button.downgrade {
+    background-color: rgba(239, 0, 0, 0.7);
+}

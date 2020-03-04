@@ -14,6 +14,7 @@ import Box from '../../components/box/Box'
 import Doggie from '../../components/doggie/Doggie'
 import Product0 from '../../components/products/product0/Product0'
 import Product1 from '../../components/products/product1/Product1'
+import Laboratory from '../../components/products/Laboratory/Laboratory'
 
 interface IRecipeProps {
     dispatch: Function
@@ -41,6 +42,8 @@ class Game extends Component<IRecipeProps> {
             switch (p.variableId){
                 case ids.product1Level:
                     return <Box productId={p.variableId} w={2}><Product1/></Box>
+                case ids.product2Level:
+                    return <Box productId={p.variableId} w={2}><Laboratory/></Box>
                 default:
                     return <Box productId={p.variableId} w={1}><Product0/></Box>
             }

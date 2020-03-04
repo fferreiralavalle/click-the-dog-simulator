@@ -105,6 +105,11 @@
     flex: 1 1 0%;
     padding: 0px 5px;
 }
+.highlight-tier{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
 .highlight-field {
     display: flex;
     width: 100%;

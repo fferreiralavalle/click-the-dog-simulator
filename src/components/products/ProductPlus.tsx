@@ -62,7 +62,7 @@ class Currencies extends Component<IRecipeProps, IState> {
             return (
                 <div className="plus-currency" style={style} key={c.key}>
                     {c.value}
-                    <div className={"plus-currency-icon "+c.className}/>
+                    <div className={c.className}/>
                 </div>
             )
         })

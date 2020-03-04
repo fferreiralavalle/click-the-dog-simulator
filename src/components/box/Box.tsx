@@ -48,20 +48,26 @@ class Box extends Component<IRecipeProps,IState> {
         const product = productId && GameManager.getInstance().getProductManager().getProduct(productId)
         const productLevel = product && product.getLevel()
         const canLevelUp = product && product.canLevelUp()
-        const levelUpPrice = product && toFormat(product.getLevelUpPrice().currency)
+        const levelUpPrices = productId ? GameManager.getInstance().getProductManager().getProduct(productId).getLevelUpPrice() : null
+        const levelUpPrice = levelUpPrices?.currency
+        const levelUpTreatsPrice = levelUpPrices?.treats
         const showHidden = !productLevel && product
         const style = {
             width: `${w*boxBase}px`, 
             height: `${h*boxBase}px`
-        } 
+        }
         return (
             <div className={`product-box ${showHidden && 'hide-overflow'}`} style={style}>
                 {showHidden ? 
                 <div className='product-hidden'>
-                    <div className="product-level-up-price">
+                    {!!levelUpPrices?.currency && <div className="product-level-up-price">
                         <span className="product-level-up-value">{levelUpPrice}</span>
                         <div className="product-level-up-icon"/>
-                    </div>
+                    </div>}
+                    {levelUpPrices?.treats && <div className="product-level-up-price">
+                        <span className="product-level-up-value">{levelUpTreatsPrice}</span>
+                        <div className="treat-icon"/>
+                    </div>}
                     <button disabled={!!!canLevelUp} className="product-unlock" onClick={this.unlockProduct}>Buy</button>
                 </div> : children}
             </div>

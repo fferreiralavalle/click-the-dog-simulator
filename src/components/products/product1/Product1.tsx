@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import '../product.css'
 import './product1.css'
 
-import {selecters, actions} from '../../../reducers/GameVariables'
+import {selecters} from '../../../reducers/GameVariables'
 import ids from '../../../game/VariableId'
 
 import {TimeSubscriber} from '../../../game/TimeManager'
@@ -13,7 +13,7 @@ import GameManager from '../../../game/GameManager'
 import { PetAppreciationCenter, RewardResult, events } from '../../../game/products/PetAppreciationCenter'
 import LevelUpButton from '../LevelUpButton'
 import ProductPlus, {plusCurrency} from '../ProductPlus'
-import { CurrencySubscriber, Currency } from '../../../game/products/Product'
+import { Currency } from '../../../game/products/Product'
 import { toFormat, clearPluses } from '../../../utils/uiUtil'
 
 interface IRecipeProps {
@@ -58,16 +58,20 @@ class Product1 extends Component<IRecipeProps, IState> {
     const x = (10+Math.random() * 30)+"%"
     const y = (30+Math.random() * 40)+"%"
     let value = ('+'+toFormat(result.currencyReward.currency))
+    let className = 'love-icon'
     switch(eventId.getValue()){
       case events.pettingTraining.id:
         value = 'PET PARTY!'
+      case events.donationCampaign.id:
+        value = '+'+toFormat(result.currencyReward.treats)
+        className = 'treat-icon'
     }
     const plusCurrency:plusCurrency = {
       value: value,
       key: Date.UTC.toString()+(Math.random()),
       x,
       y,
-      className:'currency-plus-icon',
+      className,
       size: 1.5
     }
     this.addPlusCurrency(plusCurrency)
@@ -81,7 +85,7 @@ class Product1 extends Component<IRecipeProps, IState> {
       key: Date.UTC.toString()+(Math.random()),
       x,
       y,
-      className:'currency-plus-icon',
+      className:'love-icon',
       size: 1
     }
     this.addPlusCurrency(plusCurrency)
@@ -105,6 +109,11 @@ class Product1 extends Component<IRecipeProps, IState> {
         return {
           name:"Petting Party!", 
           description: "Makes petting more efficient for some time, effects stack."
+        }
+      case events.donationCampaign.id:
+        return {
+          name:"Treats Donation", 
+          description: "Create a campagin for people to donate treats. Some dogs really like them!"
         }
       default:
         return {
@@ -172,7 +181,13 @@ class Product1 extends Component<IRecipeProps, IState> {
       <div className={"highlight "+levelClass}>
         <div className="highlight-section">
           <div className="highlight-field title">
-            Farm
+            Farm Info
+          </div>
+          <div className="highlight-field">
+            Shelters lost pets in a cozy home. It also prepares EVENTS for them!
+          </div>
+          <div className="highlight-field title">
+            Farm Stas
           </div>
           <div className="highlight-field">
             <div className="highlight-attribute">Love</div>
@@ -188,7 +203,6 @@ class Product1 extends Component<IRecipeProps, IState> {
               <div className="highlight-love-icon"/>
             </div>
           </div>
-          {this.renderEventStatistic(product,usedLevel)}
         </div>
         <div className="highlight-section">
           <div className="highlight-field title">
@@ -197,18 +211,14 @@ class Product1 extends Component<IRecipeProps, IState> {
           {this.renderEventOptions(product)}
         </div>
         <div className="highlight-section">
-          <div className="highlight-field title">
-            Info
-          </div>
-          <div className="highlight-field">
-            Shelters lost pets in a cozy home. It also prepares EVENTS for them!
-          </div>
+          
           <div className="highlight-field title">
             Event Info
           </div>
           <div className="highlight-field">
             {description}
           </div>
+          {this.renderEventStatistic(product,usedLevel)}
         </div>
       </div>
     )
@@ -219,7 +229,7 @@ class Product1 extends Component<IRecipeProps, IState> {
     const {name} = this.getEventData(eventId)
     const {petMultiplier, duration} = product.getPettingTrainingData(level)
     const title = (
-      <div className="highlight-field title">{name}</div>
+      <div className="highlight-field title">{name+" Stats"}</div>
     )
     console.log("event UI name",name)
     switch (eventId){
@@ -236,6 +246,19 @@ class Product1 extends Component<IRecipeProps, IState> {
             </div>
           </React.Fragment>
         )
+        case events.donationCampaign.id:
+          return (
+            <React.Fragment>
+              {title}
+              <div className="highlight-field">
+                <div className="highlight-attribute">Treats</div>
+                <div className="highlight-value">
+                  {product.getEventReward(eventId,level).currencyReward.treats}
+                  <div className="treat-icon"/>
+                  </div>
+              </div>
+            </React.Fragment>
+          )
       default:
         return (
           <React.Fragment>

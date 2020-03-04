@@ -9,7 +9,7 @@ import { PetPetting } from './products/PetPetting';
 
 import Cookies from 'js-cookie' 
 
-const devMegaPetMult = 1
+const devMegaPetMult = 100
 const saveEvery = 0.5
 const saveVarName = "variables"
 //Game Manager
