@@ -167,9 +167,9 @@ export class Laboratory implements Product {
     getAvailablePoints(level?:number):number {
         let points = level ? level : GameManager.getInstance().getVariable(this.variableId).getValue()
         /* Tier 1 */
-        points -= this.getUpgradeLevel(ids.labUpgradeTier1A)
-        points -= this.getUpgradeLevel(ids.labUpgradeTier1B)
-        points -= this.getUpgradeLevel(ids.labUpgradeTier1C)
+        points -= this.getUpgradePointsTaken(ids.labUpgradeTier1A)
+        points -= this.getUpgradePointsTaken(ids.labUpgradeTier1B)
+        points -= this.getUpgradePointsTaken(ids.labUpgradeTier1C)
         return points
     }
 
