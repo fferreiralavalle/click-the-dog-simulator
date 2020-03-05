@@ -22,6 +22,10 @@ class GameManager  {
         this.timeManger = new TimeManager()
         this.productManager = new ProductManager(this.timeManger)
         this.variables = initializeVariables()
+        this.timeManger.susbcribe({
+            id: 'GMTimePassed',
+            onTimePass: (timePassed:number)=> this.increaseTimePassed(timePassed)
+        })
         setInterval(()=>{
             saveGame(this.variables)
         }, saveEvery * 60 * 1000)
@@ -34,6 +38,7 @@ class GameManager  {
             id: updateUiTick,
             onTimePass:() => store.dispatch(actions.updateVariables())
         })
+        this.handleOfflineTimePassed()
     }
 
     addToVariable (add: number, variableId: string): void {
@@ -85,6 +90,20 @@ class GameManager  {
     resetGame(){
         resetGameSave()
     }
+
+    increaseTimePassed(timePassed: number){
+        let totalTime:number = this.getVariable(variableIds.timePassed).getValue()
+        totalTime += timePassed
+        this.setVariable(totalTime, variableIds.timePassed)
+    }
+
+    handleOfflineTimePassed(){
+        let lastSaveTime:Date = this.getVariable(variableIds.lastSaveDate).getValue()
+        lastSaveTime = lastSaveTime ? new Date(lastSaveTime) : new Date()
+        const today = new Date()
+        const diffInSeconds = Math.abs(today.getTime() - lastSaveTime.getTime())/1000;
+        this.getTimeManager().passTime(diffInSeconds)
+    }
 }
 
 //Get Instance
@@ -126,6 +145,7 @@ const loadSavedData = (variablesObject:VariableStructure):VariableStructure => {
 }
 
 const saveGame = (variables: VariableStructure)=> {
+    variables.lastSaveDate = new Variable({id:variableIds.lastSaveDate, value:new Date()})
     Cookies.set(saveVarName, JSON.stringify(variables))
     console.log('saved gamed', variables)
 }

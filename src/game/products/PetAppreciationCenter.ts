@@ -269,7 +269,7 @@ export class PetAppreciationCenter implements Product {
 
     getPettingTrainingData(currentLevel?: number): PettingTrainingData{
         const level = currentLevel ? currentLevel : this.getLevel()
-        const petMultiplier = events.pettingTraining.baseReward*(1+0.5*level)
+        const petMultiplier = events.pettingTraining.baseReward*(1+0.3*level)
         const duration = 8
         return {
             petMultiplier,
