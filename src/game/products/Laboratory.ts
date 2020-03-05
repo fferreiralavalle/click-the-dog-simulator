@@ -64,7 +64,7 @@ export class Laboratory implements Product {
                 currency: 0,
                 treats: 1
             }
-            GameManager.getInstance().addToVariable(currency.treats,ids.treats)
+            GameManager.getInstance().addToVariable(currencyEvent.treats,ids.treats)
             this.onCurrencyTime(currencyEvent)
         }
         GameManager.getInstance().setVariable(progress,ids.product2Progress)
