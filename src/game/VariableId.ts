@@ -19,6 +19,9 @@ const variables = {
     labUpgradeTier1A: 'labUpgradeTier1A',
     labUpgradeTier1B: 'labUpgradeTier1B',
     labUpgradeTier1C: 'labUpgradeTier1C',
+    labUpgradeTier2A: 'labUpgradeTier2A',
+    labUpgradeTier2B: 'labUpgradeTier2B',
+    labUpgradeTier2C: 'labUpgradeTier2C',
     /* Relics */
 }
 

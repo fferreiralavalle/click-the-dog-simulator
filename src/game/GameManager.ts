@@ -67,12 +67,14 @@ class GameManager  {
     
     onClickedDog(): Currency{
         const PetPetting = this.productManager.getProduct(variableIds.product0Level) as PetPetting
-        const baseClickCurrency = PetPetting.getCurrencyPerPet().currency * devMegaPetMult
+        const {currency, treats} = PetPetting.getCurrencyPerPet()
+        const baseClickCurrency = currency * devMegaPetMult
         const currencyEarned: Currency = {
             currency: baseClickCurrency,
-            treats: 0
+            treats
         }
         this.addToVariable(baseClickCurrency, variableIds.currency)
+        this.addToVariable(treats, variableIds.treats)
         return currencyEarned
     }
 
@@ -93,7 +95,6 @@ export default (()=> {
         getInstance: function () {
             if (!instance) {
                 instance = new GameManager()
-                console.log(instance)
             }
             return instance
         }

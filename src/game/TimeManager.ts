@@ -50,5 +50,9 @@ export class TimeManager {
             1000 * tickTime * modTime)
     }
 
+    getTickTime():number{
+        return tickTime
+    }
+
 }
 

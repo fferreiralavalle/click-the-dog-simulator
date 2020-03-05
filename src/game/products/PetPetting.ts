@@ -19,11 +19,12 @@ export class PetPetting implements Product {
     getCurrencyPerSecond(level?: number): Currency {
         const base:number = 0.1;
         const currentLevel:number = level ? level : GameManager.getInstance().getVariable(this.variableId).getValue()
-        const currencyWithPow = base * this.getCurrencyPerPet(currentLevel).currency
+        const allCurrencPerSecond = this.getCurrencyPerPet(currentLevel)
+        const currencyWithPow = base * allCurrencPerSecond.currency
         const currencyPerSecond = currencyWithPow * currentLevel
         return {
             currency: currencyPerSecond,
-            treats: 0
+            treats: base * allCurrencPerSecond.treats * currentLevel
         }
     }
 
@@ -36,11 +37,15 @@ export class PetPetting implements Product {
         //Pet Lab Bonus
         const lab = GameManager.getInstance().getProductManager().getProduct(variables.product2Level) as Laboratory
         const labMult = lab.getUpgradeBonus(variables.labUpgradeTier1A).baseBonus
+        //Pet Lab Change Bonus
+        const criticalChance = lab.getUpgradeBonus(variables.labUpgradeTier2A).baseBonus
+        const isCritical = Math.random() < criticalChance
+        const criticalBonus = isCritical ? 1 : 0
         //Final Gain
         const final = (base + Math.floor(lvl/5)) * petTrainingMult * labMult
         return {
             currency: final,
-            treats: 0
+            treats: criticalBonus
         }
     }
     subscribeToCurrency(cs: CurrencySubscriber): void {
@@ -53,6 +58,7 @@ export class PetPetting implements Product {
     onTimePassed(timePassed: number): void {
         const add:Currency = this.getCurrencyPerSecond();
         add.currency *= timePassed
+        add.treats *= timePassed
         GameManager.getInstance().addToVariable(add.currency,variables.currency)
         this.currencySubscribers.forEach((sub)=>{
             sub.onCurrency(add)

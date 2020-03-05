@@ -33,13 +33,12 @@ export class Laboratory implements Product {
         this.currencySubscribers = []
     }
     getCurrencyPerSecond(level?: number): Currency {
-        const base:number = 0;
-        const currentLevel:number = level ? level : GameManager.getInstance().getVariable(this.variableId).getValue()
-        const currencyPerSecond = base * currentLevel
-        return {
-            currency: currencyPerSecond,
+        const currencyUpgrade = this.getUpgradeBonus(ids.labUpgradeTier2C).baseBonus
+        const currency:Currency = {
+            currency: currencyUpgrade,
             treats: 0
         }
+        return currency
     }
     getProgressPerSecond(level?: number): number {
         const baseProgress = 0
@@ -57,17 +56,19 @@ export class Laboratory implements Product {
         const pps: number = this.getProgressPerSecond()
         let progress = this.getProgress();
         const goal = this.getProgressGoal()
+        let currency:Currency = this.getCurrencyPerSecond()
         while (progress >= goal){
             progress -= goal
-            const currency:Currency = {
+            const currencyEvent:Currency = {
                 currency: 0,
                 treats: 1
             }
             GameManager.getInstance().addToVariable(currency.treats,ids.treats)
-            this.onCurrencyTime(currency)
+            this.onCurrencyTime(currencyEvent)
         }
         GameManager.getInstance().setVariable(progress,ids.product2Progress)
         GameManager.getInstance().addToVariable(pps * timePassed,ids.product2Progress)
+        this.onCurrencyTime(currency)
     }
     
     subscribeToCurrency(cs: CurrencySubscriber): void {
@@ -170,6 +171,10 @@ export class Laboratory implements Product {
         points -= this.getUpgradePointsTaken(ids.labUpgradeTier1A)
         points -= this.getUpgradePointsTaken(ids.labUpgradeTier1B)
         points -= this.getUpgradePointsTaken(ids.labUpgradeTier1C)
+        /* Tier 2 */
+        points -= this.getUpgradePointsTaken(ids.labUpgradeTier2A)
+        points -= this.getUpgradePointsTaken(ids.labUpgradeTier2B)
+        points -= this.getUpgradePointsTaken(ids.labUpgradeTier2C)
         return points
     }
 
@@ -181,11 +186,24 @@ export class Laboratory implements Product {
     getAvaiableUpgrades(level?:number): Array<UpgradeTier> {
         const lvl = level ? level : this.getLevel()
         const upgradeTiers = [this.getTierXUpgrades(0)]
+        if (lvl>=10){
+            upgradeTiers.push(this.getTierXUpgrades(1))
+        }
         return upgradeTiers;
     }
 
     getTierXUpgrades(tier:number):UpgradeTier{
         switch(tier){
+            case 1:
+                return {
+                    upgrades: [{
+                        id: ids.labUpgradeTier2A
+                    },{
+                        id: ids.labUpgradeTier2B
+                    },{
+                        id: ids.labUpgradeTier2C
+                    }]
+                }
             default:
                 return {
                     upgrades: [{
@@ -209,16 +227,36 @@ export class Laboratory implements Product {
         if (lvl<0) lvl = 0
         let base = 0
         switch(upgradeId){
-            case ids.labUpgradeTier1B:
-                base = lvl!=0 ? 0.7 : 0
-                lvl = Math.pow(lvl,0.2)
-                if (lvl<=0) lvl = 1
+            /* TIER 2 */
+            /* Treat Chance per Pet */
+            case ids.labUpgradeTier2A:
+                base = 0.975
                 return {
-                    baseBonus: 1 - Math.pow(base,10/lvl)
+                    baseBonus: 1 - Math.pow(base,lvl)
+                }
+            /* Farm double event bonus chance */
+            case ids.labUpgradeTier2B:
+                base = 0.975
+                return {
+                    baseBonus: 1 - Math.pow(base,lvl)
+                }
+            /* Gain love for each Farm and Pet lvl */
+            case ids.labUpgradeTier2C:
+                base = 0.25
+                let petLvl = GameManager.getInstance().getVariable(ids.product0Level).getValue()
+                let farmLvl = GameManager.getInstance().getVariable(ids.product1Level).getValue()
+                return {
+                    baseBonus: base * lvl * (petLvl + farmLvl)
+                }
+            /* Farm % Reduction*/
+            case ids.labUpgradeTier1B:
+                base = 0.96
+                return {
+                    baseBonus: Math.pow(base,lvl)
                 }
             /* LAB treats */
             case ids.labUpgradeTier1C:
-                base =  lvl!=0 ? 0.25 : 0
+                base =  lvl!=0 ? 0.5 : 0
                 return {
                     baseBonus: base * lvl
                 }

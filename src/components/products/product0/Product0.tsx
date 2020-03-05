@@ -50,18 +50,34 @@ class Product0 extends Component<IRecipeProps,IState> {
   }
 
   onCurrencyGain = (currency: Currency) => {
-    const x = (10+Math.random() * 50)+"%"
-    const y = (60+Math.random() * 40)+"%"
-    const plusCurrency:plusCurrency = {
-      value: ('+'+toFormat(currency.currency)),
-      key: Date.UTC.toString()+(Math.random()),
-      x,
-      y,
-      className:'love-icon',
-      size: 1
+    if (currency.currency!=0){
+      let x = (10+Math.random() * 50)+"%"
+      let y = (60+Math.random() * 40)+"%"
+      let plusCurrency:plusCurrency = {
+        value: ('+'+toFormat(currency.currency)),
+        key: Date.UTC.toString()+(Math.random()),
+        x,
+        y,
+        className:'love-icon',
+        size: 1
+      }
+      this.addPlusCurrency(plusCurrency)
     }
-    this.addPlusCurrency(plusCurrency)
+    if (currency.treats!=0){
+        let x = (10+Math.random() * 50)+"%"
+        let y = (60+Math.random() * 40)+"%"
+        const plusCurrency:plusCurrency = {
+        value: ('+'+toFormat(currency.treats)),
+        key: Date.UTC.toString()+(Math.random()),
+        x,
+        y,
+        className:'treat-icon',
+        size: 1
+      }
+      this.addPlusCurrency(plusCurrency)
+    } 
   }
+
   addPlusCurrency = (pc: plusCurrency) => {
     this.setState({
       plusCurrencies: [...this.state.plusCurrencies,pc]
@@ -143,8 +159,14 @@ class Product0 extends Component<IRecipeProps,IState> {
             </div>
           </div>
           <div className="highlight-field">
-            Commands the Divine Forces from far away to pet your beautiful boy. 
-            <br/>👋 - Increases your Petting Power every 5 levels.
+            <div className="highlight-attribute">Hands</div>
+            <div className="highlight-value">
+              {usedLevel}👋
+            </div>
+          </div>
+          <div className="highlight-field">
+            Commands the Divine Forces from far away to pet your beautiful boy.
+            <br/>👋 count as 10% of yours. Increases pet power every 5 levels.
           </div>
         </div>
       </div>

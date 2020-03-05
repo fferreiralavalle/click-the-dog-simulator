@@ -26,7 +26,6 @@ export default class ProductManager {
         this.products.forEach((prod) => {
             if (prod.canUnlock() && !prod.isUnlocked){
                 prod.isUnlocked = true
-                console.log("product ",prod.variableId," has been unlocked!")
             }
         })
     }
@@ -54,9 +53,6 @@ export default class ProductManager {
     levelUpProduct(productId: string): boolean{
         const p:Product = this.getProduct(productId)
         const result = p.levelUp()
-        console.log({
-            result
-        })
         return result
     }
 }

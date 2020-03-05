@@ -55,18 +55,25 @@ class LaboratoryUI extends Component<IRecipeProps, IState> {
 
   onEventReward = (result:Currency)=> {
     
-    if (result.treats<=0)
+    if (result.treats<=0 && result.currency<=0)
       return
     const x = (10+Math.random() * 30)+"%"
     const y = (30+Math.random() * 40)+"%"
-    let value = ('+'+toFormat(result.treats))
+    let value = ('+'+toFormat(result.currency))
+    let size = 1
+    let className = 'love-icon'
+    if (result.treats>0){
+      value = ('+'+toFormat(result.treats))
+      size = 1.5
+      className = 'treat-icon'
+    }
     const plusCurrency:plusCurrency = {
-      value: value,
+      value,
       key: Date.UTC.toString()+(Math.random()),
       x,
       y,
-      className:'treat-icon',
-      size: 1.5
+      className,
+      size
     }
     this.addPlusCurrency(plusCurrency)
   }
@@ -116,24 +123,43 @@ class LaboratoryUI extends Component<IRecipeProps, IState> {
 
   getUpgradeData= (eventId: string)=> {
     switch (eventId){
-        case variableIds.labUpgradeTier1B:
+      /* TIER 2 */
+      case variableIds.labUpgradeTier2A:
             return {
-                name:"Farm Productivity", 
-                description: "Reduces the time needed to prepare events.",
-                className: "lab-icon-1B",
+                name:"Magic Rubbing", 
+                description: "Petting has a chance of producing 1 Treat. Scientific Magic!",
+                className: "lab-icon-1A",
             }
-        case variableIds.labUpgradeTier1C:
-            return {
-                name:"Artificial Treats!", 
-                description: "The lab will slowly generate Treats on its own, Yummy!",
-                className: "lab-icon-1C"
-            }
-        default:
-            return {
-                name:"Petting Mastery", 
-                description: "You become an expert in the ways of petting.",
-                className: "lab-icon-1A"
-            }
+      case variableIds.labUpgradeTier2B:
+          return {
+              name:"Special Event!", 
+              description: "Every Farm event has a chance of doubling its rewards. Yay!",
+              className: "lab-icon-1B"
+          }
+      case variableIds.labUpgradeTier2C:
+        return {
+            name:"Lab Puptivities!", 
+            description: "Labs produce love for each Farm and Divine Petting level!",
+            className: "lab-icon-1C"
+        }
+      case variableIds.labUpgradeTier1B:
+          return {
+              name:"Farm Productivity", 
+              description: "Reduces the time needed to prepare events.",
+              className: "lab-icon-1B",
+          }
+      case variableIds.labUpgradeTier1C:
+          return {
+              name:"Artificial Treats!", 
+              description: "The lab will slowly generate Treats on its own, Yummy!",
+              className: "lab-icon-1C"
+          }
+      default:
+          return {
+              name:"Petting Mastery", 
+              description: "You become an expert in the ways of petting.",
+              className: "lab-icon-1A"
+          }
     }
   }
 
@@ -204,7 +230,6 @@ class LaboratoryUI extends Component<IRecipeProps, IState> {
             <div className="highlight-attribute">Progress</div>
             <div className="highlight-value">
               {progressPS}/s
-              <div className="treat-icon"/>
             </div>
           </div>
         </div>
@@ -212,16 +237,16 @@ class LaboratoryUI extends Component<IRecipeProps, IState> {
           <div className="highlight-field title">
             Pupgrades
           </div>
-          {this.renderUpgrades(product)}
+          {this.renderUpgrades(product,usedLevel)}
         </div>
         <div className={"highlight-section"+upgradeClass}>
           <div className="highlight-field title">
-            Pupgrade Info
+            {this.getUpgradeData(chosenUpgrade).name}
           </div>
           <div className="highlight-field">
               {this.getUpgradeData(this.state.chosenUpgrade).description}
           </div>
-          {this.renderUpgradeStatistic(product,usedLevel)}
+          {this.renderUpgradeStatistic(product)}
           <div className="highlight-tier">
             {this.renderUpgradeButton(10,chosenUpgrade,product)}
             {this.renderUpgradeButton(1,chosenUpgrade,product)}
@@ -246,14 +271,14 @@ class LaboratoryUI extends Component<IRecipeProps, IState> {
     )
   }
 
-  renderUpgradeStatistic(product: Laboratory, level:number) {
+  renderUpgradeStatistic(product: Laboratory) {
     const {chosenUpgrade,buyUpgradeHoverValue} = this.state
     const upgradeLevel = product.getUpgradeLevel(chosenUpgrade)+buyUpgradeHoverValue
     const {name} = this.getUpgradeData(chosenUpgrade)
     const bonus = product.getUpgradeBonus(chosenUpgrade,upgradeLevel)
     const {baseBonus} = bonus
     const title = (
-      <div className="highlight-field title">{name+" Stats"}</div>
+      <div className="highlight-field title">Stats</div>
     )
     const points = (
         <div className="highlight-field">
@@ -285,6 +310,33 @@ class LaboratoryUI extends Component<IRecipeProps, IState> {
                     </div>
                 </React.Fragment>
                 )
+        case variableIds.labUpgradeTier2A:
+        case variableIds.labUpgradeTier2B:
+          return (
+            <React.Fragment>
+                {title}
+                {points}
+                <div className="highlight-field">
+                    <div className="highlight-attribute">Chance</div>
+                    <div className="highlight-value">
+                        {toFormat(baseBonus*100)}%
+                    </div>
+                </div>
+            </React.Fragment>
+            )
+        case variableIds.labUpgradeTier2C:
+          return (
+            <React.Fragment>
+                {title}
+                {points}
+                <div className="highlight-field">
+                    <div className="highlight-attribute">Love</div>
+                    <div className="highlight-value">
+                        {toFormat(baseBonus)}/s
+                    </div>
+                </div>
+            </React.Fragment>
+          )
         default:
             return (
             <React.Fragment>
@@ -301,11 +353,11 @@ class LaboratoryUI extends Component<IRecipeProps, IState> {
     }
   }
 
-  renderUpgrades(product: Laboratory) {
-    const upgradeTiers = product.getAvaiableUpgrades()
-    return upgradeTiers.map((ut)=>{
+  renderUpgrades(product: Laboratory, level: number) {
+    const upgradeTiers = product.getAvaiableUpgrades(level)
+    return upgradeTiers.map((ut,i)=>{
         return (
-            <div className="highlight-tier">
+            <div className={"highlight-tier tier-color-lab-"+i}>
                 {ut.upgrades.map((upgrade)=>{
                     const upgradeData = this.getUpgradeData(upgrade.id)
                     const upgradeLevel = product.getUpgradeLevel(upgrade.id)

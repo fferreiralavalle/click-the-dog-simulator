@@ -15,6 +15,7 @@
 .laboratory .plus-currencies {
     width: 30%;
     right: 0;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.2) 100%);
 }
 .lab-upgrade-level {
     position: absolute;
@@ -40,6 +41,11 @@
     background-size: 90%;
     cursor: pointer;
     transition: transform 1s;
+    animation: fadein 1s;
+}
+.tier-color-lab-1 .lab-icon{
+    border: 1px solid rgb(204, 0, 255);
+    background-color: rgba(126, 46, 255, 0.5);
 }
 .lab-icon:hover {
     transform: scale(1.1);

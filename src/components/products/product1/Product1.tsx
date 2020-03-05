@@ -62,9 +62,11 @@ class Product1 extends Component<IRecipeProps, IState> {
     switch(eventId.getValue()){
       case events.pettingTraining.id:
         value = 'PET PARTY!'
+        break
       case events.donationCampaign.id:
         value = '+'+toFormat(result.currencyReward.treats)
         className = 'treat-icon'
+        break
     }
     const plusCurrency:plusCurrency = {
       value: value,

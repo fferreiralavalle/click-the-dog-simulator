@@ -99,6 +99,9 @@ export class PetAppreciationCenter implements Product {
         let progress = GameManager.getInstance().getVariable(variables.product1Progress).getValue()
         while (progress >= goal){
             const event = this.getEvent()
+            const lab = GameManager.getInstance().getProductManager().getProduct(variables.product2Level) as Laboratory
+            const criticalChange = lab.getUpgradeBonus(variables.labUpgradeTier2B).baseBonus
+            const isCritical = Math.random() < criticalChange
             let reward:RewardResult = {
                 currencyReward: this.getEventReward(event.id).currencyReward
             }
@@ -107,11 +110,14 @@ export class PetAppreciationCenter implements Product {
                     reward.pettingTrainingReward = this.getPettingTrainingData()
                     let pts = GameManager.getInstance().getVariable(variables.product1EventPettingTrainingDurations).getValue() as Array<PetTrainingVariable>
                     pts = pts ? pts : []
-                    pts.push({
+                    const petReward = {
                         duration: reward.pettingTrainingReward.duration
-                    })
+                    }
+                    pts.push(petReward)
+                    if (isCritical){
+                        pts.push(petReward)
+                    }
                     GameManager.getInstance().setVariable(pts, variables.product1EventPettingTrainingDurations)
-                    console.log("Party Bonus added",pts, reward)
                     break
                 default:
                     break
@@ -121,6 +127,11 @@ export class PetAppreciationCenter implements Product {
             GameManager.getInstance().addToVariable(reward.currencyReward.treats, variables.treats)
             GameManager.getInstance().setVariable(progress, variables.product1Progress)
             this.onReward(reward)
+            if (isCritical){
+                GameManager.getInstance().addToVariable(reward.currencyReward.currency, variables.currency)
+                GameManager.getInstance().addToVariable(reward.currencyReward.treats, variables.treats)
+                this.onReward(reward)
+            }
         }
     }
 

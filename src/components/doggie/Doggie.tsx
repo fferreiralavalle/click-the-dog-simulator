@@ -10,6 +10,7 @@ import GameManager from '../../game/GameManager'
 import { Variable } from '../../game/Variables'
 import {toFormat, clearPluses} from '../../utils/uiUtil'
 import ProductPlus, { plusCurrency } from '../products/ProductPlus'
+import { Currency } from '../../game/products/Product'
 
 interface IRecipeProps {
     dogName: Variable;
@@ -45,7 +46,7 @@ class Doggies extends Component<IRecipeProps,IState> {
     onClickedDog(event:any){
         const earned = GameManager.getInstance().onClickedDog()
         this.props.dispatch(actions.updateVariables())
-        this.plusCurrencyEffect(earned.currency, event)
+        this.plusCurrencyEffect(earned, event)
         this.setState({
             isPetted: true
         })
@@ -57,13 +58,13 @@ class Doggies extends Component<IRecipeProps,IState> {
         }, 100)
     }
 
-    plusCurrencyEffect(earned: number, e:any){
+    plusCurrencyEffect(earned: Currency, e:any){
         const currencies = [...this.state.plusCurrencies]
         var rect = e.target.getBoundingClientRect();
         const x = e.clientX - rect.left; //x position within the element.
         const y = e.clientY - rect.top;  //y position within the element.
-        const plus :plusCurrency= {
-            value: "+"+toFormat(earned),
+        let plus :plusCurrency= {
+            value: "+"+toFormat(earned.currency),
             key: (new Date).toString()+(Math.random()),
             x: x+"px",
             y: y+"px",
@@ -72,6 +73,14 @@ class Doggies extends Component<IRecipeProps,IState> {
 
         }
         currencies.push(plus)
+        if (earned.treats!==0){
+            plus.value = "+"+toFormat(earned.treats)
+            plus.key = (new Date).toString()+(Math.random())
+            plus.size = (1 + Math.random() * 0.25)
+            plus.className = "treat-icon"
+            plus.x = x-70+"px"
+            currencies.push(plus)
+        }
         this.setState({
             plusCurrencies: currencies
         })
