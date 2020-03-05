@@ -13,6 +13,15 @@
     border: 1px solid rgba(0, 0, 0, 0.8);
     cursor: pointer;
     z-index: 500;
+    overflow: hidden;
+}
+.product-upgrade-progress{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: rgba(255,255,255,0.5);
+    z-index: -1;
 }
 .product-upgrade.disabled {
     background-color: rgba(255, 255, 255, 0.5);

@@ -26,14 +26,20 @@ class LevelUpButton extends Component<IRecipeProps> {
     }
 
     render(){
-        const {productId, ...rest} = this.props;
+        const {productId, currency, treats, ...rest} = this.props;
         const product = GameManager.getInstance().getProductManager().getProduct(productId)
         const canLevelUp = product.canLevelUp()
         const levelUpPrice = product.getLevelUpPrice()
         const levelUpCurrency:string= toFormat(product.getLevelUpPrice().currency)
         const levelUpTreats:string= toFormat(product.getLevelUpPrice().treats)
+        const progressTreats = levelUpPrice.treats!=0 ? treats / levelUpPrice.treats:1
+        const progressCurrency = levelUpPrice.currency!=0 ? currency / levelUpPrice.currency:1
+        const progressStyle = {
+            width: progressTreats * progressCurrency * 100+"%"
+        }
         return (
             <div className={`product-upgrade ${!canLevelUp && "disabled"}`} onClick={this.levelup()} {...rest}>
+                <div className="product-upgrade-progress" style={progressStyle}/>
                 {levelUpPrice.currency > 0 && (
                     <React.Fragment>
                         {levelUpCurrency}
@@ -52,7 +58,8 @@ class LevelUpButton extends Component<IRecipeProps> {
 }
 
 const mapStateToProps = (state:any) => ({
-  currency: selecters.getVariable(state, ids.currency),
+  currency: selecters.getVariable(state, ids.currency).getValue(),
+  treats: selecters.getVariable(state, ids.treats).getValue()
 })
 
 export default connect(mapStateToProps)(LevelUpButton);

@@ -1,4 +1,5 @@
 import GameManager from '../game/GameManager'
+import { Variable } from '../game/Variables'
 
 const types = {
     UPDATE_VARIABLES: 'UPDATE_VARIABLES'
@@ -25,8 +26,8 @@ export const actions = {
 }
 
 export const selecters = {
-    getVariables: (state:any) => (state.variables.variables),
-    getVariable: (state:any, id:string) => (state.variables.variables[id])
+    getVariables: (state:any):Variable => (state.variables.variables),
+    getVariable: (state:any, id:string):Variable => (state.variables.variables[id])
 }
 
 export default variables;
