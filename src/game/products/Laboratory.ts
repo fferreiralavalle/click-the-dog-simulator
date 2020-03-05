@@ -57,6 +57,7 @@ export class Laboratory implements Product {
         let progress = this.getProgress();
         const goal = this.getProgressGoal()
         let currency:Currency = this.getCurrencyPerSecond()
+        currency.currency *= timePassed
         while (progress >= goal){
             progress -= goal
             const currencyEvent:Currency = {
@@ -68,6 +69,7 @@ export class Laboratory implements Product {
         }
         GameManager.getInstance().setVariable(progress,ids.product2Progress)
         GameManager.getInstance().addToVariable(pps * timePassed,ids.product2Progress)
+        GameManager.getInstance().addToVariable(currency.currency,ids.currency)
         this.onCurrencyTime(currency)
     }
     
