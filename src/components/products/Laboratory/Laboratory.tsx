@@ -168,7 +168,7 @@ class LaboratoryUI extends Component<IRecipeProps, IState> {
     const {plusCurrencies, isHover} = this.state
     const product = GameManager.getInstance().getProductManager().getProduct(ids.product2Level) as Laboratory
     const progressStyle = {
-      flex: `${progress.getValue()/product.getProgressGoal()} 1`
+      width: `${progress.getValue()/product.getProgressGoal()*100}%`
     }
     const freePoints = product.getAvailablePoints()
     return (

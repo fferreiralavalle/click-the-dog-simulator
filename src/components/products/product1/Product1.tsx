@@ -142,7 +142,7 @@ class Product1 extends Component<IRecipeProps, IState> {
     const {plusCurrencies, isHover} = this.state
     const product = GameManager.getInstance().getProductManager().getProduct(ids.product1Level) as PetAppreciationCenter
     const progressStyle = {
-      flex: `${progress.getValue()/product.getProgressGoal()} 1`
+      width: `${progress.getValue()/product.getProgressGoal()*100}%`
     }
     return (
       <div className="product product1 boxed" onMouseEnter={this.onHover(true)} onMouseLeave={this.onHover(false)}>

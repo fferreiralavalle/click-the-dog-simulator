@@ -51,8 +51,8 @@
 .progress-bar-progress {
     display: flex;
     height: 100%;
-    flex: 0 1;
     background-color: rgba(255, 255, 255, 0.7);
+    transition: width 0.5s;
 }
 .progress-bar-value {
     position: absolute;
