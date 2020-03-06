@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import './box.css'
 
 import {selecters, actions} from '../../reducers/GameVariables'
+import {actions as mail} from '../../reducers/Mails'
 import ids from '../../game/VariableId'
 
 import GameManager from '../../game/GameManager'
@@ -41,6 +42,9 @@ class Box extends Component<IRecipeProps,IState> {
     unlockProduct(){
         const {productId} = this.props;
         const res = productId && GameManager.getInstance().getProductManager().levelUpProduct(productId)
+        if (res){
+            this.props.dispatch(mail.updateMails())
+        }
     }
 
     render(){

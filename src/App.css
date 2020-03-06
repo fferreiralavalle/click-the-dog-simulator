@@ -28,3 +28,14 @@ body *{
   background-image: url(https://i.imgur.com/vIOVyPq.png);
   background-position: center;
 }
+::-webkit-scrollbar{
+  width: 10px;
+  background: transparent
+}
+::-webkit-scrollbar-thumb{
+  background: url(https://i.imgur.com/DzCES2V.jpg);
+  border-radius: 5px;
+}
+::-webkit-scrollbar-track-piece, ::-webkit-scrollbar-track{
+  background: transparent
+}

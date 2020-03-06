@@ -1,4 +1,6 @@
 import { isMobile } from "../utils/uiUtil"
+import { Currency } from "./products/Product"
+import { addCurrenciy } from "../utils/mathUtils"
 
 const tickTime = isMobile() ? 1 : 0.5
 const modTimeFast = 0.5
@@ -6,7 +8,7 @@ let modTime = 1
 
 export interface TimeSubscriber {
     id: string
-    onTimePass: (timeMult: number) => void
+    onTimePass: (timeMult: number) => Currency
 }
 
 export class TimeManager {
@@ -24,10 +26,13 @@ export class TimeManager {
         this.setInterval(modTime)
     }
     
-    passTime(timeMult: number){
+    passTime(timeMult: number):Currency{
+        let currencyGained: Currency = {currency:0,treats:0}
         this.subscribers.forEach(fun => {
-            fun.onTimePass(timeMult)
+            const cur=fun.onTimePass(timeMult)
+            currencyGained = addCurrenciy(currencyGained,cur)
         })
+        return currencyGained
     }
     
     susbcribe(sub: TimeSubscriber) {

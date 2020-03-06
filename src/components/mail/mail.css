@@ -1,0 +1,89 @@
+.mail {
+    height: 100px;
+    width: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px 15px;
+    position: relative;
+}
+.mail-icon {
+    height: 100%;
+    width: 100%;
+    background-image: url(https://i.imgur.com/WV35LCM.png);
+    background-position: center;
+    position: relative;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.mail-tab {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.8);
+    top: 80px;
+    z-index: 2000;
+    border-image: url(/static/media/wood.16e04728.jpg) 30 30 stretch;
+    border-style: solid;
+    border-width: 5px;
+    max-height: 500px;
+    overflow-y: auto;
+    animation: fadein 0.5s;
+}
+.mail-notification-icon {
+    background-color: rgba(255, 255, 255, 0.7);
+    border: 1px solid;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    right: -3px;
+    bottom: 20px;
+}
+.mail-notification-unseen.dance {
+    animation: dance 1s;
+    animation-direction: alternate;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    font-weight: bold;
+}
+.mail-list {
+    width: 300px;
+}
+.mail-mail {
+    margin: 10px;
+    padding: 10px;
+    padding-left: 5px;
+    border: 1px solid;
+    display: flex;
+    background-size: cover;
+    background-position: center;
+}
+.mail-mail-icon {
+    width: 30%;
+    flex: 1 1;
+    margin: 5px;
+    background-position: center;
+}
+.mail-mail-info {
+    flex: 4 1;
+    background-color: rgba(255, 255, 255, 0.6);
+    border: 1px solid;
+    padding: 10px;
+    border-radius: 5px;
+}
+p.mail-mail-title {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+@keyframes dance {
+    0%{
+        transform: scale(0.9);
+    }
+    100%{
+        transform: scale(1.25);
+    }
+}

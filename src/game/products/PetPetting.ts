@@ -55,14 +55,16 @@ export class PetPetting implements Product {
             console.log("Subscribed to Petting: ", cs.id)
         }
     }
-    onTimePassed(timePassed: number): void {
+    onTimePassed(timePassed: number): Currency {
         const add:Currency = this.getCurrencyPerSecond();
         add.currency *= timePassed
         add.treats *= timePassed
         GameManager.getInstance().addToVariable(add.currency,variables.currency)
+        GameManager.getInstance().addToVariable(add.treats,variables.treats)
         this.currencySubscribers.forEach((sub)=>{
             sub.onCurrency(add)
         })
+        return add
     }
 
     canUnlock(): boolean{
@@ -89,6 +91,16 @@ export class PetPetting implements Product {
         if (this.canLevelUp()){
             GameManager.getInstance().addToVariable(1, this.variableId)
             GameManager.getInstance().addToVariable(-levelUpPrice, variables.currency)
+            if (this.getLevel()===1){
+                GameManager.getInstance().getNotificationManager().addNotification({
+                    id:'pet-petting-unlock',
+                    background: 'https://i.imgur.com/6ZO4rY8.jpg',
+                    description:'Wow! Your dog is being automaticly pet! Hover over a building to see more details.',
+                    image: 'https://i.imgur.com/B00xNnt.png',
+                    seen: false,
+                    title: 'Divine Petting Unlocked!'
+                  })
+            }
             return true
         }
         else {

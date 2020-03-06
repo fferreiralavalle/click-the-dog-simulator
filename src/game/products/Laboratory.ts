@@ -1,6 +1,7 @@
 import { Product, Currency, CurrencySubscriber } from './Product'
 import ids from '../VariableId';
 import GameManager from '../GameManager'
+import { addCurrenciy } from '../../utils/mathUtils';
 
 export interface EventType{
     id: string,
@@ -52,10 +53,11 @@ export class Laboratory implements Product {
         return base
     }
 
-    onTimePassed(timePassed: number): void {
+    onTimePassed(timePassed: number): Currency {
         const pps: number = this.getProgressPerSecond()
         let progress = this.getProgress();
         const goal = this.getProgressGoal()
+        let totalCurrency:Currency = {currency:0,treats:0}
         let currency:Currency = this.getCurrencyPerSecond()
         currency.currency *= timePassed
         while (progress >= goal){
@@ -64,13 +66,16 @@ export class Laboratory implements Product {
                 currency: 0,
                 treats: 1
             }
+            totalCurrency = addCurrenciy(totalCurrency,currencyEvent)
             GameManager.getInstance().addToVariable(currencyEvent.treats,ids.treats)
             this.onCurrencyTime(currencyEvent)
         }
         GameManager.getInstance().setVariable(progress,ids.product2Progress)
         GameManager.getInstance().addToVariable(pps * timePassed,ids.product2Progress)
         GameManager.getInstance().addToVariable(currency.currency,ids.currency)
+        totalCurrency = addCurrenciy(totalCurrency,currency)
         this.onCurrencyTime(currency)
+        return totalCurrency
     }
     
     subscribeToCurrency(cs: CurrencySubscriber): void {
@@ -114,6 +119,14 @@ export class Laboratory implements Product {
         if (this.canLevelUp()) {
             GameManager.getInstance().addToVariable(1, this.variableId)
             GameManager.getInstance().addToVariable(-levelUpPrice, ids.treats)
+            GameManager.getInstance().getNotificationManager().addNotification({
+                id:'lab-unlock',
+                background: 'https://i.imgur.com/icoqc1B.jpg',
+                description:'Thank you for the treats mister! Hover over my lab to pupgrade your buildings.',
+                image: 'https://i.imgur.com/mLU1yyE.png',
+                seen: false,
+                title: 'Lab Unlocked!'
+              })
             return true
         }
         else {

@@ -1,4 +1,4 @@
-import { Product } from "./products/Product"
+import { Product, Currency } from "./products/Product"
 import { PetAppreciationCenter } from "./products/PetAppreciationCenter"
 import { PetPetting } from "./products/PetPetting"
 import VariableIds from './VariableId'
@@ -22,12 +22,13 @@ export default class ProductManager {
         })
     }
 
-    onTimePassed(timeMult: number): void {
+    onTimePassed(timeMult: number): Currency {
         this.products.forEach((prod) => {
             if (prod.canUnlock() && !prod.isUnlocked){
                 prod.isUnlocked = true
             }
         })
+        return {currency:0, treats:0}
     }
 
     subscribeBuildings(timeManager: TimeManager): void {

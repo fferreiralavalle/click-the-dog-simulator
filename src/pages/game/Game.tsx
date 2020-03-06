@@ -15,6 +15,7 @@ import Doggie from '../../components/doggie/Doggie'
 import Product0 from '../../components/products/product0/Product0'
 import Product1 from '../../components/products/product1/Product1'
 import Laboratory from '../../components/products/Laboratory/Laboratory'
+import Mail from '../../components/mail/Mail'
 
 interface IRecipeProps {
     dispatch: Function
@@ -55,6 +56,7 @@ class Game extends Component<IRecipeProps> {
         <div className="game">
             <div className="game-header">
                 <Currencies/>
+                <Mail/>
                 <SaveManager/>
             </div>
             <div className="product-list">

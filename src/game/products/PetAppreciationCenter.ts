@@ -2,6 +2,7 @@ import { Product, Currency, CurrencySubscriber } from './Product'
 import variables from '../VariableId';
 import GameManager from '../GameManager'
 import { Laboratory } from './Laboratory';
+import { addCurrenciy } from '../../utils/mathUtils';
 
 export interface EventType{
     id: string,
@@ -83,18 +84,20 @@ export class PetAppreciationCenter implements Product {
         const progressPerSecond = baseProgress + currentLevel/2
         return progressPerSecond
     }
-    onTimePassed(timePassed: number): void {
+    onTimePassed(timePassed: number): Currency {
         let add:Currency = this.getCurrencyPerSecond();
         const pps: number = this.getProgressPerSecond()
         add.currency *=  timePassed
         GameManager.getInstance().addToVariable(add.currency,variables.currency)
         GameManager.getInstance().addToVariable(pps * timePassed,variables.product1Progress)
-        this.checkForProgressCompletion()
+        const eventCurrency = this.checkForProgressCompletion()
         this.checkForEventDurations(timePassed)
         this.onCurrencyTime(add)
+        return addCurrenciy(add,eventCurrency)
     }
     
-    checkForProgressCompletion(){
+    checkForProgressCompletion(): Currency{
+        let totalCurrency:Currency = {currency:0,treats:0}
         const goal = this.getProgressGoal();
         let progress = GameManager.getInstance().getVariable(variables.product1Progress).getValue()
         while (progress >= goal){
@@ -127,12 +130,15 @@ export class PetAppreciationCenter implements Product {
             GameManager.getInstance().addToVariable(reward.currencyReward.treats, variables.treats)
             GameManager.getInstance().setVariable(progress, variables.product1Progress)
             this.onReward(reward)
+            totalCurrency = addCurrenciy(reward.currencyReward,totalCurrency)
             if (isCritical){
                 GameManager.getInstance().addToVariable(reward.currencyReward.currency, variables.currency)
                 GameManager.getInstance().addToVariable(reward.currencyReward.treats, variables.treats)
                 this.onReward(reward)
+                totalCurrency = addCurrenciy(reward.currencyReward,totalCurrency)
             }
         }
+        return totalCurrency
     }
 
     /** Handles the duration of event that generate lasting effect when completed */
@@ -221,6 +227,14 @@ export class PetAppreciationCenter implements Product {
         if (this.canLevelUp()) {
             GameManager.getInstance().addToVariable(1, this.variableId)
             GameManager.getInstance().addToVariable(-levelUpPrice, variables.currency)
+            GameManager.getInstance().getNotificationManager().addNotification({
+                id:'pet-farm-unlock',
+                background: 'https://i.imgur.com/G0KXJDf.jpg',
+                description:'Hello good sir, my farm can prepare events that give BIG bonuses. You can choose a new event at level 5.',
+                image: 'https://i.imgur.com/L1eHWfM.png',
+                seen: false,
+                title: 'Farm Unlocked!'
+              })
             return true
         }
         else {

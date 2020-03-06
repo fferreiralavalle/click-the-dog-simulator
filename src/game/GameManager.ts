@@ -1,5 +1,6 @@
 import {store} from '../App'
 import {actions} from '../reducers/GameVariables'
+import {actions as mailActions} from '../reducers/Mails'
 import { TimeManager } from "./TimeManager";
 import ProductManager from './ProductManager';
 import variableIds from './VariableId'
@@ -8,6 +9,8 @@ import { Currency } from './products/Product';
 import { PetPetting } from './products/PetPetting';
 
 import Cookies from 'js-cookie' 
+import NotificationManager from './NotificationManager';
+import { toFormat } from '../utils/uiUtil';
 
 const devMegaPetMult = 1
 const saveEvery = 0.5
@@ -16,11 +19,13 @@ const saveVarName = "variables"
 class GameManager  {
     timeManger: TimeManager
     productManager: ProductManager
+    notificationManager: NotificationManager
     variables: VariableStructure
 
     constructor(){
         this.timeManger = new TimeManager()
         this.productManager = new ProductManager(this.timeManger)
+        this.notificationManager = new NotificationManager()
         this.variables = initializeVariables()
         this.timeManger.susbcribe({
             id: 'GMTimePassed',
@@ -36,9 +41,30 @@ class GameManager  {
         const updateUiTick = 'updateUITick'
         this.timeManger.susbcribe({
             id: updateUiTick,
-            onTimePass:() => store.dispatch(actions.updateVariables())
+            onTimePass:() => {store.dispatch(actions.updateVariables());return {currency:0,treats:0}}
         })
-        this.handleOfflineTimePassed()
+        const {currency,treats} = this.handleOfflineTimePassed()
+        if (this.getVariable(variableIds.lastSaveDate).getValue()!=null){
+            this.getNotificationManager().addNotification({
+                id:'welcomed-back',
+                background: '',
+                description:'Your dogs were bussy while you were gone. You made '+toFormat(currency)+' LOVE and '+toFormat(treats)+' TREATS.',
+                image: 'https://i.imgur.com/NfCybaI.png',
+                seen: false,
+                title: 'Welcomed Back!1!ONE!'
+              })
+              store.dispatch(mailActions.updateMails())
+        }else{
+            this.getNotificationManager().addNotification({
+                id:'welcomed-to-the-game',
+                background: '',
+                description:"I've been waiting a long time for a good hooman to come. I heard they give great pets!",
+                image: 'https://i.imgur.com/V70781h.png',
+                seen: false,
+                title: 'A HUMAN OMG!'
+              })
+              store.dispatch(mailActions.updateMails())
+        }
     }
 
     addToVariable (add: number, variableId: string): void {
@@ -69,6 +95,10 @@ class GameManager  {
     getProductManager(): ProductManager {
         return this.productManager
     }
+
+    getNotificationManager(): NotificationManager {
+        return this.notificationManager;
+    }
     
     onClickedDog(): Currency{
         const PetPetting = this.productManager.getProduct(variableIds.product0Level) as PetPetting
@@ -91,18 +121,20 @@ class GameManager  {
         resetGameSave()
     }
 
-    increaseTimePassed(timePassed: number){
+    increaseTimePassed(timePassed: number): Currency{
         let totalTime:number = this.getVariable(variableIds.timePassed).getValue()
         totalTime += timePassed
         this.setVariable(totalTime, variableIds.timePassed)
+        return {currency:0,treats:0}
     }
 
-    handleOfflineTimePassed(){
+    handleOfflineTimePassed(): Currency{
         let lastSaveTime:Date = this.getVariable(variableIds.lastSaveDate).getValue()
         lastSaveTime = lastSaveTime ? new Date(lastSaveTime) : new Date()
         const today = new Date()
         const diffInSeconds = Math.abs(today.getTime() - lastSaveTime.getTime())/1000;
-        this.getTimeManager().passTime(diffInSeconds)
+        const currencyGained = this.getTimeManager().passTime(diffInSeconds)
+        return currencyGained
     }
 }
 

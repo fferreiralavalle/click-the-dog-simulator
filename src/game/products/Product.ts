@@ -14,7 +14,7 @@ export interface Product {
     currencySubscribers: Array<CurrencySubscriber>
 
     getCurrencyPerSecond(): Currency
-    onTimePassed(timePassed: number): void
+    onTimePassed(timePassed: number): Currency
     subscribeToCurrency(cs: CurrencySubscriber):void
     canUnlock(): boolean
     getLevelUpPrice(): Currency
