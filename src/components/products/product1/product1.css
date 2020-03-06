@@ -1,12 +1,12 @@
 .product1 {
-    background-image: url(../../../reasorces/images/farm.jpg);
+    background-image: url(https://i.imgur.com/G0KXJDf.jpg);
     background-size: cover;
     padding: 5px;
 }
 .product1-building{
     height: 95%;
     width: 150px;
-    background-image: url(../../../reasorces/images/Shiba.png);
+    background-image: url(https://i.imgur.com/L1eHWfM.png);
     position: absolute;
     left: 5px;
     bottom: 0px;
@@ -14,7 +14,7 @@
 .product1-title{
     position: absolute;
     top: 0;
-    background-image: url(../../../reasorces/images/sign1.png);
+    background-image: url(https://i.imgur.com/HVo7Kdj.png);
     background-position: bottom;
     padding: 10px 30px;
     padding-top: 30px;
