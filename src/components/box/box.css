@@ -2,7 +2,7 @@
     position: relative;
     display: flex;
     border-width: 10px;
-    border-image: url(../../reasorces/images/wood.jpg) 30 30 stretch;
+    border-image: url(https://i.imgur.com/DzCES2V.jpg) 30 30 stretch;
     border-style: solid;
     margin: 10px;
     animation: appear 2s;
@@ -48,7 +48,7 @@
     height: 25px;
     width: 25px;
     margin-left: 2px;
-    background-image: url(../../reasorces/images/love.png);
+    background-image: url(https://i.imgur.com/NfCybaI.png);
 }
 
 

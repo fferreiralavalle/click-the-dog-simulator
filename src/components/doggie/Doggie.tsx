@@ -100,6 +100,7 @@ class Doggies extends Component<IRecipeProps,IState> {
     render(){
         const {dogName} = this.props
         const {isPetted, plusCurrencies} = this.state
+        const hasName = !!dogName && dogName.getValue()!==""
         return (
             <div className="doggie-background boxed">
                 <div className={`doggie ${isPetted ? "petted": ""}`}>
@@ -115,10 +116,10 @@ class Doggies extends Component<IRecipeProps,IState> {
                 {this.state.isHover ? 
                 <input 
                     className="doggie-name" 
-                    value={dogName?.getValue()} 
+                    value={dogName?.getValue()}
                     onChange={(e)=>this.onNameChange(e.target.value)}/>
                     :
-                <div className="doggie-name">{dogName?.getValue()}</div>
+                <div className="doggie-name">{hasName? dogName.getValue() : "What's my name?"}</div>
                 }
             </div>
         </div>
