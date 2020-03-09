@@ -189,7 +189,7 @@ class Product1 extends Component<IRecipeProps, IState> {
             Shelters lost pets in a cozy home. It also prepares EVENTS for them!
           </div>
           <div className="highlight-field title">
-            Farm Stas
+            Farm Stats
           </div>
           <div className="highlight-field">
             <div className="highlight-attribute">Love</div>

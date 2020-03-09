@@ -26,13 +26,13 @@ export const events:EventTypes = {
         id: 'pettingTraining',
         progressNeeded: 480,
         baseReward: 4,
-        unlockLevel: 10
+        unlockLevel: 20
     },
     donationCampaign: {
         id: 'donationCampaign',
         progressNeeded: 120,
         baseReward: 1,
-        unlockLevel: 5
+        unlockLevel: 10
     }
 
 }
@@ -161,7 +161,7 @@ export class PetAppreciationCenter implements Product {
                 return {
                     currencyReward: {
                         currency: 0,
-                        treats: this.getEvent(eventId).baseReward + Math.floor(finalLevel/5-1),
+                        treats: this.getEvent(eventId).baseReward + Math.floor(finalLevel/5-2),
                     }
                 }
             default:
@@ -230,7 +230,7 @@ export class PetAppreciationCenter implements Product {
             GameManager.getInstance().getNotificationManager().addNotification({
                 id:'pet-farm-unlock',
                 background: 'https://i.imgur.com/G0KXJDf.jpg',
-                description:'Hello good sir, my farm can prepare events that give BIG bonuses. You can choose a new event at level 5.',
+                description:'Hello good sir, my farm can prepare events that give BIG bonuses. You can choose a new event at level 10.',
                 image: 'https://i.imgur.com/L1eHWfM.png',
                 seen: false,
                 title: 'Farm Unlocked!'

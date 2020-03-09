@@ -95,7 +95,7 @@ export class Laboratory implements Product {
     canUnlock(): boolean{
         const farmLevel:number = GameManager.getInstance().getVariable(ids.product1Level).getValue()
         const handsLevel:number = GameManager.getInstance().getVariable(ids.product0Level).getValue()
-        const farmNeeded:number = 5
+        const farmNeeded:number = 10
         const handsNeeded:number = 10
         return farmNeeded <= farmLevel && handsNeeded <= handsLevel
     }

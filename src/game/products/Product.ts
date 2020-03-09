@@ -1,6 +1,7 @@
 export interface Currency {
     currency: number,
-    treats: number
+    treats: number,
+    patiencePoints?: number
 }
 
 export interface CurrencySubscriber {

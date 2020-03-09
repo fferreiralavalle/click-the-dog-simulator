@@ -2,7 +2,7 @@ const variables = {
     /* Game Basic */
     currency: 'currency',
     treats: 'treats',
-    turboSpeed: 'turboSpeed',
+    patiencePoints: 'patiencePoints',
     turboTimeLeft: 'turboTimeLeft',
     timePassed: 'timePassed',
     lastSaveDate: 'lastSaveDate',

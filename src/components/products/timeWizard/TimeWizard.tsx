@@ -1,23 +1,21 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
 import '../product.css'
-import './product0.css'
+import './timeWizard.css'
 
 import {selecters, actions} from '../../../reducers/GameVariables'
 
-import {TimeSubscriber} from '../../../game/TimeManager'
-import { Variable } from '../../../game/Variables'
 import ids from '../../../game/VariableId'
 import GameManager from '../../../game/GameManager'
-import {toFormat, clearPluses} from '../../../utils/uiUtil'
+import {toFormat, clearPluses, toFormatTime} from '../../../utils/uiUtil'
 import { PetPetting } from '../../../game/products/PetPetting'
 import ProductPlus, { plusCurrency } from '../ProductPlus'
 import { Currency } from '../../../game/products/Product'
 import LevelUpButton from '../LevelUpButton'
 
 interface IRecipeProps {
-  level: Variable
-  currency: Variable
+  turboTime: number
+  patiencePoints: number
   dispatch: Function
 }
 
@@ -27,7 +25,7 @@ interface IState {
   hoverLevel: boolean
 }
 
-class Product0 extends Component<IRecipeProps,IState> {
+class TimeWizard extends Component<IRecipeProps,IState> {
 
   constructor(props:any){
     super(props)
@@ -36,17 +34,6 @@ class Product0 extends Component<IRecipeProps,IState> {
       plusCurrencies: [],
       hoverLevel: false
     }
-    const product = GameManager.getInstance().getProductManager().getProduct(ids.product0Level) as PetPetting
-    product.subscribeToCurrency({
-      id: 'UIOnCurrency',
-      onCurrency: (result:Currency) => this.onCurrencyGain(result),
-    })
-    setInterval(()=>{
-      const newPlus = clearPluses(this.state.plusCurrencies)
-      this.setState({
-        plusCurrencies: newPlus
-      })
-    },5 * 1000)
   }
 
   onCurrencyGain = (currency: Currency) => {
@@ -103,80 +90,71 @@ class Product0 extends Component<IRecipeProps,IState> {
   
   render(){
     const {isHover, plusCurrencies} = this.state;
-    const product = GameManager.getInstance().getProductManager().getProduct(ids.product0Level)
-    const canLevelUp = product.canLevelUp()
-    const levelUpPrice = toFormat(product.getLevelUpPrice().currency)
     return (
-      <div className="product product0 boxed" 
+      <div className="product product3 boxed" 
         onMouseEnter={this.onHover(true)}
         onMouseLeave={this.onHover(false)}>
         {isHover ? this.renderHighlight() : this.renderContent()}
-        <LevelUpButton productId={ids.product0Level} 
-          onMouseEnter={this.onLevelHover(true)}
-          onMouseLeave={this.onLevelHover(false)}/>
         <ProductPlus plusCurrencies={plusCurrencies}/>
       </div>
     )
   }
 
   renderContent(){
-    const {level} = this.props;
+    const {turboTime} = this.props;
+    const tickTime = GameManager.getInstance().getTimeManager().getTickTime()
+    const turboClass =  turboTime>=tickTime ? "petted" : ""
     return (
       <React.Fragment>
-        <div className="product0-building"></div>
-          <div className="product0-title">
-            <p className="product0-title-text">Divine Petting</p>
+        <div className={"product3-building "+turboClass}/>
+          <div className="product3-title">
+            <p className="product3-title-text">Wizpug</p>
           </div>
-          <div className="product-level">
-            {level.getValue()}
-          </div>
+          {turboTime>=tickTime &&
+          <div className="product3 turbo-time">
+              <p>{toFormatTime(turboTime)}</p>
+          </div>}
       </React.Fragment>
     )
   }
 
   renderHighlight(){
-    const product = GameManager.getInstance().getProductManager().getProduct(ids.product0Level) as PetPetting
-    const {level} = this.props
-    const usedLevel:number = level.getValue() + (this.state.hoverLevel ? 1 : 0)
-    const lps = toFormat(product.getCurrencyPerSecond(usedLevel).currency)
-    const petPow = toFormat(product.getCurrencyPerPet(usedLevel).currency)
     const levelClass = this.state.hoverLevel ? " hover-level" : ""
+    
     return (
       <div className={"highlight "+levelClass}>
         <div className="highlight-section">
+          {this.renderTurboButton(3600)}
           <div className="highlight-field">
-            <div className="highlight-attribute">Love</div>
-            <div className="highlight-value">
-              {lps}/s
-              <div className="highlight-love-icon"/>
-            </div>
-          </div>
-          <div className="highlight-field">
-            <div className="highlight-attribute">Petting Power</div>
-            <div className="highlight-value">
-              {petPow}
-              <div className="highlight-love-icon"/>
-            </div>
-          </div>
-          <div className="highlight-field">
-            <div className="highlight-attribute">Hands</div>
-            <div className="highlight-value">
-              {usedLevel}👋
-            </div>
-          </div>
-          <div className="highlight-field">
-            Commands the Divine Forces from far away to pet your beautiful boy.
-            <br/>👋 count as 10% of yours. Increases pet power every 5 levels.
+            Good day young human, let me speed things up with my powerful magic.
           </div>
         </div>
       </div>
     )
   }
+
+  renderTurboButton(turboTimePrice:number){
+    const turboToHours = toFormat(turboTimePrice / 3600)
+    const price = GameManager.getInstance().getTimeManager().getPatiencePoints(turboTimePrice)
+    const priceFormat = toFormat(price)
+    const {turboTime, patiencePoints} = this.props
+    const canBuyClass = patiencePoints >= price ? "" : "disabled"
+    return(
+        <div className={"highlight-store-button "+canBuyClass} onClick={()=>this.onTurboBuy(price)}>
+            <div className="highlight-store-name">+{turboToHours} h</div>
+            <div className="highlight-store-price">{priceFormat}<div className="patience-icon"/></div>
+        </div>
+    )
+  }
+
+  onTurboBuy(price:number){
+      GameManager.getInstance().buyTurboTime(price)
+  }
 }
 
 const mapStateToProps = (state:any) => ({
-  level: selecters.getVariable(state, ids.product0Level),
-  currency: selecters.getVariable(state, ids.currency)
+  turboTime: selecters.getVariable(state, ids.turboTimeLeft).getValue(),
+  patiencePoints: selecters.getVariable(state, ids.patiencePoints).getValue(),
 })
 
-export default connect(mapStateToProps)(Product0);
+export default connect(mapStateToProps)(TimeWizard);

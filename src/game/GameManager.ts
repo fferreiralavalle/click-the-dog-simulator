@@ -43,21 +43,34 @@ class GameManager  {
             id: updateUiTick,
             onTimePass:() => {store.dispatch(actions.updateVariables());return {currency:0,treats:0}}
         })
-        const {currency,treats} = this.handleOfflineTimePassed()
+        const {patiencePoints} = this.handleOfflineTimePassed()
+        this.addToVariable(patiencePoints ? patiencePoints : 0, variableIds.patiencePoints)
         if (this.getVariable(variableIds.lastSaveDate).getValue()!=null){
             this.getNotificationManager().addNotification({
                 id:'welcomed-back',
-                background: '',
-                description:'Your dogs were bussy while you were gone. You made '+toFormat(currency)+' LOVE and '+toFormat(treats)+' TREATS.',
-                image: 'https://i.imgur.com/NfCybaI.png',
+                background: 'https://i.imgur.com/3AcgxLn.jpg',
+                description:'Your dogs have been waiting for you. They gained '+toFormat(patiencePoints ? patiencePoints : 0)+' patience points for waiting like good boys. Spend them to speed up the game!',
+                image: 'https://i.imgur.com/DIPnpA9.png',
                 seen: false,
                 title: 'Welcomed Back!1!ONE!'
               })
-              store.dispatch(mailActions.updateMails())
+            const dogWizardLvl = this.getVariable(variableIds.product3Level).getValue()
+            if (dogWizardLvl<1){
+                this.setVariable(1, variableIds.product3Level)
+                this.getNotificationManager().addNotification({
+                    id:'time-wizard-unlcok',
+                    background: 'https://i.imgur.com/AIK9tpI.jpg',
+                    description:'Greetings human, it is I, the Wizpug! With my powers you can use your dogs stored patience to speed time ITSELF.',
+                    image: 'https://i.imgur.com/RakeK3M.png',
+                    seen: false,
+                    title: 'Welcomed Back!1!ONE!'
+                  })
+            }
+            store.dispatch(mailActions.updateMails())
         }else{
             this.getNotificationManager().addNotification({
                 id:'welcomed-to-the-game',
-                background: '',
+                background: 'https://i.imgur.com/GZl7HTq.jpg',
                 description:"I've been waiting a long time for a good hooman to come. I heard they give great pets!",
                 image: 'https://i.imgur.com/V70781h.png',
                 seen: false,
@@ -133,8 +146,22 @@ class GameManager  {
         lastSaveTime = lastSaveTime ? new Date(lastSaveTime) : new Date()
         const today = new Date()
         const diffInSeconds = Math.abs(today.getTime() - lastSaveTime.getTime())/1000;
-        const currencyGained = this.getTimeManager().passTime(diffInSeconds)
+        const patiencePointsGained = this.getTimeManager().getPatiencePoints(diffInSeconds)
+        const currencyGained:Currency = {
+            currency:0,
+            treats:0,
+            patiencePoints: patiencePointsGained
+        }
         return currencyGained
+    }
+
+    buyTurboTime(patienceSpent: number){
+        const patiencePoints = this.getVariable(variableIds.patiencePoints).getValue()
+        if (patienceSpent <= patiencePoints){
+            const turboSeconds = this.getTimeManager().buyTurboTime(patienceSpent)
+            this.addToVariable(-patienceSpent, variableIds.patiencePoints)
+            this.addToVariable(turboSeconds, variableIds.turboTimeLeft)
+        }
     }
 }
 

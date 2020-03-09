@@ -1,0 +1,84 @@
+.product3 {
+    background-image: url(https://images.pexels.com/photos/1544420/pexels-photo-1544420.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940);
+    background-size: cover;
+    padding: 0px 5px;
+}
+
+.product3-building {
+    height: 90%;
+    background-image: url(https://i.imgur.com/RakeK3M.png);
+    background-size: contain;
+    background-position: right;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+.product3-building.petted {
+    animation-name: magicing;
+    animation-duration: 0.4s;
+    animation-iteration-count: infinite;
+}
+.product3 {
+    background-image: url(https://i.imgur.com/AIK9tpI.jpg);
+    background-size: cover;
+    padding: 0px 5px;
+    overflow: hidden;
+}
+.product3-title {
+    position: absolute;
+    top: 0px;
+    left: 5px;
+    background-image: url(https://i.imgur.com/hzsgV6d.png);
+    width: 100px;
+    height: 80px;
+    background-position-y: bottom;
+    background-size: cover;
+}
+.product3 .turbo-time {
+    background: rgba(255,255,255,0.6);
+    min-width: 80px;
+    border: 1px solid;
+    border-radius: 5px;
+    position: absolute;
+    left: 5px;
+    top: 120px;
+}
+.product3-title-text {
+    margin-top: 30px;
+    font-weight: bold;
+}
+.highlight-store-button {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid;
+    background-color: rgba(255,255,255,0.5);
+    padding: 5px 10px;
+    cursor: pointer;
+}
+.highlight-store-button:hover{
+    background-color: rgba(255,255,255,0.8);
+}
+.highlight-store-price {
+    display: flex;
+}
+
+@keyframes magicing {
+    0% {
+        transform: skewX(0deg);
+        opacity: 1;
+    }
+    25%{
+        transform: skewX(3deg); 
+    }
+    50%{
+        opacity: 0.8;
+    }
+    75%{
+        transform: skewX(-3deg); 		
+    }
+    100%{
+        transform: skewX(0deg);
+        opacity: 1;
+    }
+}

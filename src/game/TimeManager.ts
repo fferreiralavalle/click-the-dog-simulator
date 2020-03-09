@@ -1,9 +1,12 @@
 import { isMobile } from "../utils/uiUtil"
 import { Currency } from "./products/Product"
 import { addCurrenciy } from "../utils/mathUtils"
+import GameManager from "./GameManager"
+import variables from "./VariableId"
 
-const tickTime = isMobile() ? 1 : 0.5
-const modTimeFast = 0.5
+const tickTime = isMobile() ? 2 : 0.5
+const secondsPerPatiencePoint = 600
+const modTimeFast = 10
 let modTime = 1
 
 export interface TimeSubscriber {
@@ -28,8 +31,15 @@ export class TimeManager {
     
     passTime(timeMult: number):Currency{
         let currencyGained: Currency = {currency:0,treats:0}
+        let turboTimeLeft = GameManager.getInstance().getVariable(variables.turboTimeLeft).getValue()
+        let timePassed = timeMult
+        if (turboTimeLeft>tickTime){
+            const extraTimeMult = modTimeFast * timeMult
+            timePassed = extraTimeMult
+            GameManager.getInstance().addToVariable(-timePassed, variables.turboTimeLeft)
+        }
         this.subscribers.forEach(fun => {
-            const cur=fun.onTimePass(timeMult)
+            const cur=fun.onTimePass(timePassed)
             currencyGained = addCurrenciy(currencyGained,cur)
         })
         return currencyGained
@@ -57,6 +67,16 @@ export class TimeManager {
 
     getTickTime():number{
         return tickTime
+    }
+
+    getPatiencePoints(seconds:number): number{
+        const patiencePointsGained = seconds / secondsPerPatiencePoint
+        return patiencePointsGained
+    }
+
+    buyTurboTime(patiencePoints: number):number{
+        const turboSeconds = patiencePoints * secondsPerPatiencePoint
+        return turboSeconds
     }
 
 }

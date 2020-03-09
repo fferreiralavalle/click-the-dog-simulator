@@ -28,6 +28,13 @@ body *{
   background-image: url(https://i.imgur.com/vIOVyPq.png);
   background-position: center;
 }
+.patience-icon{
+  height: 1.5em;
+  width: 1.5em;
+  margin-left: 3px;
+  background-image: url(https://i.imgur.com/DIPnpA9.png);
+  background-position: center;
+}
 ::-webkit-scrollbar{
   width: 10px;
   background: transparent
