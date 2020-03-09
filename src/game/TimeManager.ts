@@ -6,7 +6,7 @@ import variables from "./VariableId"
 
 const tickTime = isMobile() ? 2 : 0.5
 const secondsPerPatiencePoint = 600
-const modTimeFast = 10
+const modTimeFast = 25
 let modTime = 1
 
 export interface TimeSubscriber {
