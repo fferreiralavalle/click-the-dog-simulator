@@ -90,8 +90,8 @@ export class PetAppreciationCenter implements Product {
         add.currency *=  timePassed
         GameManager.getInstance().addToVariable(add.currency,variables.currency)
         GameManager.getInstance().addToVariable(pps * timePassed,variables.product1Progress)
-        const eventCurrency = this.checkForProgressCompletion()
         this.checkForEventDurations(timePassed)
+        const eventCurrency = this.checkForProgressCompletion()
         this.onCurrencyTime(add)
         return addCurrenciy(add,eventCurrency)
     }
@@ -227,14 +227,16 @@ export class PetAppreciationCenter implements Product {
         if (this.canLevelUp()) {
             GameManager.getInstance().addToVariable(1, this.variableId)
             GameManager.getInstance().addToVariable(-levelUpPrice, variables.currency)
-            GameManager.getInstance().getNotificationManager().addNotification({
-                id:'pet-farm-unlock',
-                background: 'https://i.imgur.com/G0KXJDf.jpg',
-                description:'Hello good sir, my farm can prepare events that give BIG bonuses. You can choose a new event at level 10.',
-                image: 'https://i.imgur.com/L1eHWfM.png',
-                seen: false,
-                title: 'Farm Unlocked!'
-              })
+            if (this.getLevel()===1){
+                GameManager.getInstance().getNotificationManager().addNotification({
+                    id:'pet-farm-unlock',
+                    background: 'https://i.imgur.com/G0KXJDf.jpg',
+                    description:'Hello good sir, my farm can prepare events that give BIG bonuses. You can choose a new event at level 10.',
+                    image: 'https://i.imgur.com/L1eHWfM.png',
+                    seen: false,
+                    title: 'Farm Unlocked!'
+                  })
+            }
             return true
         }
         else {
