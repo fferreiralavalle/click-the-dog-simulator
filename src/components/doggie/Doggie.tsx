@@ -40,7 +40,7 @@ class Doggies extends Component<IRecipeProps,IState> {
             this.setState({
               plusCurrencies: newPlus
             })
-          },5 * 1000)
+          },3 * 1000)
     }
 
     onClickedDog(event:any){

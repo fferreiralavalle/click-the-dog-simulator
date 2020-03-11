@@ -119,14 +119,16 @@ export class Laboratory implements Product {
         if (this.canLevelUp()) {
             GameManager.getInstance().addToVariable(1, this.variableId)
             GameManager.getInstance().addToVariable(-levelUpPrice, ids.treats)
-            GameManager.getInstance().getNotificationManager().addNotification({
-                id:'lab-unlock',
-                background: 'https://i.imgur.com/icoqc1B.jpg',
-                description:'Thank you for the treats mister! Hover over my lab to pupgrade your buildings.',
-                image: 'https://i.imgur.com/mLU1yyE.png',
-                seen: false,
-                title: 'Lab Unlocked!'
-              })
+            if (this.getLevel()===1){
+                GameManager.getInstance().getNotificationManager().addNotification({
+                    id:'lab-unlock',
+                    background: 'https://i.imgur.com/icoqc1B.jpg',
+                    description:'Thank you for the treats mister! Hover over my lab to pupgrade your buildings.',
+                    image: 'https://i.imgur.com/mLU1yyE.png',
+                    seen: false,
+                    title: 'Lab Unlocked!'
+                  })
+            }
             return true
         }
         else {

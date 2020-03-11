@@ -33,11 +33,13 @@ export interface Text {
             relicChance: string,
             claim: string,
             notReady: string,
-            claimPreview: string
+            claimPreview: string,
+            notEnough: string
         },
         common: {
             info: string,
             stats: string,
+            price: string
         }
     },
     relics: {
@@ -79,11 +81,11 @@ export const english:Text = {
             quests: {
                 tier0: {
                     title: "Pupsploration",
-                    description: "Allow your small pets to explore. They will return with a gift for you."
+                    description: "Let your puppers explore and find gifts for you."
                 },
                 tier1: {
                     title: "Dogsploration",
-                    description: "Allow your medium pets to explore. They will return with a gift for you."
+                    description: "Let your good boys explore and find gifts for you."
                 },
                 tier2: {
                     title: "Bigboysploration",
@@ -93,11 +95,13 @@ export const english:Text = {
             relicChance: "Relic Chance",
             claim: "CLAIM REWARD!",
             notReady: "Not ready (Zzz)",
-            claimPreview: "READY!"
+            claimPreview: "READY!",
+            notEnough: "Low Treats :c",
         },
         common: {
             info: "Info",
-            stats: "Stats"
+            stats: "Stats",
+            price: "Price"
         }
     },
     relics: {

@@ -59,7 +59,7 @@ class ParkUI extends Component<IRecipeProps, IState> {
       this.setState({
         plusCurrencies: newPlus
       })
-    },5 * 1000)
+    },3 * 1000)
   }
 
   onEventReward = (result:RewardResult)=> {
@@ -180,11 +180,17 @@ class ParkUI extends Component<IRecipeProps, IState> {
       let {title} = this.getEventData(evId)
       switch(evId){
           case events.bigBoysploration.id:
+            if (!park.isEventUnlocked(events.bigBoysploration)){
+              return null
+            }
             progressUsed = progress2
             progressNeeeded = events.bigBoysploration.secondsNeeded
             order = 2
             break
           case events.dogsploration.id:
+            if (!park.isEventUnlocked(events.dogsploration)){
+              return null
+            }
             progressUsed = progress1
             progressNeeeded = events.dogsploration.secondsNeeded
             order = 1
@@ -281,6 +287,13 @@ class ParkUI extends Component<IRecipeProps, IState> {
     )
     const relicChance = product.getRelicChance(level)
     const isEventReady = product.isEventReady(displayedEvent)
+    const price = product.getEvent(displayedEvent).price.treats
+    let buttontext = this.productText.notReady
+    if (isEventReady){
+      buttontext = this.productText.claim
+    }else if (!product.canPayReward(displayedEvent)){
+      buttontext = this.productText.notEnough
+    }
     const readyClass = isEventReady ? "" : " disabled"
     return (
         <React.Fragment>
@@ -293,9 +306,17 @@ class ParkUI extends Component<IRecipeProps, IState> {
                     {toFormat(relicChance*100)}%
                 </div>
             </div>
+            <div className="highlight-field">
+                <div className="highlight-attribute">
+                    {this.commonText.price}
+                    </div>
+                <div className="highlight-value">
+                    {toFormat(price)}<div className="treat-icon"/>
+                </div>
+            </div>
             <div className={"highlight-field"+readyClass} onClick={this.claimReward(displayedEvent, product)}>
                 <div className="highlight-button-claim">
-                    {isEventReady ? this.productText.claim : this.productText.notReady}
+                    {buttontext}
                 </div>
             </div>
         </React.Fragment>

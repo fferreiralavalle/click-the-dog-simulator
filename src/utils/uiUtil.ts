@@ -6,9 +6,9 @@ export const toFormat = (number: number): string => {
 }
 
 export const clearPluses = (pluses: Array<plusCurrency>):Array<plusCurrency> =>{
-    const max = isMobile() ? 5 : 30
+    const max = isMobile() ? 5 : 10
     const newPluses = [...pluses]
-    if (pluses.length>30){
+    if (pluses.length>max){
         newPluses.splice(0,pluses.length-max)
     }
     return newPluses

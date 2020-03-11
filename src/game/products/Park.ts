@@ -151,15 +151,23 @@ export class Park implements Product {
 
     claimEventReward(eventId:string){
         const event = this.getEvent(eventId)
-        if (this.isEventReady(event.id)){
+        if (this.isEventReady(event.id) && this.canPayReward(event.id)){
             const reward = this.getEventReward(event.id)
             GameManager.getInstance().addCurrency(reward.currencyReward)
             if (reward.relicReward){
                 GameManager.getInstance().setVariable(1,reward.relicReward.id)
             }
+            GameManager.getInstance().addToVariable(-event.price.treats, ids.treats)
             this.resetEventTime(eventId)
             this.onReward(reward)
         }
+    }
+
+    canPayReward(eventId: string){
+        const event = this.getEvent(eventId)
+        const price = event.price
+        const treats = GameManager.getInstance().getVariable(ids.treats).getValue()
+        return (price.treats<=treats)
     }
 
     /** Gets the rewards the event gives once completed */    

@@ -50,7 +50,7 @@ class Product1 extends Component<IRecipeProps, IState> {
       this.setState({
         plusCurrencies: newPlus
       })
-    },5 * 1000)
+    },3 * 1000)
   }
 
   onEventReward = (result:RewardResult)=> {
@@ -174,11 +174,10 @@ class Product1 extends Component<IRecipeProps, IState> {
 
   renderHighlight(){
     const product = GameManager.getInstance().getProductManager().getProduct(ids.product1Level) as PetAppreciationCenter
-    const {level} = this.props
+    const {level, eventId} = this.props
     const usedLevel:number = level.getValue() + (this.state.hoverLevel ? 1 : 0)
     const lps = toFormat(product.getCurrencyPerSecond(usedLevel).currency)
     const progressPS = toFormat(product.getProgressPerSecond(usedLevel))
-    const {eventId} = this.props
     const {description} = this.getEventData(eventId.getValue())
     const levelClass = this.state.hoverLevel ? " hover-level" : ""
     return (
@@ -212,7 +211,7 @@ class Product1 extends Component<IRecipeProps, IState> {
           <div className="highlight-field title">
             Events
           </div>
-          {this.renderEventOptions(product)}
+          {this.renderEventOptions(product, eventId.getValue())}
         </div>
         <div className="highlight-section">
           
@@ -280,11 +279,12 @@ class Product1 extends Component<IRecipeProps, IState> {
     }
   }
 
-  renderEventOptions(product: PetAppreciationCenter) {
+  renderEventOptions(product: PetAppreciationCenter, selected:string) {
     const events = product.getAvailableEvents()
     return events.map((e)=>{
+      const selectedClass = e.id === selected ? " selected" : ""
       return (
-        <div className="highlight-field highlight-event-select" onClick={this.selectEvent(e.id)}>
+        <div className={"highlight-field highlight-event-select"+selectedClass} onClick={this.selectEvent(e.id)}>
           {this.getEventData(e.id).name}
         </div>)
     }
