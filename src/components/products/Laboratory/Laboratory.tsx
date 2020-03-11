@@ -181,7 +181,7 @@ class LaboratoryUI extends Component<IRecipeProps, IState> {
         <div className="product1-title">
           LABoratory
         </div>
-        <div className="available-points">{freePoints} Unspent Points</div>}
+        {freePoints>0 && <div className="available-points">{freePoints} Unspent Points</div>}
           <div className="progress">
             <div className="event-type">Artificial Treats</div>
             <div className="progress-bar">
