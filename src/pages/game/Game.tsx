@@ -17,6 +17,7 @@ import Product1 from '../../components/products/product1/Product1'
 import Laboratory from '../../components/products/Laboratory/Laboratory'
 import Mail from '../../components/mail/Mail'
 import TimeWizard from '../../components/products/timeWizard/TimeWizard'
+import Park from '../../components/products/park/Park'
 
 interface IRecipeProps {
     dispatch: Function
@@ -47,8 +48,8 @@ class Game extends Component<IRecipeProps> {
                     return <Box productId={p.variableId} w={2}><Product1/></Box>
                 case ids.product2Level:
                     return <Box productId={p.variableId} w={2}><Laboratory/></Box>
-                case ids.product3Level:
-                    return <Box w={1}><TimeWizard/></Box>
+                case ids.product4Level:
+                    return <Box w={2} productId={p.variableId}><Park/></Box>
                 default:
                     return <Box productId={p.variableId} w={1}><Product0/></Box>
             }

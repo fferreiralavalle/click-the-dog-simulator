@@ -102,7 +102,7 @@ class Product1 extends Component<IRecipeProps, IState> {
   renderCurrentEvent = () => {
     const {eventId} = this.props
     const eventData = this.getEventData(eventId.getValue())
-    return (<div className="event-type">{eventData.name}</div>)
+    return (<div className="event-title">{eventData.name}</div>)
   }
 
   getEventData= (eventId: string)=> {
@@ -154,11 +154,13 @@ class Product1 extends Component<IRecipeProps, IState> {
         <div className="product1-title">
           Pet Farm
         </div>
-        {this.renderCurrentEvent()}
-        <div className="progress-bar">
-          <div className="progress-bar-progress" style={progressStyle}></div>
-          <div className="progress-bar-value">
-            {`${Math.floor(progress.getValue())} / ${Math.floor(product.getProgressGoal())}`}
+        <div className="progress">
+          {this.renderCurrentEvent()}
+          <div className="progress-bar">
+            <div className="progress-bar-progress" style={progressStyle}></div>
+            <div className="progress-bar-value">
+              {`${Math.floor(progress.getValue())} / ${Math.floor(product.getProgressGoal())}`}
+            </div>
           </div>
         </div>
         <ProductPlus plusCurrencies={plusCurrencies}/>

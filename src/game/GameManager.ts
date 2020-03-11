@@ -63,7 +63,7 @@ class GameManager  {
                     description:'Greetings human, it is I, the Wizpug! With my powers you can use your dogs stored patience to speed time ITSELF.',
                     image: 'https://i.imgur.com/RakeK3M.png',
                     seen: false,
-                    title: 'Welcomed Back!1!ONE!'
+                    title: 'The Wizpug is here!'
                   })
             }
             store.dispatch(mailActions.updateMails())
@@ -87,6 +87,15 @@ class GameManager  {
             [variableId]:  new Variable({id:variableId, value:newValue})
         }
         this.variables = newVariables
+    }
+
+    addCurrency (add: Currency): void {
+        const {currency,treats, patiencePoints} = add
+        this.addToVariable(currency,variableIds.currency)
+        this.addToVariable(treats,variableIds.treats)
+        if (patiencePoints){
+            this.addToVariable(patiencePoints,variableIds.patiencePoints)
+        }
     }
 
     setVariable (value: any, variableId: string): void {

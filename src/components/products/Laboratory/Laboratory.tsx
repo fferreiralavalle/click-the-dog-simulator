@@ -181,12 +181,14 @@ class LaboratoryUI extends Component<IRecipeProps, IState> {
         <div className="product1-title">
           LABoratory
         </div>
-        <div className="event-type">Artificial Treats</div>
-        {freePoints>0 && <div className="available-points">{freePoints} Unspent Points</div>}
-        <div className="progress-bar">
-          <div className="progress-bar-progress" style={progressStyle}></div>
-          <div className="progress-bar-value">
-            {`${Math.floor(progress.getValue())} / ${Math.floor(product.getProgressGoal())}`}
+        <div className="available-points">{freePoints} Unspent Points</div>}
+          <div className="progress">
+            <div className="event-type">Artificial Treats</div>
+            <div className="progress-bar">
+              <div className="progress-bar-progress" style={progressStyle}></div>
+              <div className="progress-bar-value">
+                {`${Math.floor(progress.getValue())} / ${Math.floor(product.getProgressGoal())}`}
+              </div>
           </div>
         </div>
         <ProductPlus plusCurrencies={plusCurrencies}/>

@@ -43,9 +43,15 @@
     align-items: center;
     font-weight: bold;
 }
-.progress-bar {
+.progress {
     position: absolute;
-    bottom: 35px;
+    bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.progress-bar {
+    position: relative;
     height: 25px;
     width: 100px;
     border-radius: 10px;
@@ -78,6 +84,19 @@
     width: 30%;
     overflow: hidden;
 }
+.event-type {
+    padding: 5px 10px;
+    border: 1px solid;
+    border-radius:  5px;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+.event-title {
+    padding: 5px 10px;
+    border: 1px solid;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.5);
+    min-width: 110px;
+}
 .plus-currency {
     display: flex;
     align-items: center;
@@ -88,14 +107,6 @@
     user-select: none;
     font-size: 20px;
     text-shadow: 0px 0px 10px #FFFFFF;
-}
-.event-type {
-    position:  absolute;
-    bottom: 60px;
-    padding: 5px 10px;
-    border: 1px solid;
-    border-radius:  5px;
-    background-color: rgba(255, 255, 255, 0.5);
 }
 .highlight {
     position: absolute;
@@ -164,6 +175,7 @@
 .highlight-event-select:hover {
     font-weight: 600;
 }
+
 @keyframes fadein {
     from { opacity: 0; }
     to   { opacity: 1; }
