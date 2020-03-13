@@ -57,3 +57,54 @@
 .product4 .progress-bar{
     background-color: rgba(255, 122, 122, 0.5)
 }
+.product4 .special-option {
+    color: #8500ff;
+    margin-top: 20px;
+}
+.relic-view{
+    z-index: 150;
+}
+.relic-view .highlight-tier{
+    justify-content: flex-start;
+}
+.relic-view .highlight-field{
+    width: auto;
+    margin: 2.5px;
+    display: flex;
+    align-items: center;
+}
+.relic-view .highlight-field .relic-title{
+    margin-left: 5px;
+}
+.relic-view .highlight-field .relic-description{
+    margin-top: 5px;
+    font-size: 20px;
+}
+.relic-view .highlight-field.locked .relic-icon {
+    filter: brightness(0.1);
+}
+.relic-icon {
+    border: 1px solid;
+    color: #8500ff;
+    display: flex;
+    width: 35px;
+    height: 35px;
+    background-size: cover;
+    background-position: center;
+    background-image: url(https://i.imgur.com/0ZjGB7A.png);
+    cursor: pointer;
+}
+.highlight-closeButton {
+    position: absolute;
+    right: 10px;
+    color: red;
+    background-color: rgba(255,255,255,0.8);
+    border-radius: 50%;
+    border: 1px solid;
+    height: 25px;
+    width: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}

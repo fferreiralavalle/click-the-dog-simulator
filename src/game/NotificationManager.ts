@@ -1,10 +1,5 @@
-import { Product } from "./products/Product"
-import { PetAppreciationCenter } from "./products/PetAppreciationCenter"
-import { PetPetting } from "./products/PetPetting"
-import VariableIds from './VariableId'
-import { TimeManager } from "./TimeManager"
-import GameManager from './GameManager'
-import { Laboratory } from "./products/Laboratory"
+import {actions as mailActions} from '../reducers/Mails'
+import { store } from "../App"
 
 export default class NotificationManager {
     notifications: Notifications
@@ -16,6 +11,7 @@ export default class NotificationManager {
     addNotification(notification: Notification){
         this.removeNotification(notification.id)
         this.notifications[notification.id]= notification
+        store.dispatch(mailActions.updateMails())
     }
 
     removeNotification(id: string){

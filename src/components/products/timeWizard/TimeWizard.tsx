@@ -17,6 +17,7 @@ import Decimal from 'break_infinity.js'
 interface IRecipeProps {
   turboTime: number
   patiencePoints: Decimal
+  parkLevel: number
   dispatch: Function
 }
 
@@ -121,14 +122,17 @@ class TimeWizard extends Component<IRecipeProps,IState> {
 
   renderHighlight(){
     const levelClass = this.state.hoverLevel ? " hover-level" : ""
-    
+    const {parkLevel} = this.props
     return (
       <div className={"highlight "+levelClass}>
         <div className="highlight-section">
           {this.renderTurboButton(3600)}
+          {this.renderTurboButton(3600 * 10)}
+          {this.renderTurboButton(3600 * 100)}
           <div className="highlight-field">
             Good day young human, let me speed things up with my powerful magic.
           </div>
+          {parkLevel > 0 && <div>It won't affect the park timers.</div>}
         </div>
       </div>
     )
@@ -156,6 +160,7 @@ class TimeWizard extends Component<IRecipeProps,IState> {
 const mapStateToProps = (state:any) => ({
   turboTime: selecters.getVariable(state, ids.turboTimeLeft).getValue(),
   patiencePoints: selecters.getVariable(state, ids.patiencePoints).getValue(),
+  parkLevel: selecters.getVariable(state, ids.product4Level).getValue(),
 })
 
 export default connect(mapStateToProps)(TimeWizard);

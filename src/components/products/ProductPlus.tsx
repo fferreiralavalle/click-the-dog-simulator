@@ -10,6 +10,7 @@ import { isMobile } from '../../utils/uiUtil'
 
 interface IRecipeProps {
     plusCurrencies: Array<plusCurrency>;
+    [key: string]: any
 }
 
 export interface plusCurrency {
@@ -43,8 +44,9 @@ class Currencies extends Component<IRecipeProps, IState> {
     }
 
     render(){
+        const {plusCurrencies, ...rest} = this.props
         return (
-        <div className="plus-currencies">
+        <div className="plus-currencies" {...rest}>
             {this.renderPlusCurrencies()}
         </div>
         )

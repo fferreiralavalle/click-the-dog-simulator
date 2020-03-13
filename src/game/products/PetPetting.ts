@@ -1,10 +1,11 @@
 import { Product, Currency, CurrencySubscriber } from './Product'
-import variables from '../VariableId';
+import ids from '../VariableId';
 import GameManager from '../GameManager'
 import ProductManager from '../ProductManager';
 import { PetAppreciationCenter } from './PetAppreciationCenter';
 import { Laboratory } from './Laboratory';
 import Decimal from 'break_infinity.js';
+import { Park } from './Park';
 
 export class PetPetting implements Product {
     currencySubscribers: CurrencySubscriber[];
@@ -34,17 +35,21 @@ export class PetPetting implements Product {
         const lvl = level ? level : GameManager.getInstance().getVariable(this.variableId).getValue()
         const base:number = 1
         //Pet Training Bonus
-        const pac = GameManager.getInstance().getProductManager().getProduct(variables.product1Level) as PetAppreciationCenter
+        const pac = GameManager.getInstance().getProductManager().getProduct(ids.product1Level) as PetAppreciationCenter
         const petTrainingMult = pac.getPettingTrainingCurrentBonus()
         //Pet Lab Bonus
-        const lab = GameManager.getInstance().getProductManager().getProduct(variables.product2Level) as Laboratory
-        const labMult = lab.getUpgradeBonus(variables.labUpgradeTier1A).baseBonus
-        //Pet Lab Change Bonus
-        const criticalChance = lab.getUpgradeBonus(variables.labUpgradeTier2A).baseBonus
+        const lab = GameManager.getInstance().getProductManager().getProduct(ids.product2Level) as Laboratory
+        const labMult = lab.getUpgradeBonus(ids.labUpgradeTier1A).baseBonus
+        //Pet Lab Chance Bonus
+        const criticalChance = lab.getUpgradeBonus(ids.labUpgradeTier2A).baseBonus
         const isCritical = Math.random() < criticalChance
         const criticalBonus = isCritical ? 1 : 0
+        //Relic BOnus
+        const park = GameManager.getInstance().productManager.getProduct(ids.product4Level) as Park
+        const relic1ABonus = park.getRelicBonus(ids.relicTier1A)
+        const relicBonus = (relic1ABonus!==0 ? relic1ABonus : 1)
         //Final Gain
-        const final = new Decimal(base).add(Math.floor(lvl/5)).mul(petTrainingMult).mul(labMult)
+        const final = new Decimal(base).add(Math.floor(lvl/5)).mul(petTrainingMult).mul(labMult).mul(relicBonus)
         return {
             currency: final,
             treats: new Decimal(criticalBonus)
@@ -59,10 +64,10 @@ export class PetPetting implements Product {
     }
     onTimePassed(timePassed: number): Currency {
         const add:Currency = this.getCurrencyPerSecond();
-        add.currency.mul(timePassed)
+        add.currency = add.currency.mul(timePassed)
         add.treats.mul(timePassed)
-        GameManager.getInstance().addToVariable(add.currency,variables.currency)
-        GameManager.getInstance().addToVariable(add.treats,variables.treats)
+        GameManager.getInstance().addToVariable(add.currency,ids.currency)
+        GameManager.getInstance().addToVariable(add.treats,ids.treats)
         this.currencySubscribers.forEach((sub)=>{
             sub.onCurrency(add)
         })
@@ -83,7 +88,7 @@ export class PetPetting implements Product {
         
     }
     canLevelUp(): boolean {
-        const currency:Decimal = GameManager.getInstance().getVariable(variables.currency).getValue()
+        const currency:Decimal = GameManager.getInstance().getVariable(ids.currency).getValue()
         const levelUpPrice = this.getLevelUpPrice().currency
         const condition = levelUpPrice.lte(currency) 
         return condition 
@@ -93,7 +98,7 @@ export class PetPetting implements Product {
         const levelUpPrice = this.getLevelUpPrice().currency.mul(-1)
         if (this.canLevelUp()){
             GameManager.getInstance().addToVariable(1, this.variableId)
-            GameManager.getInstance().addToVariable(levelUpPrice, variables.currency)
+            GameManager.getInstance().addToVariable(levelUpPrice, ids.currency)
             if (this.getLevel()===1){
                 GameManager.getInstance().getNotificationManager().addNotification({
                     id:'pet-petting-unlock',

@@ -12,6 +12,7 @@ import Cookies from 'js-cookie'
 import NotificationManager from './NotificationManager';
 import { toFormat } from '../utils/uiUtil';
 import Decimal from 'break_infinity.js';
+import { Park } from './products/Park';
 
 const devMegaPetMult = 1
 const saveEvery = 0.5
@@ -70,7 +71,7 @@ class GameManager  {
                     title: 'The Wizpug is here!'
                   })
             }
-            store.dispatch(mailActions.updateMails())
+            
         }else{
             this.getNotificationManager().addNotification({
                 id:'welcomed-to-the-game',
@@ -80,7 +81,6 @@ class GameManager  {
                 seen: false,
                 title: 'A HUMAN OMG!'
               })
-              store.dispatch(mailActions.updateMails())
         }
     }
 
@@ -144,7 +144,11 @@ class GameManager  {
     onClickedDog(): Currency{
         const PetPetting = this.productManager.getProduct(variableIds.product0Level) as PetPetting
         const {currency, treats} = PetPetting.getCurrencyPerPet()
-        const baseClickCurrency = currency.mul(devMegaPetMult)
+        //Relics
+        const park = this.productManager.getProduct(variableIds.product4Level) as Park
+        const relic0ABonus = park.getRelicBonus(variableIds.relicTier0A)
+        const baseClickCurrency = currency.mul(devMegaPetMult).mul(relic0ABonus!==0 ? relic0ABonus : 1)
+        
         const currencyEarned: Currency = {
             currency: baseClickCurrency,
             treats

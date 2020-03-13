@@ -4,6 +4,7 @@ import GameManager from '../GameManager'
 import { Laboratory } from './Laboratory';
 import { addCurrency } from '../../utils/mathUtils';
 import Decimal from 'break_infinity.js';
+import { getRelicText } from '../../utils/textUtil';
 
 export interface EventType{
     id: string,
@@ -28,20 +29,22 @@ export const events:EventTypes = {
     },
     dogsploration: {
         id: 'dogsploration',
-        secondsNeeded: 1800,
+        secondsNeeded: 900,
         unlockLevel: 10,
         price: {currency:new Decimal(0),treats:new Decimal(100)}
     },
     bigBoysploration: {
         id: 'bigbBoysploration',
-        secondsNeeded: 7200,
+        secondsNeeded: 3600,
         unlockLevel: 20,
         price: {currency:new Decimal(0),treats:new Decimal(1000)}
     }
 }
 
 export interface Relic {
-    id: string
+    id: string,
+    base: number,
+    icon?: string
 }
 
 export interface RelicTier {
@@ -125,7 +128,7 @@ export class Park implements Product {
     onTimePassed(timePassed: number): Currency {
         let add:Currency = this.getCurrencyPerSecond();
         const pps: number = this.getProgressPerSecond()
-        add.currency.mul(timePassed)
+        add.currency = add.currency.mul(timePassed)
         if (this.isEventUnlocked(events.pupsloration)){
             GameManager.getInstance().addToVariable(pps, ids.product4Tier0Progress)
         }
@@ -168,7 +171,7 @@ export class Park implements Product {
         const event = this.getEvent(eventId)
         const price = event.price
         const treats = GameManager.getInstance().getVariable(ids.treats).getValue()
-        return (price.treats<=treats)
+        return price.treats.lte(treats)
     }
 
     /** Gets the rewards the event gives once completed */    
@@ -190,6 +193,7 @@ export class Park implements Product {
                 if(relics.length>0 && random<relicChance){
                     const randomIndex:number = Math.floor(Math.random() * relics.length)
                     reward.relicReward = relics[randomIndex]
+                    this.sendRelicNotification(relics[randomIndex])
                     return reward
                 }
                 if (randomRewardChange<0.5){
@@ -204,6 +208,7 @@ export class Park implements Product {
                 if(relics.length>0 && random<relicChance){
                     const randomIndex:number = Math.floor(Math.random() * relics.length)
                     reward.relicReward = relics[randomIndex]
+                    this.sendRelicNotification(relics[randomIndex])
                     return reward
                 }
                 if (randomRewardChange<0.5){
@@ -218,6 +223,7 @@ export class Park implements Product {
                 if(relics.length>0 && random<relicChance){
                     const randomIndex:number = Math.floor(Math.random() * relics.length)
                     reward.relicReward = relics[randomIndex]
+                    this.sendRelicNotification(relics[randomIndex])
                     return reward
                 }
                 if (randomRewardChange<0.5){
@@ -229,10 +235,21 @@ export class Park implements Product {
         }
     }
 
+    sendRelicNotification(relic: Relic){
+        GameManager.getInstance().getNotificationManager().addNotification({
+            id:'relic-unlocked-'+relic.id,
+            background: "https://i.imgur.com/uenbC1V.jpg",
+            description:"Your pets found a new Relic. Hooray! Its effect says: "+getRelicText(relic.id).description,
+            image: relic.icon ? relic.icon : "",
+            seen: false,
+            title: 'New Relic found! - '+getRelicText(relic.id).title
+          })
+    }
+
     getRelicChance(level?:number):number{
         const lvl = level ? level : this.getLevel()
         const base = 0.95
-        const total = 1 - Math.pow(base,lvl/5)
+        const total = 1.9 - Math.pow(base,lvl/5)
         return total
     }
     
@@ -290,7 +307,7 @@ export class Park implements Product {
         if (this.canLevelUp()) {
             GameManager.getInstance().addToVariable(1, this.variableId)
             GameManager.getInstance().addToVariable(levelUpPrice, ids.currency)
-            if (this.getLevel()){
+            if (this.getLevel()===1){
                 GameManager.getInstance().getNotificationManager().addNotification({
                     id:'pet-park-unlock',
                     background: 'https://i.imgur.com/uenbC1V.jpg',
@@ -351,24 +368,24 @@ export class Park implements Product {
             tier0: {
                 unlockLevel: events.pupsloration.unlockLevel,
                 relics: [
-                {id: ids.relicTier0A},
-                {id: ids.relicTier0B},
-                {id: ids.relicTier0C}
+                {id: ids.relicTier0A, base: 5, icon: 'https://i.imgur.com/DDm6ODQ.png'},
+                {id: ids.relicTier0B, base: 1.5, icon: 'https://i.imgur.com/0ZjGB7A.png'},
+                {id: ids.relicTier0C, base: 1.5, icon: 'https://i.imgur.com/qsbjSn1.png'}
             ]},
             tier1: {
                 unlockLevel: events.dogsploration.unlockLevel,
                 relics: [
-                    {id: ids.relicTier1A},
-                    {id: ids.relicTier1B},
-                    {id: ids.relicTier1C}
+                    {id: ids.relicTier1A, base: 1.25, icon: 'https://i.imgur.com/hfmuVYh.png'},
+                    {id: ids.relicTier1B, base: 0.9, icon: 'https://i.imgur.com/et49ttP.png'},
+                    {id: ids.relicTier1C, base: 2, icon: 'https://i.imgur.com/d3CJRvY.png'}
                 ]
             },
             tier2: {
                 unlockLevel: events.bigBoysploration.unlockLevel,
                 relics: [
-                    {id: ids.relicTier2A},
-                    {id: ids.relicTier2B},
-                    {id: ids.relicTier2C}
+                    /*{id: ids.relicTier2A, base: 1},
+                    {id: ids.relicTier2B, base: 1},
+                    {id: ids.relicTier2C, base: 1}*/
                 ]
             }
         }
@@ -455,6 +472,36 @@ export class Park implements Product {
             const relicLvl = GameManager.getInstance().getVariable(relic.id).getValue()
             return relicLvl <= 0
         })
+    }
+
+    isRelicUnlocked(relicId: string){
+        const relicLvl = GameManager.getInstance().getVariable(relicId).getValue()
+        return relicLvl > 0
+    }
+
+    getRelic(relicId: string): Relic {
+        const relicsTiers = this.getAllRelics()
+        let rel = relicsTiers.tier0.relics.filter((relic)=>{
+            return relic.id===relicId
+        })
+        if (rel.length>0) return rel[0]
+        rel = relicsTiers.tier1.relics.filter((relic)=>{
+            return relic.id===relicId
+        })
+        if (rel.length>0) return rel[0]
+        rel = relicsTiers.tier2.relics.filter((relic)=>{
+            return relic.id===relicId
+        })
+        if (rel.length>0) return rel[0]
+        return relicsTiers.tier0.relics[0]
+    }
+
+    /** If Relic is locked will always return 0 */
+    getRelicBonus(relicId: string):number{
+        const isUnlocked = this.isRelicUnlocked(relicId)
+        const relic = this.getRelic(relicId)
+        const bonus = isUnlocked ? relic.base : 0
+        return bonus
     }
 
     /*getEquippedRelics(currentLevel?:number): RelicTiersSlots{

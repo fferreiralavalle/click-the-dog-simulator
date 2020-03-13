@@ -9,7 +9,7 @@ import ids from '../../../game/VariableId'
 import variableIds from  '../../../game/VariableId'
 import { Variable } from '../../../game/Variables'
 import GameManager from '../../../game/GameManager'
-import { Park, RewardResult, events } from '../../../game/products/Park'
+import { Park, RewardResult, events, RelicTier, Relic } from '../../../game/products/Park'
 import LevelUpButton from '../LevelUpButton'
 import ProductPlus, {plusCurrency} from '../ProductPlus'
 import { Currency } from '../../../game/products/Product'
@@ -27,8 +27,11 @@ interface IRecipeProps {
 interface IState {
   isHover: boolean;
   plusCurrencies: Array<plusCurrency>
+  rewardsList: Array<plusCurrency>
   hoverLevel: boolean
   displayedEvent: string
+  viewRelics: boolean
+  displayedRelic: string
 }
 
 class ParkUI extends Component<IRecipeProps, IState> {
@@ -42,8 +45,11 @@ class ParkUI extends Component<IRecipeProps, IState> {
     this.state = {
       isHover: false,
       plusCurrencies: [],
+      rewardsList: [],
       hoverLevel: false,
-      displayedEvent: events.pupsloration.id
+      displayedEvent: events.pupsloration.id,
+      viewRelics: false,
+      displayedRelic: ids.relicTier0A
     }
     const product = GameManager.getInstance().getProductManager().getProduct(ids.product4Level) as Park
     product.subscribeToReward({
@@ -56,8 +62,10 @@ class ParkUI extends Component<IRecipeProps, IState> {
     })
     setInterval(()=>{
       const newPlus = clearPluses(this.state.plusCurrencies)
+      const newReward = clearPluses(this.state.rewardsList)
       this.setState({
-        plusCurrencies: newPlus
+        plusCurrencies: newPlus,
+        rewardsList: newReward
       })
     },3 * 1000)
   }
@@ -77,7 +85,8 @@ class ParkUI extends Component<IRecipeProps, IState> {
         className = "patience-icon"
     }
     else if (result.relicReward){
-        value = getRelicText(result.relicReward.id).title
+        value = "Found "+getRelicText(result.relicReward.id).title
+        className = ""
     }
     const plusCurrency:plusCurrency = {
       value: value,
@@ -87,7 +96,9 @@ class ParkUI extends Component<IRecipeProps, IState> {
       className,
       size: 1.5
     }
-    this.addPlusCurrency(plusCurrency)
+    this.setState({
+      rewardsList: [...this.state.rewardsList,plusCurrency]
+    })
   }
 
   onCurrencyGain = (currency: Currency) => {
@@ -101,7 +112,9 @@ class ParkUI extends Component<IRecipeProps, IState> {
       className:'love-icon',
       size: 1
     }
-    this.addPlusCurrency(plusCurrency)
+    if (currency.currency.gt(0)){
+      this.addPlusCurrency(plusCurrency)
+    }
   }
 
   addPlusCurrency = (pc: plusCurrency) => {
@@ -147,9 +160,14 @@ class ParkUI extends Component<IRecipeProps, IState> {
 
   render(){
     const {level} = this.props;
-    const {plusCurrencies, isHover, displayedEvent} = this.state
+    const {plusCurrencies, isHover, displayedEvent, viewRelics} = this.state
     const product = GameManager.getInstance().getProductManager().getProduct(ids.product4Level) as Park
-    
+    const plusCurrencyStyle = {
+      bottom: '80px',
+      right: '35px',
+      zIndex: 105,
+      
+    }
     return (
       <div className="product product4 boxed" onMouseEnter={this.onHover(true)} onMouseLeave={this.onHover(false)}>
         <div className="product4-building">
@@ -167,7 +185,8 @@ class ParkUI extends Component<IRecipeProps, IState> {
         <LevelUpButton productId={ids.product4Level} 
           onMouseEnter={this.onLevelHover(true)}
           onMouseLeave={this.onLevelHover(false)}/>
-        {isHover && this.renderHighlight()}
+        {isHover && (viewRelics ? this.renderRelicView(product): this.renderHighlight(product))}
+        <ProductPlus plusCurrencies={this.state.rewardsList} style={plusCurrencyStyle}/>
       </div>
     )
   }
@@ -219,8 +238,7 @@ class ParkUI extends Component<IRecipeProps, IState> {
       )
   }
 
-  renderHighlight(){
-    const park = GameManager.getInstance().getProductManager().getProduct(ids.product4Level) as Park 
+  renderHighlight(park: Park){
     const {level} = this.props
     const {displayedEvent} = this.state
     const usedLevel:number = level.getValue() + (this.state.hoverLevel ? 1 : 0)
@@ -228,6 +246,7 @@ class ParkUI extends Component<IRecipeProps, IState> {
     const lovePerRelic = toFormat(park.getCurrencyPerRelic(usedLevel).currency.toString())
     const levelClass = this.state.hoverLevel ? " hover-level" : ""
     const relicAmount = park.getRelicsUnlockedAmount()
+    
     return (
       <div className={"highlight "+levelClass}>
         <div className="highlight-section">
@@ -276,6 +295,7 @@ class ParkUI extends Component<IRecipeProps, IState> {
           </div>
           {this.renderEventStatistic(park,usedLevel)}
         </div>
+        
       </div>
     )
   }
@@ -341,12 +361,90 @@ class ParkUI extends Component<IRecipeProps, IState> {
                 </div>)
         }
     })
+    uiEvents.push(
+      <div className={"highlight-field highlight-event-select special-option"} onClick={this.toggleRelicView(true)}>
+          {this.productText.viewRelics}
+      </div>
+    )
     return uiEvents
+  }
+
+  renderRelicView(park: Park){
+    const relics = park.getAllRelics()
+    const {displayedRelic} = this.state
+    const {title, description} = getRelicText(displayedRelic)
+    const relic = park.getRelic(displayedRelic)
+    const iconStyle = {
+      backgroundImage: relic.icon ? `url(${relic.icon})` : ""
+    }
+    const isCurrentRelicUnlocked = park.isRelicUnlocked(displayedRelic)
+    const lockClass = isCurrentRelicUnlocked ? "" : " locked"
+    return (
+      <div className={"highlight relic-view"}>
+        <div className="highlight-section scroll-y">
+          <div className="highlight-field title">
+            {this.productText.quests.tier0.title}
+          </div>
+          {this.renderRelicTier(relics.tier0, park)}
+          <div className="highlight-field title">
+            {this.productText.quests.tier1.title}
+          </div>
+          {this.renderRelicTier(relics.tier1, park)}
+          <div className="highlight-field title">
+            {this.productText.quests.tier2.title}
+          </div>
+          {this.renderRelicTier(relics.tier2, park)}
+        </div>
+        <div className="highlight-section">
+          <div className={"highlight-field title"+lockClass}>
+            <div className="relic-icon" style={iconStyle}/><span className="relic-title">{title}</span>
+          </div>
+          <div className="highlight-field">
+          <span className="relic-description">{isCurrentRelicUnlocked ? description : "???"}</span>
+          </div>
+        </div>
+        <div className="highlight-closeButton" onClick={this.toggleRelicView(false)}>X</div>
+        </div>
+    )
+  }
+
+  renderRelicTier(tier: RelicTier, park: Park){
+    const relics = tier.relics
+    return (
+      <div className="highlight-tier">
+        {relics.map((relic)=> (this.renderRelic(relic, park.isRelicUnlocked(relic.id))))}
+      </div>)
+  }
+
+  renderRelic(relic: Relic, isUnlocked: boolean){
+    const iconStyle = {
+      backgroundImage: relic.icon ? `url(${relic.icon})` : ""
+    }
+    const lockClass = isUnlocked ? "" : " locked"
+    return (
+      <div className={"highlight-field"+lockClass} onClick={this.selectRelic(relic.id)}>
+        <div className="relic-icon" style={iconStyle}>
+
+        </div>
+      </div>
+    )
   }
   
   selectEvent = (eventId: string) => () =>{
     this.setState({
         displayedEvent: eventId
+    })
+  }
+
+  selectRelic = (relicId: string) => () =>{
+    this.setState({
+        displayedRelic: relicId
+    })
+  }
+
+  toggleRelicView = (view:boolean) => () => {
+    this.setState({
+      viewRelics: view
     })
   }
 

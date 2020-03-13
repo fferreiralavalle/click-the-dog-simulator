@@ -55,6 +55,7 @@
     color: #d600fd;;
     background-color: rgba(255,255,255,0.5);
     padding: 5px 10px;
+    margin-bottom: 5px;
     cursor: pointer;
     transition: transform 0.5s;
 }

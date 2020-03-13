@@ -10,10 +10,13 @@
 .product-list {
     display: inline-flex;
     flex-wrap: wrap;
+    margin: 100px 0px;
 }
 .game-header {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     max-width: 100vw;
+    position: fixed;
+    z-index:5000
 }

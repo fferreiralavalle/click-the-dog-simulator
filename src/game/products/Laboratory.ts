@@ -3,6 +3,7 @@ import ids from '../VariableId';
 import GameManager from '../GameManager'
 import { addCurrency } from '../../utils/mathUtils';
 import Decimal from 'break_infinity.js';
+import { Park } from './Park';
 
 export interface EventType{
     id: string,
@@ -63,9 +64,14 @@ export class Laboratory implements Product {
         currency.currency.times(timePassed)
         while (progress >= goal){
             progress -= goal
+            //Relic Bonus
+            const park = GameManager.getInstance().productManager.getProduct(ids.product4Level) as Park
+            const relic1CBonus = park.getRelicBonus(ids.relicTier1C)
+            const relicBonus = (relic1CBonus!==0 ? relic1CBonus : 1)
+            
             const currencyEvent:Currency = {
                 currency: new Decimal(0),
-                treats: new Decimal(1)
+                treats: new Decimal(1 * relicBonus)
             }
             totalCurrency = addCurrency(totalCurrency,currencyEvent)
             GameManager.getInstance().addToVariable(currencyEvent.treats,ids.treats)
@@ -113,7 +119,7 @@ export class Laboratory implements Product {
     canLevelUp(): boolean {
         const treats = GameManager.getInstance().getVariable(ids.treats).getValue()
         const levelUpPrice = this.getLevelUpPrice().treats
-        return levelUpPrice <= treats
+        return levelUpPrice.lte(treats)
     }
     levelUp(): boolean {
         const levelUpPrice = this.getLevelUpPrice().treats.mul(-1)
@@ -184,7 +190,8 @@ export class Laboratory implements Product {
     }
 
     getAvailablePoints(level?:number):number {
-        let points = level ? level : GameManager.getInstance().getVariable(this.variableId).getValue()
+        let points = this.getPoints(level)
+        
         /* Tier 1 */
         points -= this.getUpgradePointsTaken(ids.labUpgradeTier1A)
         points -= this.getUpgradePointsTaken(ids.labUpgradeTier1B)
@@ -193,12 +200,18 @@ export class Laboratory implements Product {
         points -= this.getUpgradePointsTaken(ids.labUpgradeTier2A)
         points -= this.getUpgradePointsTaken(ids.labUpgradeTier2B)
         points -= this.getUpgradePointsTaken(ids.labUpgradeTier2C)
+
+
         return points
     }
 
     getPoints(level?:number){
-        const lvl = level ? level : GameManager.getInstance().getVariable(ids.product2Level).getValue()
-        return lvl
+        let points = level ? level : GameManager.getInstance().getVariable(ids.product2Level).getValue()
+        //Relics
+        const park = GameManager.getInstance().productManager.getProduct(ids.product4Level) as Park
+        const relic0ABonus = park.getRelicBonus(ids.relicTier0C)
+        points = Math.floor(points * (relic0ABonus!==0 ? relic0ABonus : 1))
+        return points
     }
 
     getAvaiableUpgrades(level?:number): Array<UpgradeTier> {
