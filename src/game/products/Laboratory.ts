@@ -61,7 +61,7 @@ export class Laboratory implements Product {
         const goal = this.getProgressGoal()
         let totalCurrency:Currency = {currency:new Decimal(0),treats:new Decimal(0)}
         let currency:Currency = this.getCurrencyPerSecond()
-        currency.currency.times(timePassed)
+        currency.currency = currency.currency.times(timePassed)
         while (progress >= goal){
             progress -= goal
             //Relic Bonus
