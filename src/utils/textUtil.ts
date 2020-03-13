@@ -120,8 +120,8 @@ export const english:Text = {
                 description: "Your own pets are 5 times more powerful."
             },
             relicTier0B: {
-                title:  "Bone of Production",
-                description: "Reduces event progress neeeded by 10%"
+                title:  "Ball of Rubs",
+                description: "Increases Belly Rub Day Love gained by 50%"
             },
             relicTier0C: {
                 title:  "Ball of Science",

@@ -203,7 +203,6 @@ class Product1 extends Component<IRecipeProps, IState> {
             <div className="highlight-attribute">Progress</div>
             <div className="highlight-value">
               {progressPS}/s
-              <div className="highlight-love-icon"/>
             </div>
           </div>
         </div>
