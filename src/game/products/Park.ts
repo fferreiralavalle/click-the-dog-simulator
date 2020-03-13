@@ -249,7 +249,7 @@ export class Park implements Product {
     getRelicChance(level?:number):number{
         const lvl = level ? level : this.getLevel()
         const base = 0.95
-        const total = 1.9 - Math.pow(base,lvl/5)
+        const total = 1.15 - Math.pow(base,lvl/5)
         return total
     }
     
