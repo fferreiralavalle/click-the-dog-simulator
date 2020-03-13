@@ -139,7 +139,7 @@ class TimeWizard extends Component<IRecipeProps,IState> {
     const price = GameManager.getInstance().getTimeManager().getPatiencePoints(turboTimePrice)
     const priceFormat = toFormat(price)
     const {turboTime, patiencePoints} = this.props
-    const canBuyClass = patiencePoints >= price ? "" : "disabled"
+    const canBuyClass = patiencePoints.gte(price) ? "" : "disabled"
     return(
         <div className={"highlight-store-button "+canBuyClass} onClick={()=>this.onTurboBuy(price)}>
             <div className="highlight-store-name">+{turboToHours} h</div>

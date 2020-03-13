@@ -20,10 +20,10 @@
 .lab-upgrade-level {
     position: absolute;
     bottom: -10px;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: bold;
     text-align: center;
-    padding: 0px 5px;
+    padding: 0.1px 5px;
     border: 1px solid rgb(17, 13, 255);
     background-color: rgba(255, 255, 255, 0.8);
     border-radius: 5px;

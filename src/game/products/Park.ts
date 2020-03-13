@@ -271,7 +271,7 @@ export class Park implements Product {
     getLevelUpPrice(): Currency {
         const basePrice:Decimal = new Decimal(25);
         const initialPrice:Decimal = new Decimal(475);
-        const currentLevel:Decimal = new Decimal(GameManager.getInstance().getVariable(this.variableId).getValue())
+        const currentLevel:Decimal = new Decimal(Number(GameManager.getInstance().getVariable(this.variableId).getValue()))
         const finalPrice:Decimal = initialPrice.add(basePrice.multiply(currentLevel)).add(basePrice.pow(currentLevel.div(4).add(1)))
         return {
             currency: finalPrice,
@@ -279,7 +279,7 @@ export class Park implements Product {
         };
     }
     canLevelUp(): boolean {
-        const currency = GameManager.getInstance().getVariable(ids.currency).getValue()
+        const currency = new Decimal(Number(GameManager.getInstance().getVariable(ids.currency).getValue()))
         const levelUpPrice = this.getLevelUpPrice().currency
         const condition = levelUpPrice.lte(currency) 
         return condition

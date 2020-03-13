@@ -102,9 +102,9 @@ class GameManager  {
 
     addCurrency (add: Currency): void {
         const {currency,treats, patiencePoints} = add
-        let myCurrency:Decimal = new Decimal(this.getVariable(variableIds.currency).getValue())
-        let myTreats:Decimal = new Decimal(this.getVariable(variableIds.treats).getValue())
-        let myPatiencePoints:Decimal = new Decimal(this.getVariable(variableIds.patiencePoints).getValue())
+        let myCurrency:Decimal = new Decimal(Number(this.getVariable(variableIds.currency).getValue()))
+        let myTreats:Decimal = new Decimal(Number(this.getVariable(variableIds.treats).getValue()))
+        let myPatiencePoints:Decimal = new Decimal(Number(this.getVariable(variableIds.patiencePoints).getValue()))
         myCurrency = myCurrency.add(currency)
         myTreats = myTreats.add(treats)
 
@@ -183,11 +183,11 @@ class GameManager  {
     }
 
     buyTurboTime(patienceSpent: Decimal){
-        const patiencePoints = this.getVariable(variableIds.patiencePoints).getValue()
-        if (patienceSpent <= patiencePoints){
+        const patiencePoints = new Decimal(Number(this.getVariable(variableIds.patiencePoints).getValue()))
+        if (patienceSpent.lte(patiencePoints)){
             const turboSeconds = this.getTimeManager().buyTurboTime(patienceSpent)
-            this.addToVariable(-patienceSpent, variableIds.patiencePoints)
-            this.addToVariable(turboSeconds, variableIds.turboTimeLeft)
+            this.addToVariable(patienceSpent.mul(-1), variableIds.patiencePoints)
+            this.addToVariable(turboSeconds.toNumber(), variableIds.turboTimeLeft)
         }
     }
 }
