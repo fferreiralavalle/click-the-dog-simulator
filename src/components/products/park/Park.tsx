@@ -66,14 +66,14 @@ class ParkUI extends Component<IRecipeProps, IState> {
     const {eventId} = this.props;
     const x = (10+Math.random() * 30)+"%"
     const y = (30+Math.random() * 40)+"%"
-    let value = ('+'+toFormat(result.currencyReward.currency))
+    let value = ('+'+toFormat(result.currencyReward.currency.toString()))
     let className = 'love-icon'
-    if (result.currencyReward.treats!==0){
-        value = '+'+toFormat(result.currencyReward.treats)
+    if (!result.currencyReward.treats.equals(0)){
+        value = '+'+toFormat(result.currencyReward.treats.toString())
         className = "treat-icon"
     }
     else if (result.currencyReward.patiencePoints){
-        value = '+'+toFormat(result.currencyReward.patiencePoints)
+        value = '+'+toFormat(result.currencyReward.patiencePoints.toString())
         className = "patience-icon"
     }
     else if (result.relicReward){
@@ -94,7 +94,7 @@ class ParkUI extends Component<IRecipeProps, IState> {
     const x = (10+Math.random() * 50)+"%"
     const y = (30+Math.random() * 50)+"%"
     const plusCurrency:plusCurrency = {
-      value: ('+'+toFormat(currency.currency)),
+      value: ('+'+toFormat(currency.currency.toString())),
       key: Date.UTC.toString()+(Math.random()),
       x,
       y,
@@ -224,8 +224,8 @@ class ParkUI extends Component<IRecipeProps, IState> {
     const {level} = this.props
     const {displayedEvent} = this.state
     const usedLevel:number = level.getValue() + (this.state.hoverLevel ? 1 : 0)
-    const lps = toFormat(park.getCurrencyPerSecond(usedLevel).currency)
-    const lovePerRelic = toFormat(park.getCurrencyPerRelic(usedLevel).currency)
+    const lps = toFormat(park.getCurrencyPerSecond(usedLevel).currency.toString())
+    const lovePerRelic = toFormat(park.getCurrencyPerRelic(usedLevel).currency.toString())
     const levelClass = this.state.hoverLevel ? " hover-level" : ""
     const relicAmount = park.getRelicsUnlockedAmount()
     return (
@@ -311,7 +311,7 @@ class ParkUI extends Component<IRecipeProps, IState> {
                     {this.commonText.price}
                     </div>
                 <div className="highlight-value">
-                    {toFormat(price)}<div className="treat-icon"/>
+                    {toFormat(price.toString())}<div className="treat-icon"/>
                 </div>
             </div>
             <div className={"highlight-field"+readyClass} onClick={this.claimReward(displayedEvent, product)}>

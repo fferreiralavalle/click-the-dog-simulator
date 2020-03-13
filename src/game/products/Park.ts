@@ -2,7 +2,8 @@ import { Product, Currency, CurrencySubscriber } from './Product'
 import ids from '../VariableId';
 import GameManager from '../GameManager'
 import { Laboratory } from './Laboratory';
-import { addCurrenciy } from '../../utils/mathUtils';
+import { addCurrency } from '../../utils/mathUtils';
+import Decimal from 'break_infinity.js';
 
 export interface EventType{
     id: string,
@@ -23,19 +24,19 @@ export const events:EventTypes = {
         id: 'pupsloration',
         secondsNeeded: 300,
         unlockLevel: 0,
-        price: {currency:0,treats:10}
+        price: {currency: new Decimal(0),treats:new Decimal(10)}
     },
     dogsploration: {
         id: 'dogsploration',
         secondsNeeded: 1800,
         unlockLevel: 10,
-        price: {currency:0,treats:100}
+        price: {currency:new Decimal(0),treats:new Decimal(100)}
     },
     bigBoysploration: {
         id: 'bigbBoysploration',
         secondsNeeded: 7200,
         unlockLevel: 20,
-        price: {currency:0,treats:1000}
+        price: {currency:new Decimal(0),treats:new Decimal(1000)}
     }
 }
 
@@ -100,8 +101,8 @@ export class Park implements Product {
         const relics = this.getRelicsUnlockedAmount()
         const currencyPerRelic = this.getCurrencyPerRelic(currentLevel)
         const currencyPerSecond:Currency = {
-            currency: currencyPerRelic.currency * relics,
-            treats: currencyPerRelic.treats * relics
+            currency: currencyPerRelic.currency.mul(relics),
+            treats: currencyPerRelic.treats.mul(relics)
         }
         return currencyPerSecond
     }
@@ -111,8 +112,8 @@ export class Park implements Product {
         const base = 1
         const total = base * currentLevel
         return {
-            currency: total,
-            treats:0
+            currency: new Decimal(total),
+            treats: new Decimal(0)
         }
     }
 
@@ -124,7 +125,7 @@ export class Park implements Product {
     onTimePassed(timePassed: number): Currency {
         let add:Currency = this.getCurrencyPerSecond();
         const pps: number = this.getProgressPerSecond()
-        add.currency *=  timePassed
+        add.currency.mul(timePassed)
         if (this.isEventUnlocked(events.pupsloration)){
             GameManager.getInstance().addToVariable(pps, ids.product4Tier0Progress)
         }
@@ -134,7 +135,7 @@ export class Park implements Product {
         if (this.isEventUnlocked(events.bigBoysploration)){
             GameManager.getInstance().addToVariable(pps, ids.product4Tier2Progress)
         }
-        GameManager.getInstance().addToVariable(add.currency,ids.currency)
+        GameManager.getInstance().addCurrency(add)
         this.onCurrencyTime(add)
         return add
     }
@@ -178,7 +179,7 @@ export class Park implements Product {
         const random:number = Math.random()
         const relicChance = this.getRelicChance(lvl)
         let reward:RewardResult = {
-            currencyReward: {currency:0,treats:0}
+            currencyReward: {currency:new Decimal(0),treats:new Decimal(0)}
         }
         let relics = []
         const randomRewardChange = Math.random()
@@ -192,9 +193,9 @@ export class Park implements Product {
                     return reward
                 }
                 if (randomRewardChange<0.5){
-                    reward.currencyReward.patiencePoints = 12
+                    reward.currencyReward.patiencePoints = new Decimal(12)
                 }else{
-                    reward.currencyReward.treats = event.price.treats*2
+                    reward.currencyReward.treats = new Decimal(event.price.treats.mul(2))
                 }
                 return reward
             /* Tier 1 */
@@ -206,9 +207,9 @@ export class Park implements Product {
                     return reward
                 }
                 if (randomRewardChange<0.5){
-                    reward.currencyReward.patiencePoints = 6
+                    reward.currencyReward.patiencePoints = new Decimal(6)
                 }else{
-                    reward.currencyReward.treats = event.price.treats*2
+                    reward.currencyReward.treats = new Decimal(event.price.treats.mul(2))
                 }
                 return reward
             /* Tier 0 */
@@ -220,9 +221,9 @@ export class Park implements Product {
                     return reward
                 }
                 if (randomRewardChange<0.5){
-                    reward.currencyReward.patiencePoints = 3
+                    reward.currencyReward.patiencePoints = new Decimal(3)
                 }else{
-                    reward.currencyReward.treats = event.price.treats*2
+                    reward.currencyReward.treats = new Decimal(event.price.treats.mul(2))
                 }
                 return reward
         }
@@ -268,26 +269,27 @@ export class Park implements Product {
     }
 
     getLevelUpPrice(): Currency {
-        const basePrice:number = 25;
-        const initialPrice:number = 475;
-        const currentLevel:number = GameManager.getInstance().getVariable(this.variableId).getValue()
-        const finalPrice = initialPrice + basePrice * currentLevel + Math.pow(basePrice,currentLevel/4+1)
+        const basePrice:Decimal = new Decimal(25);
+        const initialPrice:Decimal = new Decimal(475);
+        const currentLevel:Decimal = new Decimal(GameManager.getInstance().getVariable(this.variableId).getValue())
+        const finalPrice:Decimal = initialPrice.add(basePrice.multiply(currentLevel)).add(basePrice.pow(currentLevel.div(4).add(1)))
         return {
             currency: finalPrice,
-            treats: 0
+            treats: new Decimal(0)
         };
     }
     canLevelUp(): boolean {
         const currency = GameManager.getInstance().getVariable(ids.currency).getValue()
         const levelUpPrice = this.getLevelUpPrice().currency
-        return levelUpPrice < currency
+        const condition = levelUpPrice.lte(currency) 
+        return condition
     }
 
     levelUp(): boolean {
-        const levelUpPrice = this.getLevelUpPrice().currency
+        const levelUpPrice = this.getLevelUpPrice().currency.mul(-1)
         if (this.canLevelUp()) {
             GameManager.getInstance().addToVariable(1, this.variableId)
-            GameManager.getInstance().addToVariable(-levelUpPrice, ids.currency)
+            GameManager.getInstance().addToVariable(levelUpPrice, ids.currency)
             if (this.getLevel()){
                 GameManager.getInstance().getNotificationManager().addNotification({
                     id:'pet-park-unlock',

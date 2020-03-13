@@ -73,7 +73,7 @@ class Doggies extends Component<IRecipeProps,IState> {
 
         }
         currencies.push(plus)
-        if (earned.treats!==0){
+        if (!earned.treats.equals(0)){
             plus.value = "+"+toFormat(earned.treats)
             plus.key = (new Date).toString()+(Math.random())
             plus.size = (1 + Math.random() * 0.25)

@@ -1,7 +1,8 @@
 import { Product, Currency, CurrencySubscriber } from './Product'
 import ids from '../VariableId';
 import GameManager from '../GameManager'
-import { addCurrenciy } from '../../utils/mathUtils';
+import { addCurrency } from '../../utils/mathUtils';
+import Decimal from 'break_infinity.js';
 
 export interface EventType{
     id: string,
@@ -36,8 +37,8 @@ export class Laboratory implements Product {
     getCurrencyPerSecond(level?: number): Currency {
         const currencyUpgrade = this.getUpgradeBonus(ids.labUpgradeTier2C).baseBonus
         const currency:Currency = {
-            currency: currencyUpgrade,
-            treats: 0
+            currency: new Decimal(currencyUpgrade),
+            treats: new Decimal(0)
         }
         return currency
     }
@@ -57,23 +58,23 @@ export class Laboratory implements Product {
         const pps: number = this.getProgressPerSecond()
         let progress = this.getProgress();
         const goal = this.getProgressGoal()
-        let totalCurrency:Currency = {currency:0,treats:0}
+        let totalCurrency:Currency = {currency:new Decimal(0),treats:new Decimal(0)}
         let currency:Currency = this.getCurrencyPerSecond()
-        currency.currency *= timePassed
+        currency.currency.times(timePassed)
         while (progress >= goal){
             progress -= goal
             const currencyEvent:Currency = {
-                currency: 0,
-                treats: 1
+                currency: new Decimal(0),
+                treats: new Decimal(1)
             }
-            totalCurrency = addCurrenciy(totalCurrency,currencyEvent)
+            totalCurrency = addCurrency(totalCurrency,currencyEvent)
             GameManager.getInstance().addToVariable(currencyEvent.treats,ids.treats)
             this.onCurrencyTime(currencyEvent)
         }
         GameManager.getInstance().setVariable(progress,ids.product2Progress)
         GameManager.getInstance().addToVariable(pps * timePassed,ids.product2Progress)
         GameManager.getInstance().addToVariable(currency.currency,ids.currency)
-        totalCurrency = addCurrenciy(totalCurrency,currency)
+        totalCurrency = addCurrency(totalCurrency,currency)
         this.onCurrencyTime(currency)
         return totalCurrency
     }
@@ -105,8 +106,8 @@ export class Laboratory implements Product {
         const lvl:number = level ? level : GameManager.getInstance().getVariable(this.variableId).getValue()
         const finalPrice = initialPrice + Math.pow(basePrice,1+Math.floor(lvl/3))
         return {
-            currency: 0,
-            treats: finalPrice
+            currency: new Decimal(0),
+            treats: new Decimal(finalPrice)
         };
     }
     canLevelUp(): boolean {
@@ -115,10 +116,10 @@ export class Laboratory implements Product {
         return levelUpPrice <= treats
     }
     levelUp(): boolean {
-        const levelUpPrice = this.getLevelUpPrice().treats
+        const levelUpPrice = this.getLevelUpPrice().treats.mul(-1)
         if (this.canLevelUp()) {
             GameManager.getInstance().addToVariable(1, this.variableId)
-            GameManager.getInstance().addToVariable(-levelUpPrice, ids.treats)
+            GameManager.getInstance().addToVariable(levelUpPrice, ids.treats)
             if (this.getLevel()===1){
                 GameManager.getInstance().getNotificationManager().addNotification({
                     id:'lab-unlock',

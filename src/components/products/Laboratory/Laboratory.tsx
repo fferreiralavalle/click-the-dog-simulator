@@ -55,14 +55,14 @@ class LaboratoryUI extends Component<IRecipeProps, IState> {
 
   onEventReward = (result:Currency)=> {
     
-    if (result.treats<=0 && result.currency<=0)
+    if (result.treats.lessThanOrEqualTo(0) && result.currency.lessThanOrEqualTo(0))
       return
     const x = (10+Math.random() * 30)+"%"
     const y = (30+Math.random() * 40)+"%"
     let value = ('+'+toFormat(result.currency))
     let size = 1
     let className = 'love-icon'
-    if (result.treats>0){
+    if (result.treats.greaterThan(0)){
       value = ('+'+toFormat(result.treats))
       size = 1.5
       className = 'treat-icon'

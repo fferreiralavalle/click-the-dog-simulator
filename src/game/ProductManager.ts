@@ -6,6 +6,7 @@ import { TimeManager } from "./TimeManager"
 import GameManager from './GameManager'
 import { Laboratory } from "./products/Laboratory"
 import { Park } from "./products/Park"
+import Decimal from "break_infinity.js"
 
 export default class ProductManager {
     products: Array<Product>
@@ -29,7 +30,7 @@ export default class ProductManager {
                 prod.isUnlocked = true
             }
         })
-        return {currency:0, treats:0}
+        return {currency: new Decimal(0), treats: new Decimal(0)}
     }
 
     subscribeBuildings(timeManager: TimeManager): void {

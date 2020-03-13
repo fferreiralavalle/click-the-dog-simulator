@@ -2,7 +2,8 @@ import { Product, Currency, CurrencySubscriber } from './Product'
 import variables from '../VariableId';
 import GameManager from '../GameManager'
 import { Laboratory } from './Laboratory';
-import { addCurrenciy } from '../../utils/mathUtils';
+import { addCurrency } from '../../utils/mathUtils';
+import Decimal from 'break_infinity.js';
 
 export interface EventType{
     id: string,
@@ -71,11 +72,11 @@ export class PetAppreciationCenter implements Product {
     }
     getCurrencyPerSecond(level?: number): Currency {
         const base:number = 1;
-        const currentLevel:number = level ? level : GameManager.getInstance().getVariable(this.variableId).getValue()
-        const currencyPerSecond = base * currentLevel
+        const currentLevel:number = Number(level ? level : GameManager.getInstance().getVariable(this.variableId).getValue())
+        const currencyPerSecond = new Decimal(base).times(currentLevel)
         return {
             currency: currencyPerSecond,
-            treats: 0
+            treats: new Decimal(0)
         }
     }
     getProgressPerSecond(level?: number): number {
@@ -87,17 +88,17 @@ export class PetAppreciationCenter implements Product {
     onTimePassed(timePassed: number): Currency {
         let add:Currency = this.getCurrencyPerSecond();
         const pps: number = this.getProgressPerSecond()
-        add.currency *=  timePassed
+        add.currency.mul(timePassed)
         GameManager.getInstance().addToVariable(add.currency,variables.currency)
         GameManager.getInstance().addToVariable(pps * timePassed,variables.product1Progress)
         this.checkForEventDurations(timePassed)
         const eventCurrency = this.checkForProgressCompletion()
         this.onCurrencyTime(add)
-        return addCurrenciy(add,eventCurrency)
+        return addCurrency(add,eventCurrency)
     }
     
     checkForProgressCompletion(): Currency{
-        let totalCurrency:Currency = {currency:0,treats:0}
+        let totalCurrency:Currency = {currency:new Decimal(0),treats:new Decimal(0)}
         const goal = this.getProgressGoal();
         let progress = GameManager.getInstance().getVariable(variables.product1Progress).getValue()
         while (progress >= goal){
@@ -130,12 +131,12 @@ export class PetAppreciationCenter implements Product {
             GameManager.getInstance().addToVariable(reward.currencyReward.treats, variables.treats)
             GameManager.getInstance().setVariable(progress, variables.product1Progress)
             this.onReward(reward)
-            totalCurrency = addCurrenciy(reward.currencyReward,totalCurrency)
+            totalCurrency = addCurrency(reward.currencyReward,totalCurrency)
             if (isCritical){
                 GameManager.getInstance().addToVariable(reward.currencyReward.currency, variables.currency)
                 GameManager.getInstance().addToVariable(reward.currencyReward.treats, variables.treats)
                 this.onReward(reward)
-                totalCurrency = addCurrenciy(reward.currencyReward,totalCurrency)
+                totalCurrency = addCurrency(reward.currencyReward,totalCurrency)
             }
         }
         return totalCurrency
@@ -160,15 +161,15 @@ export class PetAppreciationCenter implements Product {
             case events.donationCampaign.id:
                 return {
                     currencyReward: {
-                        currency: 0,
-                        treats: this.getEvent(eventId).baseReward + Math.floor(finalLevel/5-2),
+                        currency: new Decimal(0),
+                        treats: new Decimal(this.getEvent(eventId).baseReward + Math.floor(finalLevel/5-2)),
                     }
                 }
             default:
                 return {
                     currencyReward: {
-                        currency: this.getEvent(eventId).baseReward * (1 + 0.5 * finalLevel),
-                        treats: 0
+                        currency: new Decimal(this.getEvent(eventId).baseReward * (1 + 0.5 * finalLevel)),
+                        treats: new Decimal(0)
                     }
             }
         }
@@ -212,21 +213,22 @@ export class PetAppreciationCenter implements Product {
         const currentLevel:number = GameManager.getInstance().getVariable(this.variableId).getValue()
         const finalPrice = initialPrice + basePrice * currentLevel + Math.pow(basePrice,currentLevel/4+1)
         return {
-            currency: finalPrice,
-            treats: 0
+            currency: new Decimal(finalPrice),
+            treats: new Decimal(0)
         };
         
     }
     canLevelUp(): boolean {
-        const currency = GameManager.getInstance().getVariable(variables.currency).getValue()
+        const currency:Decimal = GameManager.getInstance().getVariable(variables.currency).getValue()
         const levelUpPrice = this.getLevelUpPrice().currency
-        return levelUpPrice < currency
+        const condition = levelUpPrice.lte(currency) 
+        return condition
     }
     levelUp(): boolean {
-        const levelUpPrice = this.getLevelUpPrice().currency
+        const levelUpPrice = this.getLevelUpPrice().currency.mul(-1)
         if (this.canLevelUp()) {
             GameManager.getInstance().addToVariable(1, this.variableId)
-            GameManager.getInstance().addToVariable(-levelUpPrice, variables.currency)
+            GameManager.getInstance().addToVariable(levelUpPrice, variables.currency)
             if (this.getLevel()===1){
                 GameManager.getInstance().getNotificationManager().addNotification({
                     id:'pet-farm-unlock',

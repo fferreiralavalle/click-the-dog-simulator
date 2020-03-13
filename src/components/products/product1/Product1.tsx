@@ -234,7 +234,6 @@ class Product1 extends Component<IRecipeProps, IState> {
     const title = (
       <div className="highlight-field title">{name+" Stats"}</div>
     )
-    console.log("event UI name",name)
     switch (eventId){
       case events.bellyRub.id:
         return (
@@ -243,7 +242,7 @@ class Product1 extends Component<IRecipeProps, IState> {
             <div className="highlight-field">
               <div className="highlight-attribute">Love</div>
               <div className="highlight-value">
-                {product.getEventReward(eventId,level).currencyReward.currency}
+                {product.getEventReward(eventId,level).currencyReward.currency.toString()}
                 <div className="highlight-love-icon"/>
                 </div>
             </div>
@@ -256,7 +255,7 @@ class Product1 extends Component<IRecipeProps, IState> {
               <div className="highlight-field">
                 <div className="highlight-attribute">Treats</div>
                 <div className="highlight-value">
-                  {product.getEventReward(eventId,level).currencyReward.treats}
+                  {product.getEventReward(eventId,level).currencyReward.treats.toString()}
                   <div className="treat-icon"/>
                   </div>
               </div>

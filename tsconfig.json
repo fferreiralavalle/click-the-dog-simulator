@@ -17,9 +17,12 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react"
+    "jsx": "react",
   },
   "include": [
-    "src"
-  ]
+    "src",
+    "index.d.ts"
+  ],
+  "typescript.suggestionActions.enabled": false,
+  "javascript.suggestionActions.enabled": false,
 }

@@ -11,6 +11,7 @@ import { PetPetting } from './products/PetPetting';
 import Cookies from 'js-cookie' 
 import NotificationManager from './NotificationManager';
 import { toFormat } from '../utils/uiUtil';
+import Decimal from 'break_infinity.js';
 
 const devMegaPetMult = 1
 const saveEvery = 0.5
@@ -41,15 +42,18 @@ class GameManager  {
         const updateUiTick = 'updateUITick'
         this.timeManger.susbcribe({
             id: updateUiTick,
-            onTimePass:() => {store.dispatch(actions.updateVariables());return {currency:0,treats:0}}
+            onTimePass:() => {
+                store.dispatch(actions.updateVariables());
+                return {currency:new Decimal(0),treats:new Decimal(0)}
+            }
         })
-        const {patiencePoints} = this.handleOfflineTimePassed()
-        this.addToVariable(patiencePoints ? patiencePoints : 0, variableIds.patiencePoints)
+        const currencyOffline = this.handleOfflineTimePassed()
+        this.addCurrency(currencyOffline)
         if (this.getVariable(variableIds.lastSaveDate).getValue()!=null){
             this.getNotificationManager().addNotification({
                 id:'welcomed-back',
                 background: 'https://i.imgur.com/3AcgxLn.jpg',
-                description:'Your dogs have been waiting for you. They gained '+toFormat(patiencePoints ? patiencePoints : 0)+' patience points for waiting like good boys. Spend them to speed up the game!',
+                description:'Your dogs have been waiting for you. They gained '+toFormat(currencyOffline.patiencePoints? currencyOffline.patiencePoints : 0)+' patience points for waiting like good boys. Spend them to speed up the game!',
                 image: 'https://i.imgur.com/DIPnpA9.png',
                 seen: false,
                 title: 'Welcomed Back!1!ONE!'
@@ -80,8 +84,15 @@ class GameManager  {
         }
     }
 
-    addToVariable (add: number, variableId: string): void {
-        const newValue = this.variables[variableId].getValue() + add
+    addToVariable (add: number | Decimal, variableId: string): void {
+        let preValue = this.variables[variableId].getValue()
+        let newValue
+        if (add instanceof Decimal){
+            preValue = preValue ? new Decimal(preValue) : new Decimal(0)
+            newValue = preValue.add(add)
+        }else {
+            newValue = preValue + add
+        }
         const newVariables: VariableStructure = {
             ...this.variables,
             [variableId]:  new Variable({id:variableId, value:newValue})
@@ -91,11 +102,19 @@ class GameManager  {
 
     addCurrency (add: Currency): void {
         const {currency,treats, patiencePoints} = add
-        this.addToVariable(currency,variableIds.currency)
-        this.addToVariable(treats,variableIds.treats)
+        let myCurrency:Decimal = new Decimal(this.getVariable(variableIds.currency).getValue())
+        let myTreats:Decimal = new Decimal(this.getVariable(variableIds.treats).getValue())
+        let myPatiencePoints:Decimal = new Decimal(this.getVariable(variableIds.patiencePoints).getValue())
+        myCurrency = myCurrency.add(currency)
+        myTreats = myTreats.add(treats)
+
         if (patiencePoints){
-            this.addToVariable(patiencePoints,variableIds.patiencePoints)
+            myPatiencePoints = myPatiencePoints.add(patiencePoints? patiencePoints : 0)
+            this.setVariable(myPatiencePoints,variableIds.patiencePoints)
         }
+
+        this.setVariable(myCurrency,variableIds.currency)
+        this.setVariable(myTreats,variableIds.treats)
     }
 
     setVariable (value: any, variableId: string): void {
@@ -125,13 +144,12 @@ class GameManager  {
     onClickedDog(): Currency{
         const PetPetting = this.productManager.getProduct(variableIds.product0Level) as PetPetting
         const {currency, treats} = PetPetting.getCurrencyPerPet()
-        const baseClickCurrency = currency * devMegaPetMult
+        const baseClickCurrency = currency.mul(devMegaPetMult)
         const currencyEarned: Currency = {
             currency: baseClickCurrency,
             treats
         }
-        this.addToVariable(baseClickCurrency, variableIds.currency)
-        this.addToVariable(treats, variableIds.treats)
+        this.addCurrency(currencyEarned)
         return currencyEarned
     }
 
@@ -147,7 +165,7 @@ class GameManager  {
         let totalTime:number = this.getVariable(variableIds.timePassed).getValue()
         totalTime += timePassed
         this.setVariable(totalTime, variableIds.timePassed)
-        return {currency:0,treats:0}
+        return {currency: new Decimal(0),treats:new Decimal(0)}
     }
 
     handleOfflineTimePassed(): Currency{
@@ -157,14 +175,14 @@ class GameManager  {
         const diffInSeconds = Math.abs(today.getTime() - lastSaveTime.getTime())/1000;
         const patiencePointsGained = this.getTimeManager().getPatiencePoints(diffInSeconds)
         const currencyGained:Currency = {
-            currency:0,
-            treats:0,
+            currency:new Decimal(0),
+            treats:new Decimal(0),
             patiencePoints: patiencePointsGained
         }
         return currencyGained
     }
 
-    buyTurboTime(patienceSpent: number){
+    buyTurboTime(patienceSpent: Decimal){
         const patiencePoints = this.getVariable(variableIds.patiencePoints).getValue()
         if (patienceSpent <= patiencePoints){
             const turboSeconds = this.getTimeManager().buyTurboTime(patienceSpent)

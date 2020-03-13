@@ -64,12 +64,12 @@ class Box extends Component<IRecipeProps,IState> {
             <div className={`product-box ${showHidden && 'hide-overflow'}`} style={style}>
                 {showHidden ? 
                 <div className='product-hidden'>
-                    {!!levelUpPrices?.currency && <div className="product-level-up-price">
-                        <span className="product-level-up-value">{levelUpPrice}</span>
+                    {levelUpPrices?.currency.greaterThan(0) && <div className="product-level-up-price">
+                        <span className="product-level-up-value">{levelUpPrice?.toString()}</span>
                         <div className="product-level-up-icon"/>
                     </div>}
-                    {levelUpPrices?.treats && <div className="product-level-up-price">
-                        <span className="product-level-up-value">{levelUpTreatsPrice}</span>
+                    {levelUpPrices?.treats.greaterThan(0) && <div className="product-level-up-price">
+                        <span className="product-level-up-value">{levelUpTreatsPrice?.toString()}</span>
                         <div className="treat-icon"/>
                     </div>}
                     <button disabled={!!!canLevelUp} className="product-unlock" onClick={this.unlockProduct}>Buy</button>

@@ -1,8 +1,9 @@
 import { isMobile } from "../utils/uiUtil"
 import { Currency } from "./products/Product"
-import { addCurrenciy } from "../utils/mathUtils"
+import { addCurrency } from "../utils/mathUtils"
 import GameManager from "./GameManager"
 import variables from "./VariableId"
+import Decimal from "break_infinity.js"
 
 const tickTime = isMobile() ? 2 : 0.5
 const secondsPerPatiencePoint = 600
@@ -30,7 +31,7 @@ export class TimeManager {
     }
     
     passTime(timeMult: number):Currency{
-        let currencyGained: Currency = {currency:0,treats:0}
+        let currencyGained: Currency = {currency: new Decimal(0),treats: new Decimal(0)}
         let turboTimeLeft = GameManager.getInstance().getVariable(variables.turboTimeLeft).getValue()
         let timePassed = timeMult
         if (turboTimeLeft>tickTime){
@@ -40,7 +41,7 @@ export class TimeManager {
         }
         this.subscribers.forEach(fun => {
             const cur=fun.onTimePass(timePassed)
-            currencyGained = addCurrenciy(currencyGained,cur)
+            currencyGained = addCurrency(currencyGained,cur)
         })
         return currencyGained
     }
@@ -69,13 +70,13 @@ export class TimeManager {
         return tickTime
     }
 
-    getPatiencePoints(seconds:number): number{
+    getPatiencePoints(seconds:number): Decimal{
         const patiencePointsGained = seconds / secondsPerPatiencePoint
-        return patiencePointsGained
+        return new Decimal(patiencePointsGained)
     }
 
-    buyTurboTime(patiencePoints: number):number{
-        const turboSeconds = patiencePoints * secondsPerPatiencePoint
+    buyTurboTime(patiencePoints: Decimal):Decimal{
+        const turboSeconds = patiencePoints.mul(secondsPerPatiencePoint)
         return turboSeconds
     }
 

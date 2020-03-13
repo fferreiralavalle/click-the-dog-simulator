@@ -12,10 +12,11 @@ import { PetPetting } from '../../../game/products/PetPetting'
 import ProductPlus, { plusCurrency } from '../ProductPlus'
 import { Currency } from '../../../game/products/Product'
 import LevelUpButton from '../LevelUpButton'
+import Decimal from 'break_infinity.js'
 
 interface IRecipeProps {
   turboTime: number
-  patiencePoints: number
+  patiencePoints: Decimal
   dispatch: Function
 }
 
@@ -37,7 +38,7 @@ class TimeWizard extends Component<IRecipeProps,IState> {
   }
 
   onCurrencyGain = (currency: Currency) => {
-    if (currency.currency!=0){
+    if (!currency.currency.equals(0)){
       let x = (10+Math.random() * 50)+"%"
       let y = (60+Math.random() * 40)+"%"
       let plusCurrency:plusCurrency = {
@@ -50,7 +51,7 @@ class TimeWizard extends Component<IRecipeProps,IState> {
       }
       this.addPlusCurrency(plusCurrency)
     }
-    if (currency.treats!=0){
+    if (!currency.treats.equals(0)){
         let x = (10+Math.random() * 50)+"%"
         let y = (60+Math.random() * 40)+"%"
         const plusCurrency:plusCurrency = {
@@ -147,7 +148,7 @@ class TimeWizard extends Component<IRecipeProps,IState> {
     )
   }
 
-  onTurboBuy(price:number){
+  onTurboBuy(price:Decimal){
       GameManager.getInstance().buyTurboTime(price)
   }
 }

@@ -1,7 +1,9 @@
+import Decimal from 'break_infinity.js'
+
 export interface Currency {
-    currency: number,
-    treats: number,
-    patiencePoints?: number
+    currency: Decimal,
+    treats: Decimal,
+    patiencePoints?: Decimal
 }
 
 export interface CurrencySubscriber {

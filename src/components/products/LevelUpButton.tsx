@@ -10,6 +10,7 @@ import variableIds from  '../../game/VariableId'
 import { Variable } from '../../game/Variables'
 import GameManager from '../../game/GameManager'
 import {toFormat} from '../../utils/uiUtil'
+import Decimal from 'break_infinity.js'
 
 interface IRecipeProps {
     productId: string,
@@ -32,21 +33,21 @@ class LevelUpButton extends Component<IRecipeProps> {
         const levelUpPrice = product.getLevelUpPrice()
         const levelUpCurrency:string= toFormat(product.getLevelUpPrice().currency)
         const levelUpTreats:string= toFormat(product.getLevelUpPrice().treats)
-        const progressTreats = levelUpPrice.treats!=0 ? treats / levelUpPrice.treats:1
-        const progressCurrency = levelUpPrice.currency!=0 ? currency / levelUpPrice.currency:1
+        const progressTreats = !levelUpPrice.treats.equals(0) ? new Decimal(Number(treats)).div(levelUpPrice.treats) : new Decimal(1)
+        const progressCurrency = !levelUpPrice.currency.equals(0) ? new Decimal(Number(currency)).div(levelUpPrice.currency) : new Decimal(1)
         const progressStyle = {
-            width: progressTreats * progressCurrency * 100+"%"
+            width: progressTreats.mul(progressCurrency).mul(100)+"%"
         }
         return (
             <div className={`product-upgrade ${!canLevelUp && "disabled"}`} onClick={this.levelup()} {...rest}>
                 <div className="product-upgrade-progress" style={progressStyle}/>
-                {levelUpPrice.currency > 0 && (
+                {levelUpPrice.currency.greaterThan(0) && (
                     <React.Fragment>
                         {levelUpCurrency}
                         <div className="highlight-love-icon"/>
                     </React.Fragment>)
                 }
-                {levelUpPrice.treats > 0 && (
+                {levelUpPrice.treats.greaterThan(0) && (
                     <React.Fragment>
                         {levelUpTreats}
                         <div className="treat-icon"/>

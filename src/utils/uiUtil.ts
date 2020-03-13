@@ -1,7 +1,11 @@
 import numeral from 'numeral'
 import { plusCurrency } from '../components/products/ProductPlus'
+import Decimal from 'break_infinity.js'
 
-export const toFormat = (number: number): string => {
+export const toFormat = (number: string | number | Decimal): string => {
+    if (number instanceof Decimal){
+        number = number.toString()
+    }
     return numeral(number).format('0.[00]a').toUpperCase()
 }
 
