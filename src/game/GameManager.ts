@@ -49,7 +49,7 @@ class GameManager  {
             }
         })
         let currencyOffline = this.handleOfflineTimePassed()
-        currencyOffline.patiencePoints = currencyOffline.patiencePoints?.max(72)
+        currencyOffline.patiencePoints = currencyOffline.patiencePoints?.min(72)
         this.addCurrency(currencyOffline)
         if (this.getVariable(variableIds.lastSaveDate).getValue()!=null){
             this.getNotificationManager().addNotification({
