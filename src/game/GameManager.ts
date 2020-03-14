@@ -48,7 +48,8 @@ class GameManager  {
                 return {currency:new Decimal(0),treats:new Decimal(0)}
             }
         })
-        const currencyOffline = this.handleOfflineTimePassed()
+        let currencyOffline = this.handleOfflineTimePassed()
+        currencyOffline.patiencePoints = currencyOffline.patiencePoints?.max(72)
         this.addCurrency(currencyOffline)
         if (this.getVariable(variableIds.lastSaveDate).getValue()!=null){
             this.getNotificationManager().addNotification({
