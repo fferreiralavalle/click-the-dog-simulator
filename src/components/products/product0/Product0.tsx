@@ -166,7 +166,7 @@ class Product0 extends Component<IRecipeProps,IState> {
           </div>
           <div className="highlight-field">
             Commands the Divine Forces from far away to pet your beautiful boy.
-            <br/>👋 count as 10% of yours. Increases pet power every 5 levels.
+            <br/>👋 count as 10% of yours. Increases pet power every 3 levels.
           </div>
         </div>
       </div>

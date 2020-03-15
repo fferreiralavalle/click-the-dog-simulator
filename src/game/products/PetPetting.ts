@@ -49,7 +49,7 @@ export class PetPetting implements Product {
         const relic1ABonus = park.getRelicBonus(ids.relicTier1A)
         const relicBonus = (relic1ABonus!==0 ? relic1ABonus : 1)
         //Final Gain
-        const final = new Decimal(base).add(Math.floor(lvl/5)).mul(petTrainingMult).mul(labMult).mul(relicBonus)
+        const final = new Decimal(base).add(Math.floor(lvl/3)).mul(petTrainingMult).mul(labMult).mul(relicBonus)
         return {
             currency: final,
             treats: new Decimal(criticalBonus)
