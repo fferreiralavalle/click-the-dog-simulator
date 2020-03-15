@@ -161,7 +161,7 @@ export class Park implements Product {
             if (reward.relicReward){
                 GameManager.getInstance().setVariable(1,reward.relicReward.id)
             }
-            GameManager.getInstance().addToVariable(-event.price.treats, ids.treats)
+            GameManager.getInstance().addToVariable(event.price.treats.mul(-1), ids.treats)
             this.resetEventTime(eventId)
             this.onReward(reward)
         }
