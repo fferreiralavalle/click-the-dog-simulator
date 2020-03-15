@@ -209,8 +209,9 @@ export class Laboratory implements Product {
         let points = level ? level : GameManager.getInstance().getVariable(ids.product2Level).getValue()
         //Relics
         const park = GameManager.getInstance().productManager.getProduct(ids.product4Level) as Park
-        const relic0ABonus = park.getRelicBonus(ids.relicTier0C)
-        points = Math.floor(points * (relic0ABonus!==0 ? relic0ABonus : 1))
+        const relic0CBonus = park.getRelicBonus(ids.relicTier0C)
+        const relic1FBonus = park.getRelicBonus(ids.relicTier1F)
+        points = Math.floor(points * relic0CBonus * relic1FBonus)
         return points
     }
 
@@ -257,6 +258,8 @@ export class Laboratory implements Product {
         let lvl:number = level ? level : this.getUpgradeLevel(upgradeId)
         if (lvl<0) lvl = 0
         let base = 0
+        //Relics
+        const park = GameManager.getInstance().productManager.getProduct(ids.product4Level) as Park
         switch(upgradeId){
             /* TIER 2 */
             /* Treat Chance per Pet */
@@ -288,8 +291,10 @@ export class Laboratory implements Product {
             /* LAB treats */
             case ids.labUpgradeTier1C:
                 base =  lvl!=0 ? 0.5 : 0
+                const relic0FBonus = park.getRelicBonus(ids.relicTier0F)
+                const relic0FFinal = relic0FBonus !==0 ? relic0FBonus : 1
                 return {
-                    baseBonus: base * lvl
+                    baseBonus: base * lvl * relic0FFinal
                 }
             /* Pet Mastery */
             default:

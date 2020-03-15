@@ -127,11 +127,23 @@ export const english:Text = {
                 title:  "Ball of Science",
                 description:  "Increases your Lab points by 50%"
             },
+            relicTier0D: {
+                title: "Ball of the Sky",
+                description: "Your pets are 25% more powerful."
+            },
+            relicTier0E: {
+                title:  "Ball of Farming",
+                description: "Increases The Farms passive love gain by 50%"
+            },
+            relicTier0F: {
+                title:  "Ball of Productivity",
+                description:  "Increases your Lab research speed by 50%"
+            },
         },
         tier1: {
             relicTier1A: {
                 title: "Petting Sun",
-                description: "Your petting becomes 25% more powerful."
+                description: "Your petting becomes 50% more powerful."
             },
             relicTier1B: {
                 title:  "Bone of Production",
@@ -140,6 +152,18 @@ export const english:Text = {
             relicTier1C: {
                 title:  "Rope of Cooking",
                 description:  "Double the amount of artificial treats the Lab produces."
+            },
+            relicTier1D: {
+                title: "Hand Blessing",
+                description: "Increases Divine Petting hands amount by 50%"
+            },
+            relicTier1E: {
+                title:  "Bone of Farming",
+                description: "Increases The Farms passive love gain by 100%"
+            },
+            relicTier1F: {
+                title:  "Rope of Science",
+                description:  "Increases your Lab points by 50%"
             },
         }
     },
@@ -156,20 +180,7 @@ export const getText = ():Text =>{
 
 export const getRelicText = (relicId: string):RelicText => {
     const relics = getText().relics
-    switch (relicId){
-        // TIER 0
-        default:
-            return relics.tier0.relicTier0A
-        case variables.relicTier0B:
-            return relics.tier0.relicTier0B
-        case variables.relicTier0C:
-            return relics.tier0.relicTier0C
-        // TIER 1
-        case variables.relicTier1A:
-            return relics.tier1.relicTier1A
-        case variables.relicTier1B:
-            return relics.tier1.relicTier1B
-        case variables.relicTier1C:
-            return relics.tier1.relicTier1C
-    }
+    if (relics.tier0[relicId]) return relics.tier0[relicId]
+    if (relics.tier1[relicId]) return relics.tier1[relicId]
+    return relics.tier0.relicTier0A
 }

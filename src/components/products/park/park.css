@@ -66,6 +66,7 @@
 }
 .relic-view .highlight-tier{
     justify-content: flex-start;
+    flex-wrap: wrap;
 }
 .relic-view .highlight-field{
     width: auto;

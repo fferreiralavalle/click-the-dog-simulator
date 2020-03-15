@@ -19,12 +19,13 @@ export class PetPetting implements Product {
         this.onTimePassed = this.onTimePassed.bind(this)
     }
     getCurrencyPerSecond(level?: number): Currency {
+        const lvl = level ? level : GameManager.getInstance().getVariable(this.variableId).getValue()
         const base:number = 0.1;
-        const currentLevel:number = Number(level ? level : GameManager.getInstance().getVariable(this.variableId).getValue())
-        const allCurrencPerSecond = this.getCurrencyPerPet(currentLevel)
+        const hands = this.getHandsAmount(lvl)
+        const allCurrencPerSecond = this.getCurrencyPerPet(lvl)
         const currencyWithPow = new Decimal(base).mul(allCurrencPerSecond.currency)
-        const currencyPerSecond = currencyWithPow.mul(currentLevel)
-        const treats = new Decimal(base).mul(allCurrencPerSecond.treats).mul(currentLevel)
+        const currencyPerSecond = currencyWithPow.mul(hands)
+        const treats = new Decimal(base).mul(allCurrencPerSecond.treats).mul(hands)
         return {
             currency: currencyPerSecond,
             treats
@@ -44,16 +45,30 @@ export class PetPetting implements Product {
         const criticalChance = lab.getUpgradeBonus(ids.labUpgradeTier2A).baseBonus
         const isCritical = Math.random() < criticalChance
         const criticalBonus = isCritical ? 1 : 0
-        //Relic BOnus
+        //Relic Bonus
         const park = GameManager.getInstance().productManager.getProduct(ids.product4Level) as Park
+        const relic0DBonus = park.getRelicBonus(ids.relicTier0D)
+        const relic0DFinal = (relic0DBonus!==0 ? relic0DBonus : 1)
         const relic1ABonus = park.getRelicBonus(ids.relicTier1A)
-        const relicBonus = (relic1ABonus!==0 ? relic1ABonus : 1)
+        const relic1Final = (relic1ABonus!==0 ? relic1ABonus : 1)
         //Final Gain
-        const final = new Decimal(base).add(Math.floor(lvl/3)).mul(petTrainingMult).mul(labMult).mul(relicBonus)
+        const final = new Decimal(base).add(Math.floor(lvl/3)).mul(petTrainingMult).mul(labMult).mul(relic1Final).mul(relic0DFinal)
         return {
             currency: final,
             treats: new Decimal(criticalBonus)
         }
+    }
+
+
+    getHandsAmount(level?:number){
+        const lvl = level ? level : GameManager.getInstance().getVariable(this.variableId).getValue()
+        //Relic
+        const park = GameManager.getInstance().productManager.getProduct(ids.product4Level) as Park
+        const relic1DBonus = park.getRelicBonus(ids.relicTier1D)
+        const relic1DFinal = (relic1DBonus!==0 ? relic1DBonus : 1)
+
+        const hands = lvl * relic1DFinal
+        return hands
     }
     subscribeToCurrency(cs: CurrencySubscriber): void {
         const alreadySubscribed = !this.currencySubscribers.filter(sub => sub.id === cs.id)

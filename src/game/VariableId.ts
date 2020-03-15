@@ -36,10 +36,16 @@ const variables = {
     relicTier0A: 'relicTier0A',
     relicTier0B: 'relicTier0B',
     relicTier0C: 'relicTier0C',
+    relicTier0D: 'relicTier0D',
+    relicTier0E: 'relicTier0E',
+    relicTier0F: 'relicTier0F',
     /* Tier 1 */
     relicTier1A: 'relicTier1A',
     relicTier1B: 'relicTier1B',
     relicTier1C: 'relicTier1C',
+    relicTier1D: 'relicTier1D',
+    relicTier1E: 'relicTier1E',
+    relicTier1F: 'relicTier1F',
     /* Tier 2 */
     relicTier2A: 'relicTier2A',
     relicTier2B: 'relicTier2B',

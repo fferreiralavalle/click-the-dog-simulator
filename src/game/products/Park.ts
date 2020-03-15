@@ -373,14 +373,26 @@ export class Park implements Product {
                 relics: [
                 {id: ids.relicTier0A, base: 5, icon: 'https://i.imgur.com/DDm6ODQ.png'},
                 {id: ids.relicTier0B, base: 1.5, icon: 'https://i.imgur.com/0ZjGB7A.png'},
-                {id: ids.relicTier0C, base: 1.5, icon: 'https://i.imgur.com/qsbjSn1.png'}
+                {id: ids.relicTier0C, base: 1.5, icon: 'https://i.imgur.com/qsbjSn1.png'},
+                {id: ids.relicTier0D, base: 1.25, icon: 'https://i.imgur.com/DDm6ODQ.png'},
+                {id: ids.relicTier0E, base: 1.5, icon: 'https://i.imgur.com/0ZjGB7A.png'},
+                {id: ids.relicTier0F, base: 1.5, icon: 'https://i.imgur.com/qsbjSn1.png'}
             ]},
             tier1: {
                 unlockLevel: events.dogsploration.unlockLevel,
                 relics: [
-                    {id: ids.relicTier1A, base: 1.25, icon: 'https://i.imgur.com/hfmuVYh.png'},
+                    //Increases Pet Power by 50%
+                    {id: ids.relicTier1A, base: 1.5, icon: 'https://i.imgur.com/hfmuVYh.png'},
+                    //Lowers farm goal by 10%
                     {id: ids.relicTier1B, base: 0.9, icon: 'https://i.imgur.com/et49ttP.png'},
-                    {id: ids.relicTier1C, base: 2, icon: 'https://i.imgur.com/d3CJRvY.png'}
+                    //doubles treats gained from alb
+                    {id: ids.relicTier1C, base: 2, icon: 'https://i.imgur.com/d3CJRvY.png'},
+                    //Increases Hands amount by 50%
+                    {id: ids.relicTier1D, base: 1.5, icon: 'https://i.imgur.com/hfmuVYh.png'},
+                    //Doubles passive Love for Farm
+                    {id: ids.relicTier1E, base: 2, icon: 'https://i.imgur.com/et49ttP.png'},
+                    //Increases lab points by 50%
+                    {id: ids.relicTier1F, base: 1.5, icon: 'https://i.imgur.com/d3CJRvY.png'}
                 ]
             },
             tier2: {
@@ -499,11 +511,11 @@ export class Park implements Product {
         return relicsTiers.tier0.relics[0]
     }
 
-    /** If Relic is locked will always return 0 */
+    /** If Relic is locked will always return 1 */
     getRelicBonus(relicId: string):number{
         const isUnlocked = this.isRelicUnlocked(relicId)
         const relic = this.getRelic(relicId)
-        const bonus = isUnlocked ? relic.base : 0
+        const bonus = isUnlocked ? relic.base : 1
         return bonus
     }
 

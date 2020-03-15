@@ -161,7 +161,7 @@ class Product0 extends Component<IRecipeProps,IState> {
           <div className="highlight-field">
             <div className="highlight-attribute">Hands</div>
             <div className="highlight-value">
-              {usedLevel}👋
+              {product.getHandsAmount(usedLevel)}👋
             </div>
           </div>
           <div className="highlight-field">

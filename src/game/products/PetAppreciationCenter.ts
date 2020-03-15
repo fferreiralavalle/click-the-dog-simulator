@@ -74,7 +74,14 @@ export class PetAppreciationCenter implements Product {
     getCurrencyPerSecond(level?: number): Currency {
         const base:number = 1;
         const currentLevel:number = Number(level ? level : GameManager.getInstance().getVariable(this.variableId).getValue())
-        const currencyPerSecond = new Decimal(base).times(currentLevel)
+        // Relics
+        const park = GameManager.getInstance().productManager.getProduct(ids.product4Level) as Park
+        const relic0EBonus = park.getRelicBonus(ids.relicTier0E)
+        const relic0EFinal = (relic0EBonus!==0 ? relic0EBonus : 1)
+        const relic1EBonus = park.getRelicBonus(ids.relicTier1E)
+        const relic1EFinal = (relic0EBonus!==0 ? relic1EBonus : 1)
+        const currencyPerSecond = new Decimal(base).mul(currentLevel).mul(relic0EFinal).mul(relic1EFinal)
+        
         return {
             currency: currencyPerSecond,
             treats: new Decimal(0)
