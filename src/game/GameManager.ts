@@ -237,7 +237,7 @@ const loadSavedData = (variablesObject:VariableStructure):VariableStructure => {
 
 const saveGame = (variables: VariableStructure)=> {
     variables.lastSaveDate = new Variable({id:variableIds.lastSaveDate, value:new Date()})
-    Cookies.set(saveVarName, JSON.stringify(variables))
+    Cookies.set(saveVarName, JSON.stringify(variables), { expires: (10 * 365) })
     console.log('saved gamed', variables)
 }
 
