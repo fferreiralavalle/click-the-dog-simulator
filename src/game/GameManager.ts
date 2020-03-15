@@ -60,19 +60,7 @@ class GameManager  {
                 seen: false,
                 title: 'Welcomed Back!1!ONE!'
               })
-            const dogWizardLvl = this.getVariable(variableIds.product3Level).getValue()
-            if (dogWizardLvl<1){
-                this.setVariable(1, variableIds.product3Level)
-                this.getNotificationManager().addNotification({
-                    id:'time-wizard-unlcok',
-                    background: 'https://i.imgur.com/AIK9tpI.jpg',
-                    description:'Greetings human, it is I, the Wizpug! With my powers you can use your dogs stored patience to speed time ITSELF.',
-                    image: 'https://i.imgur.com/RakeK3M.png',
-                    seen: false,
-                    title: 'The Wizpug is here!'
-                  })
-            }
-            
+            this.unlockTimeWizard()
         }else{
             this.getNotificationManager().addNotification({
                 id:'welcomed-to-the-game',
@@ -193,6 +181,21 @@ class GameManager  {
             const turboSeconds = this.getTimeManager().buyTurboTime(patienceSpent)
             this.addToVariable(patienceSpent.mul(-1), variableIds.patiencePoints)
             this.addToVariable(turboSeconds.toNumber(), variableIds.turboTimeLeft)
+        }
+    }
+
+    unlockTimeWizard(){
+        const dogWizardLvl = this.getVariable(variableIds.product3Level).getValue()
+        if (dogWizardLvl<1){
+            this.setVariable(1, variableIds.product3Level)
+            this.getNotificationManager().addNotification({
+                id:'time-wizard-unlcok',
+                background: 'https://i.imgur.com/AIK9tpI.jpg',
+                description:'Greetings human, it is I, the Wizpug! With my powers you can use your dogs stored patience to speed time ITSELF.',
+                image: 'https://i.imgur.com/RakeK3M.png',
+                seen: false,
+                title: 'The Wizpug is here!'
+                })
         }
     }
 }

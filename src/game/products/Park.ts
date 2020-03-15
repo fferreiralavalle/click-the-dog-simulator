@@ -198,6 +198,7 @@ export class Park implements Product {
                 }
                 if (randomRewardChange<0.5){
                     reward.currencyReward.patiencePoints = new Decimal(12)
+                    GameManager.getInstance().unlockTimeWizard()
                 }else{
                     reward.currencyReward.treats = new Decimal(event.price.treats.mul(2))
                 }
@@ -213,6 +214,7 @@ export class Park implements Product {
                 }
                 if (randomRewardChange<0.5){
                     reward.currencyReward.patiencePoints = new Decimal(6)
+                    GameManager.getInstance().unlockTimeWizard()
                 }else{
                     reward.currencyReward.treats = new Decimal(event.price.treats.mul(2))
                 }
@@ -228,6 +230,7 @@ export class Park implements Product {
                 }
                 if (randomRewardChange<0.5){
                     reward.currencyReward.patiencePoints = new Decimal(3)
+                    GameManager.getInstance().unlockTimeWizard()
                 }else{
                     reward.currencyReward.treats = new Decimal(event.price.treats.mul(2))
                 }
