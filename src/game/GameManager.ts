@@ -228,10 +228,17 @@ const initializeVariables = () => {
 }
 
 const loadSavedData = (variablesObject:VariableStructure):VariableStructure => {
-    const savedVariables = Cookies.getJSON(saveVarName) as VariableStructure
-    if (savedVariables){
-        Object.keys(savedVariables).map((id:string) => {
-            variablesObject[id] = new Variable(savedVariables[id].properties)
+    const localSave = localStorage.getItem(saveVarName)
+    let save:VariableStructure;
+    debugger
+    if (!localSave){
+        save = Cookies.getJSON(saveVarName) as VariableStructure
+    }else {
+        save = JSON.parse(localSave) as VariableStructure
+    }
+    if (save){
+        Object.keys(save).map((id:string) => {
+            variablesObject[id] = new Variable(save[id].properties)
         })
         console.log("data loaded", variablesObject)
     }
@@ -240,10 +247,14 @@ const loadSavedData = (variablesObject:VariableStructure):VariableStructure => {
 
 const saveGame = (variables: VariableStructure)=> {
     variables.lastSaveDate = new Variable({id:variableIds.lastSaveDate, value:new Date()})
-    Cookies.set(saveVarName, JSON.stringify(variables), { expires: (10 * 365) })
+    const cook = Cookies.set(saveVarName, JSON.stringify(variables), { expires: (10 * 365) })
+    localStorage.setItem(saveVarName, JSON.stringify(variables))
     console.log('saved gamed', variables)
+    console.log('Cookie length', cook?.length)
 }
 
 const resetGameSave = () => {
+    debugger
     Cookies.remove(saveVarName)
+    localStorage.removeItem(saveVarName)
 }
