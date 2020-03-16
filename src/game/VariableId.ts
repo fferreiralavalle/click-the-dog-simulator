@@ -16,7 +16,7 @@ const variables = {
     /* Progress */
     product1Progress: 'product1Progress',
     product1Event: 'product1Event',
-    product1EventPettingTrainingDurations: 'product1EventPettingTrainingDuration',
+    product1EventPettingTrainingDurations: 'p1EveDurs',
     product2Progress: 'product2Progress',
     product4Tier0Progress: 'product4Tier0Progress',
     product4Tier1Progress: 'product4Tier1Progress',
@@ -29,9 +29,6 @@ const variables = {
     labUpgradeTier2B: 'labUpgradeTier2B',
     labUpgradeTier2C: 'labUpgradeTier2C',
     /* Relics */
-    relicsEquippedTier0: 'relicsEquippedTier0',
-    relicsEquippedTier1: 'relicsEquippedTier1',
-    relicsEquippedTier2: 'relicsEquippedTier2',
     /* Tier 0 */
     relicTier0A: 'relicTier0A',
     relicTier0B: 'relicTier0B',
