@@ -16,7 +16,7 @@ const variables = {
     /* Progress */
     product1Progress: 'product1Progress',
     product1Event: 'product1Event',
-    product1EventPettingTrainingDurations: 'p1EveDurs',
+    product1EventPettingTrainingDurations: 'product1EventPettingTrainingDuration',
     product2Progress: 'product2Progress',
     product4Tier0Progress: 'product4Tier0Progress',
     product4Tier1Progress: 'product4Tier1Progress',
