@@ -13,6 +13,7 @@ const variables = {
     product2Level: 'product2Level',
     product3Level: 'product3Level',
     product4Level: 'product4Level',
+    upgradeShop: 'upgradeShop',
     /* Progress */
     product1Progress: 'product1Progress',
     product1Event: 'product1Event',
@@ -47,6 +48,13 @@ const variables = {
     relicTier2A: 'relicTier2A',
     relicTier2B: 'relicTier2B',
     relicTier2C: 'relicTier2C',
+
+    /* Upgrades KING */
+    upgradeProduct0A: 'upgradeProduct0A',
+    upgradeProduct1A: 'upgradeProduct1A',
+    upgradeProduct2A: 'upgradeProduct2A',
+    upgradeProduct4A: 'upgradeProduct4A',
+    
 }
 
 export default variables;

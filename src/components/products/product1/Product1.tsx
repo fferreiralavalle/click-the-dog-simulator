@@ -29,6 +29,7 @@ interface IState {
 }
 
 class Product1 extends Component<IRecipeProps, IState> {
+  uiCleaner: any
   constructor(props:any){
     super(props)
     this.state = {
@@ -45,12 +46,16 @@ class Product1 extends Component<IRecipeProps, IState> {
       id: 'UIOnCurrency',
       onCurrency: (result:Currency) => this.onCurrencyGain(result),
     })
-    setInterval(()=>{
+    this.uiCleaner = setInterval(()=>{
       const newPlus = clearPluses(this.state.plusCurrencies)
       this.setState({
         plusCurrencies: newPlus
       })
     },3 * 1000)
+  }
+
+  componentWillUnmount(){
+    clearInterval(this.uiCleaner)
   }
 
   onEventReward = (result:RewardResult)=> {
@@ -138,14 +143,27 @@ class Product1 extends Component<IRecipeProps, IState> {
   }
 
   render(){
+    const {isHover, plusCurrencies} = this.state
+    return (
+      <div className="product product1 boxed" onMouseEnter={this.onHover(true)} onMouseLeave={this.onHover(false)}>
+        {isHover ? this.renderHighlight() : this.renderContent()}
+        <LevelUpButton productId={ids.product1Level} 
+          onMouseEnter={this.onLevelHover(true)}
+          onMouseLeave={this.onLevelHover(false)}/>
+        <ProductPlus plusCurrencies={plusCurrencies}/>
+        {isHover && this.renderHighlight()}
+      </div>
+    )
+  }
+
+  renderContent(){
     const {level, progress} = this.props;
-    const {plusCurrencies, isHover} = this.state
     const product = GameManager.getInstance().getProductManager().getProduct(ids.product1Level) as PetAppreciationCenter
     const progressStyle = {
       width: `${progress.getValue()/product.getProgressGoal()*100}%`
     }
     return (
-      <div className="product product1 boxed" onMouseEnter={this.onHover(true)} onMouseLeave={this.onHover(false)}>
+      <React.Fragment>
         <div className="product1-building">
         </div>
         <div className="product-level">
@@ -163,12 +181,11 @@ class Product1 extends Component<IRecipeProps, IState> {
             </div>
           </div>
         </div>
-        <ProductPlus plusCurrencies={plusCurrencies}/>
+        
         <LevelUpButton productId={ids.product1Level} 
           onMouseEnter={this.onLevelHover(true)}
           onMouseLeave={this.onLevelHover(false)}/>
-        {isHover && this.renderHighlight()}
-      </div>
+      </React.Fragment>
     )
   }
 
@@ -176,7 +193,7 @@ class Product1 extends Component<IRecipeProps, IState> {
     const product = GameManager.getInstance().getProductManager().getProduct(ids.product1Level) as PetAppreciationCenter
     const {level, eventId} = this.props
     const usedLevel:number = level.getValue() + (this.state.hoverLevel ? 1 : 0)
-    const lps = toFormat(product.getCurrencyPerSecond(usedLevel).currency)
+    const lps = toFormat(product.updateCurrencyPerSecond(usedLevel, true).currency)
     const progressPS = toFormat(product.getProgressPerSecond(usedLevel))
     const {description} = this.getEventData(eventId.getValue())
     const levelClass = this.state.hoverLevel ? " hover-level" : ""

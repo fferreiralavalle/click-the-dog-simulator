@@ -18,6 +18,7 @@ import Laboratory from '../../components/products/Laboratory/Laboratory'
 import Mail from '../../components/mail/Mail'
 import TimeWizard from '../../components/products/timeWizard/TimeWizard'
 import Park from '../../components/products/park/Park'
+import King from '../../components/products/King/King'
 
 interface IRecipeProps {
     dispatch: Function
@@ -45,13 +46,15 @@ class Game extends Component<IRecipeProps> {
         return products.map((p,i)=>{
             switch (p.variableId){
                 case ids.product1Level:
-                    return <Box productId={p.variableId} w={2}><Product1/></Box>
+                    return <Box key={1} productId={p.variableId} w={2}><Product1/></Box>
                 case ids.product2Level:
-                    return <Box productId={p.variableId} w={2}><Laboratory/></Box>
+                    return <Box key={2} productId={p.variableId} w={2}><Laboratory/></Box>
                 case ids.product4Level:
-                    return <Box w={2} productId={p.variableId}><Park/></Box>
+                    return <Box key={4} w={2} productId={p.variableId}><Park/></Box>
+                case ids.upgradeShop:
+                    return <Box key={5} w={1} productId={p.variableId}><King/></Box>
                 default:
-                    return <Box productId={p.variableId} w={1}><Product0/></Box>
+                    return <Box key={0} productId={p.variableId} w={1}><Product0/></Box>
             }
         })
     }
@@ -66,8 +69,8 @@ class Game extends Component<IRecipeProps> {
                 <SaveManager/>
             </div>
             <div className="product-list">
-                <Box><Doggie/></Box>
-                {dogWizard?.getValue()>0 && <Box w={1}><TimeWizard/></Box>}
+                <Box><Doggie key={777}/></Box>
+                {dogWizard?.getValue()>0 && <Box key={3} w={1}><TimeWizard/></Box>}
                 {this.renderProducts()}
             </div>
         </div>

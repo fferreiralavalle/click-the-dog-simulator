@@ -1,6 +1,7 @@
 import numeral from 'numeral'
 import { plusCurrency } from '../components/products/ProductPlus'
 import Decimal from 'break_infinity.js'
+import variables from '../game/VariableId'
 
 export const toFormat = (number: string | number | Decimal): string => {
     if (number instanceof Decimal){
@@ -31,4 +32,31 @@ export const toFormatTime = (seconds:number) => {
     const formatMinutes = (minutes < 10 ? "0": "") + minutes
     const formatsec = (sec < 10 ? "0": "") + sec
     return `${hours}:${formatMinutes}:${formatsec}`
+}
+
+export class BuildingIcons {
+    icon: string
+    background: string
+
+    constructor(icon: string, background: string){
+        this.icon = icon
+        this.background = background
+    }
+}
+
+export const getBuildingIcon = (building: string)=>{
+    switch(building){
+        default:
+            return new BuildingIcons('https://i.imgur.com/B00xNnt.png','https://i.imgur.com/6ZO4rY8.jpg')
+        case variables.product1Level:
+            return new BuildingIcons('https://i.imgur.com/L1eHWfM.png','https://i.imgur.com/G0KXJDf.jpg')
+        case variables.product2Level:
+            return new BuildingIcons('https://i.imgur.com/mLU1yyE.png','https://i.imgur.com/icoqc1B.jpg')
+        case variables.product3Level:
+            return new BuildingIcons('https://i.imgur.com/RakeK3M.png','https://i.imgur.com/AIK9tpI.jpg')
+        case variables.product4Level:
+            return new BuildingIcons('https://i.imgur.com/QJ3nDVL.png','https://i.imgur.com/uenbC1V.jpg')
+        case variables.upgradeShop:
+            return new BuildingIcons('https://i.imgur.com/4VroGvm.png','https://i.imgur.com/ZskZX6W.jpg')
+    }
 }

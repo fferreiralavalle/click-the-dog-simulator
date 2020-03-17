@@ -37,10 +37,20 @@ export interface Text {
             notEnough: string,
             viewRelics: string
         },
+        king: {
+            title: string,
+            description: string,
+            lovePerBuilding: string,
+            buy: string,
+            show: string,
+            defaultTitle: string,
+            defaultDescription: string
+        },
         common: {
             info: string,
             stats: string,
             price: string,
+            close: string
         }
     },
     relics: {
@@ -58,10 +68,17 @@ export interface Text {
             [key: string]: RelicText
         }
     },
+    kingUpgrades: {
+        upgrade: string
+        upgrades: {
+            [key: string]: RelicText
+        }
+    }
     currencies: {
         love: string
         treats: string,
-        pattience: string
+        pattience: string,
+        level: string
     }
 }
 
@@ -106,10 +123,20 @@ export const english:Text = {
             notEnough: "Low Treats :c",
             viewRelics: "View Relics"
         },
+        king: {
+            title: "King Baby",
+            description: "Hello humble human, have a look at my propawsals.",
+            lovePerBuilding: "Per All Lvls",
+            buy: "Buy",
+            show: "Show Owned",
+            defaultTitle: "Choose an Upgrade",
+            defaultDescription: "",
+        },
         common: {
             info: "Info",
             stats: "Stats",
-            price: "Price"
+            price: "Price",
+            close: "Close"
         }
     },
     relics: {
@@ -167,10 +194,32 @@ export const english:Text = {
             },
         }
     },
+    kingUpgrades: {
+        upgrade: "Upgrade",
+        upgrades: {
+            upgradeProduct0A: {
+                title: "Petting Management",
+                description: "With my help, your petting power will double. You are welcomed."
+            },
+            upgradeProduct1A: {
+                title: "Farm Management",
+                description: "Your farm is looking good, but what if it doubled its passive production..."
+            },
+            upgradeProduct2A: {
+                title: "Lab Management",
+                description: "Labs like treats right? I can double its Treat production for you."
+            },
+            upgradeProduct4A: {
+                title: "Park Management",
+                description: "My doogness, a dragon! Good thing I know how to double its love production."
+            },
+        }
+    },
     currencies: {
         love: "Love",
         treats: "Treats",
-        pattience: "Patience Points"
+        pattience: "Patience Points",
+        level: "Level"
     }
 }
 
@@ -183,4 +232,10 @@ export const getRelicText = (relicId: string):RelicText => {
     if (relics.tier0[relicId]) return relics.tier0[relicId]
     if (relics.tier1[relicId]) return relics.tier1[relicId]
     return relics.tier0.relicTier0A
+}
+
+export const getKingUpgradeText = (upgradeId: string):RelicText => {
+    const upgrades = getText().kingUpgrades
+    if (upgrades.upgrades[upgradeId]) return upgrades.upgrades[upgradeId]
+    return upgrades.upgrades.upgradeProduct0A
 }

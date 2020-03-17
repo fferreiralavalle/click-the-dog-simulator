@@ -1,9 +1,10 @@
 import { Product, Currency, CurrencySubscriber } from './Product'
 import ids from '../VariableId';
 import GameManager from '../GameManager'
-import { addCurrency } from '../../utils/mathUtils';
+import { addCurrency, multiplyCurrencyBy } from '../../utils/mathUtils';
 import Decimal from 'break_infinity.js';
 import { Park } from './Park';
+import { King } from './UpgradeKing';
 
 export interface EventType{
     id: string,
@@ -28,19 +29,30 @@ export class Laboratory implements Product {
     currencySubscribers: Array<CurrencySubscriber>;
     variableId: string;
     isUnlocked: boolean;
+    currencyPerSecond: Currency;
     
     constructor(variableId: string, isUnlocked: boolean){
         this.variableId = variableId
         this.isUnlocked = isUnlocked
         this.onTimePassed = this.onTimePassed.bind(this)
         this.currencySubscribers = []
+        this.currencyPerSecond = {currency:new Decimal(0), treats: new Decimal(0)}
     }
-    getCurrencyPerSecond(level?: number): Currency {
+    getCurrencyPerSecond(): Currency {
         const currencyUpgrade = this.getUpgradeBonus(ids.labUpgradeTier2C).baseBonus
         const currency:Currency = {
             currency: new Decimal(currencyUpgrade),
             treats: new Decimal(0)
         }
+        return currency
+    }
+    updateCurrencyPerSecond(): Currency {
+        const currencyUpgrade = this.getUpgradeBonus(ids.labUpgradeTier2C).baseBonus
+        const currency:Currency = {
+            currency: new Decimal(currencyUpgrade),
+            treats: new Decimal(0)
+        }
+        this.currencyPerSecond = currency
         return currency
     }
     getProgressPerSecond(level?: number): number {
@@ -60,18 +72,21 @@ export class Laboratory implements Product {
         let progress = this.getProgress();
         const goal = this.getProgressGoal()
         let totalCurrency:Currency = {currency:new Decimal(0),treats:new Decimal(0)}
-        let currency:Currency = this.getCurrencyPerSecond()
-        currency.currency = currency.currency.times(timePassed)
+        const cps:Currency = this.getCurrencyPerSecond();
+        const currency:Currency = multiplyCurrencyBy(cps,timePassed)
         while (progress >= goal){
             progress -= goal
-            //Relic Bonus
+            // Relic Bonus
             const park = GameManager.getInstance().productManager.getProduct(ids.product4Level) as Park
             const relic1CBonus = park.getRelicBonus(ids.relicTier1C)
             const relicBonus = (relic1CBonus!==0 ? relic1CBonus : 1)
-            
+            // King Upgrade Bonus
+            const king = GameManager.getInstance().productManager.getProduct(ids.upgradeShop) as King
+            const kingBonus = king.getUpgradeBonus(ids.upgradeProduct2A)
+        
             const currencyEvent:Currency = {
                 currency: new Decimal(0),
-                treats: new Decimal(1 * relicBonus)
+                treats: new Decimal(1 * relicBonus * kingBonus)
             }
             totalCurrency = addCurrency(totalCurrency,currencyEvent)
             GameManager.getInstance().addToVariable(currencyEvent.treats,ids.treats)
@@ -126,6 +141,7 @@ export class Laboratory implements Product {
         if (this.canLevelUp()) {
             GameManager.getInstance().addToVariable(1, this.variableId)
             GameManager.getInstance().addToVariable(levelUpPrice, ids.treats)
+            GameManager.getInstance().getProductManager().updateCurrenciesPerSecond()
             if (this.getLevel()===1){
                 GameManager.getInstance().getNotificationManager().addNotification({
                     id:'lab-unlock',
@@ -184,6 +200,7 @@ export class Laboratory implements Product {
             const upgradeLevel = this.getUpgradeLevel(upgradeId)
             const result = Math.max(upgradeLevel+plusLevels,0)
             GameManager.getInstance().setVariable(result, upgradeId)
+            GameManager.getInstance().getProductManager().updateCurrenciesPerSecond()
             return true
         }
         return false

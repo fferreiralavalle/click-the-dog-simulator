@@ -15,8 +15,10 @@ export interface Product {
     variableId: string
     isUnlocked: boolean
     currencySubscribers: Array<CurrencySubscriber>
+    currencyPerSecond: Currency
 
     getCurrencyPerSecond(): Currency
+    updateCurrencyPerSecond(): Currency
     onTimePassed(timePassed: number): Currency
     subscribeToCurrency(cs: CurrencySubscriber):void
     canUnlock(): boolean

@@ -2,9 +2,10 @@ import { Product, Currency, CurrencySubscriber } from './Product'
 import ids from '../VariableId';
 import GameManager from '../GameManager'
 import { Laboratory } from './Laboratory';
-import { addCurrency } from '../../utils/mathUtils';
+import { addCurrency, multiplyCurrencyBy } from '../../utils/mathUtils';
 import Decimal from 'break_infinity.js';
 import { getRelicText } from '../../utils/textUtil';
+import { King } from './UpgradeKing';
 
 export interface EventType{
     id: string,
@@ -90,6 +91,7 @@ export class Park implements Product {
     questSubscribers: Array<RewardSubscribers>
     variableId: string;
     isUnlocked: boolean;
+    currencyPerSecond: Currency;
     
     constructor(variableId: string, isUnlocked: boolean){
         this.variableId = variableId
@@ -97,19 +99,29 @@ export class Park implements Product {
         this.onTimePassed = this.onTimePassed.bind(this)
         this.currencySubscribers = []
         this.questSubscribers = []
+        this.currencyPerSecond = {currency:new Decimal(0), treats: new Decimal(0)}
     }
-
-    getCurrencyPerSecond(level?: number): Currency {
+    
+    getCurrencyPerSecond(): Currency {
+       return this.currencyPerSecond
+    }
+    updateCurrencyPerSecond(level?: number, dontApply:boolean=false): Currency {
         const currentLevel:number = level ? level : GameManager.getInstance().getVariable(this.variableId).getValue()
         const relics = this.getRelicsUnlockedAmount()
         const currencyPerRelic = this.getCurrencyPerRelic(currentLevel)
-        const currencyPerSecond:Currency = {
-            currency: currencyPerRelic.currency.mul(relics),
+        // King Upgrade Bonus
+        const king = GameManager.getInstance().productManager.getProduct(ids.upgradeShop) as King
+        const kingBonus = king.getUpgradeBonus(ids.upgradeProduct4A)
+        
+        const newCurrencyPerSecond:Currency = {
+            currency: currencyPerRelic.currency.mul(relics).mul(kingBonus),
             treats: currencyPerRelic.treats.mul(relics)
         }
-        return currencyPerSecond
+        if (!dontApply){
+            this.currencyPerSecond = newCurrencyPerSecond
+        }
+        return newCurrencyPerSecond
     }
-
     getCurrencyPerRelic(level?:number):Currency{
         const currentLevel:number = level ? level : GameManager.getInstance().getVariable(this.variableId).getValue()
         const base = 1
@@ -126,9 +138,9 @@ export class Park implements Product {
     }
 
     onTimePassed(timePassed: number): Currency {
-        let add:Currency = this.getCurrencyPerSecond();
+        const cps:Currency = this.getCurrencyPerSecond();
+        const add:Currency = multiplyCurrencyBy(cps,timePassed)
         const pps: number = this.getProgressPerSecond()
-        add.currency = add.currency.mul(timePassed)
         if (this.isEventUnlocked(events.pupsloration)){
             GameManager.getInstance().addToVariable(pps, ids.product4Tier0Progress)
         }
@@ -247,6 +259,7 @@ export class Park implements Product {
             seen: false,
             title: 'New Relic found! - '+getRelicText(relic.id).title
           })
+          GameManager.getInstance().getProductManager().updateCurrenciesPerSecond()
     }
 
     getRelicChance(level?:number):number{
@@ -284,15 +297,15 @@ export class Park implements Product {
 
     canUnlock(): boolean{
         const previousProductLevel:number = GameManager.getInstance().getVariable(ids.product2Level).getValue()
-        const needdedLevel:number = 10
+        const needdedLevel:number = 15
         return needdedLevel <= previousProductLevel 
     }
 
     getLevelUpPrice(): Currency {
-        const basePrice:Decimal = new Decimal(25);
-        const initialPrice:Decimal = new Decimal(475);
+        const basePrice:Decimal = new Decimal(23);
+        const initialPrice:Decimal = new Decimal(977);
         const currentLevel:Decimal = new Decimal(Number(GameManager.getInstance().getVariable(this.variableId).getValue()))
-        const finalPrice:Decimal = initialPrice.add(basePrice.multiply(currentLevel)).add(basePrice.pow(currentLevel.div(4).add(1)))
+        const finalPrice:Decimal = initialPrice.add(basePrice.mul(currentLevel).mul(5)).add(basePrice.pow(currentLevel.div(3).add(1)))
         return {
             currency: finalPrice,
             treats: new Decimal(0)
@@ -310,6 +323,7 @@ export class Park implements Product {
         if (this.canLevelUp()) {
             GameManager.getInstance().addToVariable(1, this.variableId)
             GameManager.getInstance().addToVariable(levelUpPrice, ids.currency)
+            GameManager.getInstance().getProductManager().updateCurrenciesPerSecond()
             if (this.getLevel()===1){
                 GameManager.getInstance().getNotificationManager().addNotification({
                     id:'pet-park-unlock',

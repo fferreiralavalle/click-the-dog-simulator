@@ -5,7 +5,6 @@ import './product0.css'
 
 import {selecters, actions} from '../../../reducers/GameVariables'
 
-import {TimeSubscriber} from '../../../game/TimeManager'
 import { Variable } from '../../../game/Variables'
 import ids from '../../../game/VariableId'
 import GameManager from '../../../game/GameManager'
@@ -17,7 +16,6 @@ import LevelUpButton from '../LevelUpButton'
 
 interface IRecipeProps {
   level: Variable
-  currency: Variable
   dispatch: Function
 }
 
@@ -28,7 +26,7 @@ interface IState {
 }
 
 class Product0 extends Component<IRecipeProps,IState> {
-
+  uiCleaner: any
   constructor(props:any){
     super(props)
     this.state = {
@@ -41,12 +39,16 @@ class Product0 extends Component<IRecipeProps,IState> {
       id: 'UIOnCurrency',
       onCurrency: (result:Currency) => this.onCurrencyGain(result),
     })
-    setInterval(()=>{
+    this.uiCleaner = setInterval(()=>{
       const newPlus = clearPluses(this.state.plusCurrencies)
       this.setState({
         plusCurrencies: newPlus
       })
     },5 * 1000)
+  }
+
+  componentWillUnmount(){
+    clearTimeout(this.uiCleaner)
   }
 
   onCurrencyGain = (currency: Currency) => {
@@ -103,9 +105,6 @@ class Product0 extends Component<IRecipeProps,IState> {
   
   render(){
     const {isHover, plusCurrencies} = this.state;
-    const product = GameManager.getInstance().getProductManager().getProduct(ids.product0Level)
-    const canLevelUp = product.canLevelUp()
-    const levelUpPrice = toFormat(product.getLevelUpPrice().currency)
     return (
       <div className="product product0 boxed" 
         onMouseEnter={this.onHover(true)}
@@ -130,6 +129,7 @@ class Product0 extends Component<IRecipeProps,IState> {
           <div className="product-level">
             {level.getValue()}
           </div>
+          
       </React.Fragment>
     )
   }
@@ -138,8 +138,8 @@ class Product0 extends Component<IRecipeProps,IState> {
     const product = GameManager.getInstance().getProductManager().getProduct(ids.product0Level) as PetPetting
     const {level} = this.props
     const usedLevel:number = level.getValue() + (this.state.hoverLevel ? 1 : 0)
-    const lps = toFormat(product.getCurrencyPerSecond(usedLevel).currency)
-    const petPow = toFormat(product.getCurrencyPerPet(usedLevel).currency)
+    const lps = toFormat(product.updateCurrencyPerSecond(usedLevel, true).currency)
+    const petPow = toFormat(product.updateCurrencyPet(usedLevel, true).currency)
     const levelClass = this.state.hoverLevel ? " hover-level" : ""
     return (
       <div className={"highlight "+levelClass}>
@@ -175,8 +175,7 @@ class Product0 extends Component<IRecipeProps,IState> {
 }
 
 const mapStateToProps = (state:any) => ({
-  level: selecters.getVariable(state, ids.product0Level),
-  currency: selecters.getVariable(state, ids.currency)
+  level: selecters.getVariable(state, ids.product0Level)
 })
 
 export default connect(mapStateToProps)(Product0);

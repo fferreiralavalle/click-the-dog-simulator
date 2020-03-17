@@ -1,0 +1,63 @@
+.king-building{
+    height: 70%;
+    width: 150px;
+    background-image: url(https://i.imgur.com/4VroGvm.png);
+    position: absolute;
+    right: 0px;
+    bottom: 10px;
+}
+.product.king.boxed {
+    background-image: url(https://i.imgur.com/ZskZX6W.jpg);
+    background-size: cover;
+}
+
+.king .highlight-store-button {
+    color: #fd3a00;
+}
+.king .highlight-section{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+.king-shop .highlight-section {
+    flex-direction: row;
+    justify-content: space-around;
+    margin-bottom: 5px;
+}
+.king-shop .highlight-section.upgrades-shop {
+    justify-content: flex-start;
+}
+.king .product-level {
+    left: 35px;
+    top: 90px;
+}
+.highlight-king-item {
+    display: flex;
+    width: 40px;
+    height: 40px;
+    background-position: center;
+    margin: 5px;
+    border: 1px solid;
+    color: #fd3a00;
+    border-radius: 5px;
+    background-color: rgba(255,255,255,0.5);
+    cursor: pointer;
+}
+.king .highlight {
+    flex-direction: column;
+}
+.king-title-text{
+    margin-top: 23px;
+    font-weight: bold;
+}
+.available-king-upgrades{
+    position: absolute;
+    right: 18px;
+    top: 25px;
+    padding: 5px 10px;
+    border: 1px solid;
+    color: #fd3a00;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.7);
+}

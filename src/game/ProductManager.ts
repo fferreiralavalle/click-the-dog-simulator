@@ -7,6 +7,7 @@ import GameManager from './GameManager'
 import { Laboratory } from "./products/Laboratory"
 import { Park } from "./products/Park"
 import Decimal from "break_infinity.js"
+import { King } from "./products/UpgradeKing"
 
 export default class ProductManager {
     products: Array<Product>
@@ -58,10 +59,17 @@ export default class ProductManager {
         const result = p.levelUp()
         return result
     }
+
+    updateCurrenciesPerSecond(){
+        this.products.forEach((product)=> {
+            product.updateCurrencyPerSecond()
+        })
+    }
 }
 
 function initializeProducts(): Array<Product> {
     return [
+        new King(VariableIds.upgradeShop, false),
         new PetPetting(VariableIds.product0Level, false),
         new PetAppreciationCenter(VariableIds.product1Level, false),
         new Laboratory(VariableIds.product2Level, false),

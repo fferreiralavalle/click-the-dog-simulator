@@ -48,6 +48,7 @@ class GameManager  {
                 return {currency:new Decimal(0),treats:new Decimal(0)}
             }
         })
+        this.getProductManager().updateCurrenciesPerSecond()
         let currencyOffline = this.handleOfflineTimePassed()
         currencyOffline.patiencePoints = currencyOffline.patiencePoints?.min(72)
         this.addCurrency(currencyOffline)
@@ -104,6 +105,17 @@ class GameManager  {
 
         this.setVariable(myCurrency,variableIds.currency)
         this.setVariable(myTreats,variableIds.treats)
+    }
+
+    getCurrency(): Currency {
+        let currency:Decimal = new Decimal(Number(this.getVariable(variableIds.currency).getValue()))
+        let treats:Decimal = new Decimal(Number(this.getVariable(variableIds.treats).getValue()))
+        let patiencePoints:Decimal = new Decimal(Number(this.getVariable(variableIds.patiencePoints).getValue()))
+        return {
+            currency,
+            treats,
+            patiencePoints
+        }
     }
 
     setVariable (value: any, variableId: string): void {
@@ -230,7 +242,6 @@ const initializeVariables = () => {
 const loadSavedData = (variablesObject:VariableStructure):VariableStructure => {
     const localSave = localStorage.getItem(saveVarName)
     let save:VariableStructure;
-    debugger
     if (!localSave){
         save = Cookies.getJSON(saveVarName) as VariableStructure
     }else {
@@ -254,7 +265,6 @@ const saveGame = (variables: VariableStructure)=> {
 }
 
 const resetGameSave = () => {
-    debugger
     Cookies.remove(saveVarName)
     localStorage.removeItem(saveVarName)
 }

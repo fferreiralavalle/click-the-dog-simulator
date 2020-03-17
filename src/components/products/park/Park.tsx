@@ -39,7 +39,7 @@ class ParkUI extends Component<IRecipeProps, IState> {
   currencyText = getText().currencies
   productText = getText().products.park
   relicsText = getText().relics
-
+  uiCleaner: any
   constructor(props:any){
     super(props)
     this.state = {
@@ -60,7 +60,7 @@ class ParkUI extends Component<IRecipeProps, IState> {
       id: 'UIOnCurrency',
       onCurrency: (result:Currency) => this.onCurrencyGain(result),
     })
-    setInterval(()=>{
+    this.uiCleaner = setInterval(()=>{
       const newPlus = clearPluses(this.state.plusCurrencies)
       const newReward = clearPluses(this.state.rewardsList)
       this.setState({
@@ -68,6 +68,10 @@ class ParkUI extends Component<IRecipeProps, IState> {
         rewardsList: newReward
       })
     },3 * 1000)
+  }
+
+  componentWillUnmount(){
+    clearTimeout(this.uiCleaner)
   }
 
   onEventReward = (result:RewardResult)=> {
@@ -178,9 +182,7 @@ class ParkUI extends Component<IRecipeProps, IState> {
         <div className="product1-title">
           {this.productText.title}
         </div>
-        {this.renderTimeLeftBar(events.pupsloration.id, product)}
-        {this.renderTimeLeftBar(events.dogsploration.id, product)}
-        {this.renderTimeLeftBar(events.bigBoysploration.id, product)}
+        {!isHover && this.renderBars(product)}
         <ProductPlus plusCurrencies={plusCurrencies}/>
         <LevelUpButton productId={ids.product4Level} 
           onMouseEnter={this.onLevelHover(true)}
@@ -188,6 +190,16 @@ class ParkUI extends Component<IRecipeProps, IState> {
         {isHover && (viewRelics ? this.renderRelicView(product): this.renderHighlight(product))}
         <ProductPlus plusCurrencies={this.state.rewardsList} style={plusCurrencyStyle}/>
       </div>
+    )
+  }
+
+  renderBars(park: Park){
+    return (
+      <React.Fragment>
+        {this.renderTimeLeftBar(events.pupsloration.id, park)}
+        {this.renderTimeLeftBar(events.dogsploration.id, park)}
+        {this.renderTimeLeftBar(events.bigBoysploration.id, park)}
+      </React.Fragment>
     )
   }
 
@@ -242,7 +254,7 @@ class ParkUI extends Component<IRecipeProps, IState> {
     const {level} = this.props
     const {displayedEvent} = this.state
     const usedLevel:number = level.getValue() + (this.state.hoverLevel ? 1 : 0)
-    const lps = toFormat(park.getCurrencyPerSecond(usedLevel).currency.toString())
+    const lps = toFormat(park.updateCurrencyPerSecond(usedLevel, true).currency.toString())
     const lovePerRelic = toFormat(park.getCurrencyPerRelic(usedLevel).currency.toString())
     const levelClass = this.state.hoverLevel ? " hover-level" : ""
     const relicAmount = park.getRelicsUnlockedAmount()

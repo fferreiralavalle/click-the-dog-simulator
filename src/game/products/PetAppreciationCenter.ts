@@ -2,9 +2,10 @@ import { Product, Currency, CurrencySubscriber } from './Product'
 import ids from '../VariableId';
 import GameManager from '../GameManager'
 import { Laboratory } from './Laboratory';
-import { addCurrency } from '../../utils/mathUtils';
+import { addCurrency, multiplyCurrencyBy } from '../../utils/mathUtils';
 import Decimal from 'break_infinity.js';
 import { Park } from './Park';
+import { King } from './UpgradeKing';
 
 export interface EventType{
     id: string,
@@ -63,6 +64,7 @@ export class PetAppreciationCenter implements Product {
     variableId: string;
     isUnlocked: boolean;
     subscribers: Array<RewardSubscribers>
+    currencyPerSecond: Currency;
     
     constructor(variableId: string, isUnlocked: boolean){
         this.variableId = variableId
@@ -70,8 +72,13 @@ export class PetAppreciationCenter implements Product {
         this.onTimePassed = this.onTimePassed.bind(this)
         this.currencySubscribers = []
         this.subscribers = []
+        this.currencyPerSecond = {currency:new Decimal(0), treats: new Decimal(0)}
     }
-    getCurrencyPerSecond(level?: number): Currency {
+    getCurrencyPerSecond(): Currency {
+        return this.currencyPerSecond
+    }
+
+    updateCurrencyPerSecond(level?: number, dontApply:boolean=false): Currency {
         const base:number = 1;
         const currentLevel:number = Number(level ? level : GameManager.getInstance().getVariable(this.variableId).getValue())
         // Relics
@@ -80,12 +87,19 @@ export class PetAppreciationCenter implements Product {
         const relic0EFinal = (relic0EBonus!==0 ? relic0EBonus : 1)
         const relic1EBonus = park.getRelicBonus(ids.relicTier1E)
         const relic1EFinal = (relic0EBonus!==0 ? relic1EBonus : 1)
-        const currencyPerSecond = new Decimal(base).mul(currentLevel).mul(relic0EFinal).mul(relic1EFinal)
-        
-        return {
+        // King Upgrade Bonus
+        const king = GameManager.getInstance().productManager.getProduct(ids.upgradeShop) as King
+        const kingBonus = king.getUpgradeBonus(ids.upgradeProduct1A)
+        //Final
+        const currencyPerSecond = new Decimal(base).mul(currentLevel).mul(relic0EFinal).mul(relic1EFinal).mul(kingBonus)
+        const newCurrencyPerSecond = {
             currency: currencyPerSecond,
             treats: new Decimal(0)
         }
+        if (!dontApply){
+            this.currencyPerSecond = newCurrencyPerSecond
+        }
+        return newCurrencyPerSecond
     }
     getProgressPerSecond(level?: number): number {
         const currentLevel:number = level ? level : GameManager.getInstance().getVariable(this.variableId).getValue()
@@ -94,9 +108,9 @@ export class PetAppreciationCenter implements Product {
         return progressPerSecond
     }
     onTimePassed(timePassed: number): Currency {
-        let add:Currency = this.getCurrencyPerSecond();
+        const cps:Currency = this.getCurrencyPerSecond();
+        const add:Currency = multiplyCurrencyBy(cps,timePassed)
         const pps: number = this.getProgressPerSecond()
-        add.currency = add.currency.mul(timePassed)
         GameManager.getInstance().addToVariable(add.currency,ids.currency)
         GameManager.getInstance().addToVariable(pps * timePassed,ids.product1Progress)
         this.checkForEventDurations(timePassed)
@@ -130,6 +144,7 @@ export class PetAppreciationCenter implements Product {
                         pts.push(petReward)
                     }
                     GameManager.getInstance().setVariable(pts, ids.product1EventPettingTrainingDurations)
+                    GameManager.getInstance().getProductManager().updateCurrenciesPerSecond()
                     break
                 default:
                     break
@@ -159,6 +174,9 @@ export class PetAppreciationCenter implements Product {
             pt.duration = pt.duration - timePassed
             return pt.duration > 0
         })
+        if (newPtDurations.length != ptDurations.length){
+            GameManager.getInstance().getProductManager().updateCurrenciesPerSecond()
+        }
         GameManager.getInstance().setVariable(newPtDurations, ids.product1EventPettingTrainingDurations)
     }
     /** Gets the rewards the event gives once completed */    
@@ -242,6 +260,7 @@ export class PetAppreciationCenter implements Product {
         if (this.canLevelUp()) {
             GameManager.getInstance().addToVariable(1, this.variableId)
             GameManager.getInstance().addToVariable(levelUpPrice, ids.currency)
+            GameManager.getInstance().getProductManager().updateCurrenciesPerSecond()
             if (this.getLevel()===1){
                 GameManager.getInstance().getNotificationManager().addNotification({
                     id:'pet-farm-unlock',

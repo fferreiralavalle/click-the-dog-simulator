@@ -9,60 +9,49 @@ import ids from '../../game/VariableId'
 import GameManager from '../../game/GameManager'
 import { Variable } from '../../game/Variables'
 import {toFormat, clearPluses} from '../../utils/uiUtil'
-import ProductPlus, { plusCurrency } from '../products/ProductPlus'
+import { plusCurrency } from '../products/ProductPlus'
+import ProductPlusDog, {productPlusInterface} from '../products/ProductPlusDog'
 import { Currency } from '../../game/products/Product'
+import DoggiePicture from './DoggiePicture'
+import { events } from '../../game/products/Park'
+import DoggieName from './DoggieName'
 
 interface IRecipeProps {
-    dogName: Variable;
     dispatch: Function;
 }
 
 interface IState {
     isHover: boolean;
-    plusCurrencies: Array<plusCurrency>
-    isPetted: boolean
 }
 
 class Doggies extends Component<IRecipeProps,IState> {
 
     petTimeout: any
+    plusDog = React.createRef<ProductPlusDog>()
+    dogPicture = React.createRef<DoggiePicture>()
 
     constructor(props:any){
         super(props)
         this.state = {
             isHover: false,
-            plusCurrencies: [],
-            isPetted: false
         }
         this.petTimeout = null
-        setInterval(()=>{
-            const newPlus = clearPluses(this.state.plusCurrencies)
-            this.setState({
-              plusCurrencies: newPlus
-            })
-          },3 * 1000)
     }
 
     onClickedDog(event:any){
         const earned = GameManager.getInstance().onClickedDog()
+        const currentPlus = this.dogPicture.current as DoggiePicture
+        currentPlus.onClickedDog(event)
         this.props.dispatch(actions.updateVariables())
+        console.log("dog clicked!")
         this.plusCurrencyEffect(earned, event)
-        this.setState({
-            isPetted: true
-        })
-        clearTimeout(this.petTimeout)
-        this.petTimeout = setTimeout(()=>{
-            this.setState({
-                isPetted: false
-            })
-        }, 100)
     }
 
     plusCurrencyEffect(earned: Currency, e:any){
-        const currencies = [...this.state.plusCurrencies]
         var rect = e.target.getBoundingClientRect();
         const x = e.clientX - rect.left; //x position within the element.
         const y = e.clientY - rect.top;  //y position within the element.
+        const currentPlus = this.plusDog.current as productPlusInterface
         let plus :plusCurrency= {
             value: "+"+toFormat(earned.currency),
             key: (new Date).toString()+(Math.random()),
@@ -70,66 +59,32 @@ class Doggies extends Component<IRecipeProps,IState> {
             y: y+"px",
             className:"love-icon",
             size: (1 + Math.random() * 0.25)
-
         }
-        currencies.push(plus)
+        currentPlus.addCurrency(plus)
         if (!earned.treats.equals(0)){
             plus.value = "+"+toFormat(earned.treats)
             plus.key = (new Date).toString()+(Math.random())
             plus.size = (1 + Math.random() * 0.25)
             plus.className = "treat-icon"
             plus.x = x-70+"px"
-            currencies.push(plus)
+            currentPlus.addCurrency(plus)
         }
-        this.setState({
-            plusCurrencies: currencies
-        })
-    }
-
-    onNameChange(name: string):void {
-        GameManager.getInstance().setVariable(name, ids.dogName)
-        this.props.dispatch(actions.updateVariables())
-    }
-
-    onMouseChange(isIn: boolean){
-        this.setState({
-            isHover: isIn
-        })
     }
 
     render(){
-        const {dogName} = this.props
-        const {isPetted, plusCurrencies} = this.state
-        const hasName = !!dogName && dogName.getValue()!==""
         return (
             <div className="doggie-background boxed">
-                <div className={`doggie ${isPetted ? "petted": ""}`}>
-                    <div className="doggie-plus">
-                        {<ProductPlus plusCurrencies={plusCurrencies}/>}
-                    </div>
-                    <div className="doggie-click" onClick={(e)=>this.onClickedDog(e)}>
+                <DoggiePicture ref={this.dogPicture}/>
+                <div className="doggie-plus">
+                    <ProductPlusDog ref={this.plusDog}/>
                 </div>
-            </div>
-            <div className="doggie-tag"
-                onMouseEnter={()=>this.onMouseChange(true)}
-                onMouseLeave={()=>this.onMouseChange(false)}>
-                {this.state.isHover ? 
-                <input 
-                    className="doggie-name" 
-                    value={dogName?.getValue()}
-                    onChange={(e)=>this.onNameChange(e.target.value)}/>
-                    :
-                <div className="doggie-name">{hasName? dogName.getValue() : "What's my name?"}</div>
-                }
-            </div>
+                <div className="doggie-click" onClick={(e:any)=>this.onClickedDog(e)}/>
+                <DoggieName/>
         </div>
         )
     }
 }
 
-const mapStateToProps = (state:any) => ({
-  currency: selecters.getVariable(state, ids.currency),
-  dogName: selecters.getVariable(state, ids.dogName),
-})
+const mapStateToProps = (state:any) => ({})
 
 export default connect(mapStateToProps)(Doggies);

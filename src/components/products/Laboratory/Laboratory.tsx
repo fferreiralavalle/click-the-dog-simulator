@@ -164,15 +164,27 @@ class LaboratoryUI extends Component<IRecipeProps, IState> {
   }
 
   render(){
-    const {level, progress} = this.props;
-    const {plusCurrencies, isHover} = this.state
+    const {isHover, plusCurrencies} = this.state
     const product = GameManager.getInstance().getProductManager().getProduct(ids.product2Level) as Laboratory
+    return (
+      <div className="product laboratory boxed" onMouseEnter={this.onHover(true)} onMouseLeave={this.onHover(false)}>
+        {isHover ? this.renderHighlight(product) : this.renderContent(product)}
+        <LevelUpButton productId={ids.product2Level} 
+          onMouseEnter={this.onLevelHover(true)}
+          onMouseLeave={this.onLevelHover(false)}/>
+        <ProductPlus plusCurrencies={plusCurrencies}/>
+      </div>
+    )
+  }
+
+  renderContent(product: Laboratory){
+    const {level, progress} = this.props;
     const progressStyle = {
       width: `${progress.getValue()/product.getProgressGoal()*100}%`
     }
     const freePoints = product.getAvailablePoints()
     return (
-      <div className="product laboratory boxed" onMouseEnter={this.onHover(true)} onMouseLeave={this.onHover(false)}>
+      <React.Fragment>
         <div className="laboratory-building">
         </div>
         <div className="product-level">
@@ -191,13 +203,8 @@ class LaboratoryUI extends Component<IRecipeProps, IState> {
               </div>
           </div>
         </div>
-        <ProductPlus plusCurrencies={plusCurrencies}/>
-        <LevelUpButton productId={ids.product2Level} 
-          onMouseEnter={this.onLevelHover(true)}
-          onMouseLeave={this.onLevelHover(false)}/>
-        {isHover && this.renderHighlight(product)}
-      </div>
-    )
+      </React.Fragment>
+      )
   }
 
   renderHighlight(product: Laboratory){
@@ -276,7 +283,6 @@ class LaboratoryUI extends Component<IRecipeProps, IState> {
   renderUpgradeStatistic(product: Laboratory) {
     const {chosenUpgrade,buyUpgradeHoverValue} = this.state
     const upgradeLevel = product.getUpgradeLevel(chosenUpgrade)+buyUpgradeHoverValue
-    const {name} = this.getUpgradeData(chosenUpgrade)
     const bonus = product.getUpgradeBonus(chosenUpgrade,upgradeLevel)
     const {baseBonus} = bonus
     const title = (
