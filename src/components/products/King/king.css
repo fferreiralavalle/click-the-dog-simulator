@@ -19,6 +19,7 @@
     flex-wrap: wrap;
     justify-content: flex-start;
     flex-direction: column;
+    flex: auto;
 }
 .king-shop .highlight-section {
     flex-direction: row;
