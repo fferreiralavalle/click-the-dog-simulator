@@ -85,10 +85,10 @@ export class King implements Product {
         return farmNeeded <= farmLevel && handsNeeded <= handsLevel && labLevelNeeded <= labLevel
     }
     getLevelUpPrice(level?:number): Currency {
-        const basePrice:number = 18;
-        const initialPrice:number = 282;
+        const basePrice:number = 15;
+        const initialPrice:number = 285;
         const lvl:number = level ? level : GameManager.getInstance().getVariable(this.variableId).getValue()
-        const finalPrice = initialPrice + basePrice*lvl*3 + Math.pow(basePrice,1+lvl/3)
+        const finalPrice = initialPrice + basePrice*lvl*10 + Math.pow(basePrice,1+lvl/3)
         return {
             currency: new Decimal(finalPrice),
             treats: new Decimal(0)

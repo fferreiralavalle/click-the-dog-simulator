@@ -109,12 +109,8 @@ export class Park implements Product {
         const currentLevel:number = level ? level : GameManager.getInstance().getVariable(this.variableId).getValue()
         const relics = this.getRelicsUnlockedAmount()
         const currencyPerRelic = this.getCurrencyPerRelic(currentLevel)
-        // King Upgrade Bonus
-        const king = GameManager.getInstance().productManager.getProduct(ids.upgradeShop) as King
-        const kingBonus = king.getUpgradeBonus(ids.upgradeProduct4A)
-        
         const newCurrencyPerSecond:Currency = {
-            currency: currencyPerRelic.currency.mul(relics).mul(kingBonus),
+            currency: currencyPerRelic.currency.mul(relics),
             treats: currencyPerRelic.treats.mul(relics)
         }
         if (!dontApply){
@@ -124,10 +120,13 @@ export class Park implements Product {
     }
     getCurrencyPerRelic(level?:number):Currency{
         const currentLevel:number = level ? level : GameManager.getInstance().getVariable(this.variableId).getValue()
-        const base = 1
-        const total = base * currentLevel
+        const base:Decimal = new Decimal(1)
+        // King Upgrade Bonus
+        const king = GameManager.getInstance().productManager.getProduct(ids.upgradeShop) as King
+        const kingBonus = king.getUpgradeBonus(ids.upgradeProduct4A)
+        const total:Decimal = base.mul(currentLevel).mul(kingBonus)
         return {
-            currency: new Decimal(total),
+            currency: total,
             treats: new Decimal(0)
         }
     }
@@ -193,6 +192,8 @@ export class Park implements Product {
         const lockedRelics = this.getAllLockedRelics(lvl)
         const random:number = Math.random()
         const relicChance = this.getRelicChance(lvl)
+        let relicModChance = relicChance
+        let relicFailedAttemps = 0
         let reward:RewardResult = {
             currencyReward: {currency:new Decimal(0),treats:new Decimal(0)}
         }
@@ -202,49 +203,64 @@ export class Park implements Product {
             /* Tier 2 */
             case events.bigBoysploration.id:
                 relics = lockedRelics.tier2.relics
-                if(relics.length>0 && random<relicChance){
+                relicFailedAttemps = Number(GameManager.getInstance().getVariable(ids.relicTier2Misses).getValue())
+                relicModChance = Math.pow(relicChance, 1/(1+relicFailedAttemps*2))
+                if(relics.length>0 && random<relicModChance){
                     const randomIndex:number = Math.floor(Math.random() * relics.length)
                     reward.relicReward = relics[randomIndex]
                     this.sendRelicNotification(relics[randomIndex])
+                    GameManager.getInstance().setVariable(0,ids.relicTier2Misses)
                     return reward
                 }
                 if (randomRewardChange<0.5){
                     reward.currencyReward.patiencePoints = new Decimal(12)
                     GameManager.getInstance().unlockTimeWizard()
+                    GameManager.getInstance().addToVariable(1,ids.relicTier2Misses)
                 }else{
                     reward.currencyReward.treats = new Decimal(event.price.treats.mul(2))
+                    GameManager.getInstance().addToVariable(1,ids.relicTier2Misses)
                 }
                 return reward
             /* Tier 1 */
             case events.dogsploration.id:
                 relics = lockedRelics.tier1.relics
-                if(relics.length>0 && random<relicChance){
+                relicFailedAttemps = Number(GameManager.getInstance().getVariable(ids.relicTier1Misses).getValue())
+                relicModChance = Math.pow(relicChance, 1/(1+relicFailedAttemps*2))
+                if(relics.length>0 && random<relicModChance){
                     const randomIndex:number = Math.floor(Math.random() * relics.length)
                     reward.relicReward = relics[randomIndex]
                     this.sendRelicNotification(relics[randomIndex])
+                    GameManager.getInstance().setVariable(0,ids.relicTier1Misses)
                     return reward
                 }
                 if (randomRewardChange<0.5){
                     reward.currencyReward.patiencePoints = new Decimal(6)
                     GameManager.getInstance().unlockTimeWizard()
+                    GameManager.getInstance().addToVariable(1,ids.relicTier1Misses)
                 }else{
                     reward.currencyReward.treats = new Decimal(event.price.treats.mul(2))
+                    GameManager.getInstance().addToVariable(1,ids.relicTier1Misses)
                 }
                 return reward
             /* Tier 0 */
             default:
                 relics = lockedRelics.tier0.relics
-                if(relics.length>0 && random<relicChance){
+                relicFailedAttemps = Number(GameManager.getInstance().getVariable(ids.relicTier0Misses).getValue())
+                relicModChance = Math.pow(relicChance, 1/(1+relicFailedAttemps*2))
+                if(relics.length>0 && random<relicModChance){
                     const randomIndex:number = Math.floor(Math.random() * relics.length)
                     reward.relicReward = relics[randomIndex]
                     this.sendRelicNotification(relics[randomIndex])
+                    GameManager.getInstance().setVariable(0,ids.relicTier0Misses)
                     return reward
                 }
                 if (randomRewardChange<0.5){
                     reward.currencyReward.patiencePoints = new Decimal(3)
                     GameManager.getInstance().unlockTimeWizard()
+                    GameManager.getInstance().addToVariable(1,ids.relicTier0Misses)
                 }else{
                     reward.currencyReward.treats = new Decimal(event.price.treats.mul(2))
+                    GameManager.getInstance().addToVariable(1,ids.relicTier0Misses)
                 }
                 return reward
         }

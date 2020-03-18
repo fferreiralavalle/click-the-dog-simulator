@@ -30,6 +30,9 @@ const variables = {
     labUpgradeTier2B: 'labUpgradeTier2B',
     labUpgradeTier2C: 'labUpgradeTier2C',
     /* Relics */
+    relicTier0Misses: 'relicTier0Misses',
+    relicTier1Misses: 'relicTier1Misses',
+    relicTier2Misses: 'relicTier1Misses',
     /* Tier 0 */
     relicTier0A: 'relicTier0A',
     relicTier0B: 'relicTier0B',
