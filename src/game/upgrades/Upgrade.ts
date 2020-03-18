@@ -49,7 +49,7 @@ export class UpgradeKingStandar implements UpgradeKing {
     }
 
     getBonus(upgradeLevel: number): number {
-        return Math.pow(this.base, upgradeLevel)
+        return Math.pow(this.base, Number(upgradeLevel))
     }
 
     getIcon(): BuildingIcons {

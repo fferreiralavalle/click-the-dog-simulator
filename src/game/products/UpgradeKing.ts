@@ -185,7 +185,7 @@ export class King implements Product {
 
     getUpgradeBonus(upgradeId: string, level?: number): number {
         const lvl:number = level ? level : this.getUpgradeLevel(upgradeId)
-        const bonus = this.getUpgrade(upgradeId).getBonus(lvl)
+        const bonus = Number(this.getUpgrade(upgradeId).getBonus(lvl))
         return bonus
     }
 

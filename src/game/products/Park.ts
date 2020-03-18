@@ -123,8 +123,8 @@ export class Park implements Product {
         const base:Decimal = new Decimal(1)
         // King Upgrade Bonus
         const king = GameManager.getInstance().productManager.getProduct(ids.upgradeShop) as King
-        const kingBonus = king.getUpgradeBonus(ids.upgradeProduct4A)
-        const total:Decimal = base.mul(currentLevel).mul(kingBonus)
+        const kingBonus = Number(king.getUpgradeBonus(ids.upgradeProduct4A))
+        const total:Decimal = base.mul(Number(currentLevel)).mul(kingBonus)
         return {
             currency: total,
             treats: new Decimal(0)

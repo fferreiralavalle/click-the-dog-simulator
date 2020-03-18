@@ -10,7 +10,7 @@ import { PetPetting } from './products/PetPetting';
 
 import Cookies from 'js-cookie' 
 import NotificationManager from './NotificationManager';
-import { toFormat } from '../utils/uiUtil';
+import { toFormat, getBuildingIcon } from '../utils/uiUtil';
 import Decimal from 'break_infinity.js';
 import { Park } from './products/Park';
 
@@ -55,7 +55,7 @@ class GameManager  {
         if (this.getVariable(variableIds.lastSaveDate).getValue()!=null){
             this.getNotificationManager().addNotification({
                 id:'welcomed-back',
-                background: 'https://i.imgur.com/3AcgxLn.jpg',
+                background: getBuildingIcon(variableIds.product3Level).background,
                 description:'Your dogs have been waiting for you. They gained '+toFormat(currencyOffline.patiencePoints? currencyOffline.patiencePoints : 0)+' patience points for waiting like good boys. Spend them to speed up the game!',
                 image: 'https://i.imgur.com/DIPnpA9.png',
                 seen: false,
@@ -202,9 +202,9 @@ class GameManager  {
             this.setVariable(1, variableIds.product3Level)
             this.getNotificationManager().addNotification({
                 id:'time-wizard-unlcok',
-                background: 'https://i.imgur.com/AIK9tpI.jpg',
+                background: getBuildingIcon(variableIds.product3Level).background,
                 description:'Greetings human, it is I, the Wizpug! With my powers you can use your dogs stored patience to speed time ITSELF.',
-                image: 'https://i.imgur.com/RakeK3M.png',
+                image: getBuildingIcon(variableIds.product3Level).icon,
                 seen: false,
                 title: 'The Wizpug is here!'
                 })
