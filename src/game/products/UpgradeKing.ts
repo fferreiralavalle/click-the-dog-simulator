@@ -100,10 +100,10 @@ export class King implements Product {
         return levelUpPrice.lte(currency)
     }
     levelUp(): boolean {
-        const levelUpPrice = this.getLevelUpPrice().treats.mul(-1)
+        const levelUpPrice = this.getLevelUpPrice().currency.mul(-1)
         if (this.canLevelUp()) {
             GameManager.getInstance().addToVariable(1, this.variableId)
-            GameManager.getInstance().addToVariable(levelUpPrice, ids.treats)
+            GameManager.getInstance().addToVariable(levelUpPrice, ids.currency)
             GameManager.getInstance().getProductManager().updateCurrenciesPerSecond()
             if (this.getLevel()===1){
                 GameManager.getInstance().getNotificationManager().addNotification({
