@@ -115,12 +115,12 @@ class Product1 extends Component<IRecipeProps, IState> {
       case events.pettingTraining.id:
         return {
           name:"Petting Party!", 
-          description: "Makes petting more efficient for some time, effects stack."
+          description: "Makes petting more efficient for some time (multiple instances at a time add up)"
         }
       case events.donationCampaign.id:
         return {
           name:"Treats Donation", 
-          description: "Create a campagin for people to donate treats. Some dogs really like them!"
+          description: "Create a campagin for people to donate treats. Some dogs really like them! +1 Treats every 5 levels."
         }
       default:
         return {

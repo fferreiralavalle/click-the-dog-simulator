@@ -20,16 +20,18 @@ export class UpgradeKingStandar implements UpgradeKing {
     base: number
     relatedId: string
     basePrice: Currency
+    minLevel: number
 
     constructor(id:string, cost: Currency, relatedId:string, base:number=2){
         this.id=id
         this.base=base
         this.relatedId = relatedId
         this.basePrice = cost
+        this.minLevel = 0
     }
     
     isUnlocked(upgradeLevel: number, kingLevel: number): boolean {
-        const relatedIdLevel = GameManager.getInstance().getVariable(this.relatedId).getValue()
+        const relatedIdLevel = this.minLevel + GameManager.getInstance().getVariable(this.relatedId).getValue()
         const requiredLevel = (upgradeLevel + 1) * 10
         const isKingHighEnough = upgradeLevel * 10 <= kingLevel
         return relatedIdLevel>=requiredLevel && isKingHighEnough
@@ -54,6 +56,14 @@ export class UpgradeKingStandar implements UpgradeKing {
 
     getIcon(): BuildingIcons {
         return getBuildingIcon(this.relatedId)
+    }
+}
+
+export class UpgradeKingMinLevel extends UpgradeKingStandar {
+
+    constructor(id:string, cost: Currency, relatedId:string, base:number=2, minLevl:number=0){
+        super(id, cost, relatedId, base)
+        this.minLevel = minLevl
     }
 }
 

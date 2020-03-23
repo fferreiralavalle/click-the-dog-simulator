@@ -335,7 +335,7 @@ export class PetAppreciationCenter implements Product {
         let pts = GameManager.getInstance().getVariable(ids.product1EventPettingTrainingDurations)?.getValue() as Array<PetTrainingVariable>
         pts = pts ? pts : []
         const trainingDataBase:PettingTrainingData = this.getPettingTrainingData()
-        const petMult = trainingDataBase.petMultiplier ** pts.length
+        const petMult = 1 + trainingDataBase.petMultiplier * pts.length
         return petMult
     }
 

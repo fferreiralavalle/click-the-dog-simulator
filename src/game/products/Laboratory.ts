@@ -5,6 +5,7 @@ import { addCurrency, multiplyCurrencyBy } from '../../utils/mathUtils';
 import Decimal from 'break_infinity.js';
 import { Park } from './Park';
 import { King } from './UpgradeKing';
+import { UpgradeKing } from '../upgrades/Upgrade';
 
 export interface EventType{
     id: string,
@@ -276,6 +277,7 @@ export class Laboratory implements Product {
         let base = 0
         //Relics
         const park = GameManager.getInstance().productManager.getProduct(ids.product4Level) as Park
+        const king = GameManager.getInstance().productManager.getProduct(ids.upgradeShop) as King
         switch(upgradeId){
             /* TIER 2 */
             /* Treat Chance per Pet */
@@ -295,8 +297,9 @@ export class Laboratory implements Product {
                 base = 0.25
                 let petLvl = GameManager.getInstance().getVariable(ids.product0Level).getValue()
                 let farmLvl = GameManager.getInstance().getVariable(ids.product1Level).getValue()
+                const kingLoveBonus = king.getUpgradeBonus(ids.upgradeProduct2B) 
                 return {
-                    baseBonus: base * lvl * (petLvl + farmLvl)
+                    baseBonus: base * lvl * (petLvl + farmLvl) * kingLoveBonus
                 }
             /* Farm % Reduction*/
             case ids.labUpgradeTier1B:

@@ -56,7 +56,9 @@ const variables = {
     upgradeProduct0A: 'upgradeProduct0A',
     upgradeProduct1A: 'upgradeProduct1A',
     upgradeProduct2A: 'upgradeProduct2A',
+    upgradeProduct2B: 'upgradeProduct2B',
     upgradeProduct4A: 'upgradeProduct4A',
+    upgradeProduct5A: 'upgradeProduct5A',
     
 }
 

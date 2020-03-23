@@ -44,7 +44,8 @@ export interface Text {
             buy: string,
             show: string,
             defaultTitle: string,
-            defaultDescription: string
+            defaultDescription: string,
+            maxUpgradeLevel: string
         },
         common: {
             info: string,
@@ -125,12 +126,13 @@ export const english:Text = {
         },
         king: {
             title: "King Baby",
-            description: "Hello humble human, have a look at my propawsals.",
+            description: "Hello human, have a look. Buildings get new upgrades every 10 levels.",
             lovePerBuilding: "Per All Lvls",
             buy: "Buy",
             show: "Show Owned",
             defaultTitle: "Choose an Upgrade",
             defaultDescription: "",
+            maxUpgradeLevel: "Upgrade Max"
         },
         common: {
             info: "Info",
@@ -144,7 +146,7 @@ export const english:Text = {
         tier0: {
             relicTier0A: {
                 title: "Ball of Petting",
-                description: "Your own pets are 5 times more powerful."
+                description: "Your own pets (clicks) give 5 times more love!"
             },
             relicTier0B: {
                 title:  "Ball of Rubs",
@@ -209,9 +211,17 @@ export const english:Text = {
                 title: "Lab Management",
                 description: "Labs like treats right? I can double its Treat production for you."
             },
+            upgradeProduct2B: {
+                title: "Lab Activities Management",
+                description: "I will double your labs passive love production. Their smarts need it."
+            },
             upgradeProduct4A: {
                 title: "Park Management",
                 description: "My doogness, a dragon! Good thing I know how to double its love production."
+            },
+            upgradeProduct5A: {
+                title: "Kingdom Management",
+                description: "Even I need upgrades. With your help I can double my love production."
             },
         }
     },

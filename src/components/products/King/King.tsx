@@ -127,7 +127,7 @@ class KingUI extends Component<IRecipeProps,IState> {
           </div>
         {isHover && show===0 && this.renderHighlight(king, usedLevel)}
         {isHover && show===1 && this.renderBuyMenu(king, usedLevel)}
-        {isHover && show===2 && this.renderBuyMenu(king, usedLevel)}
+        {isHover && show===2 && this.renderBuyMenu(king, usedLevel, true)}
         <LevelUpButton productId={ids.upgradeShop} 
           onMouseEnter={this.onLevelHover(true)}
           onMouseLeave={this.onLevelHover(false)}/>
@@ -152,23 +152,24 @@ class KingUI extends Component<IRecipeProps,IState> {
     const levelClass = this.state.hoverLevel ? " hover-level" : ""
     const lps = toFormat(king.updateCurrencyPerSecond(level, true).currency)
     const perBuilding = toFormat(king.getCurrencyMultiplier(level))
+    const upgradeMax = king.getMaxUpgradeLevel(level)
     return (
       <div className={"highlight "+levelClass}>
-        <div className="highlight-section">
+        <div className="highlight-section options">
             <div className={"highlight-store-button "} onClick={this.changeMenu(1)}>
                 <div className="highlight-store-name">
                     {this.productText.buy}
                 </div>
                 <div className="highlight-store-price"><div className="love-icon"/></div>
             </div>
-            <div className={"highlight-store-button "} onClick={this.changeMenu(1)}>
+            <div className={"highlight-store-button "} onClick={this.changeMenu(2)}>
                 <div className="highlight-store-price">
                     {this.productText.show}
                 </div>
             </div>
-            <div className="highlight-field">
-                {this.productText.description+" (I'm still being development)"}
-            </div>
+        </div>
+        <div className="highlight-field">
+            {this.productText.description}
         </div>
         <div className="highlight-section">
             <div className="highlight-field">
@@ -189,12 +190,20 @@ class KingUI extends Component<IRecipeProps,IState> {
                     <div className="highlight-love-icon"/>
                 </div>
             </div>
+            <div className="highlight-field">
+                <div className="highlight-attribute">
+                    {this.productText.maxUpgradeLevel}
+                </div>
+                <div className="highlight-value">
+                    {upgradeMax}
+                </div>
+            </div>
         </div>
       </div>
     )
   }
 
-  renderBuyMenu(king: King, level: number){
+  renderBuyMenu(king: King, level: number, seeBought:boolean=false){
       const {selectedUpgrade} = this.state;
       const upgradeText = getKingUpgradeText(selectedUpgrade)
       const isUpgradeSelected = selectedUpgrade!==''
@@ -205,10 +214,10 @@ class KingUI extends Component<IRecipeProps,IState> {
       return (
         <div className="highlight king-shop">
             <div className="highlight-section upgrades-shop scroll-y">
-                {this.renderAvailableUpgrades(king, level)}
+                {seeBought ? this.renderBoughtUpgrades(king,level) : this.renderAvailableUpgrades(king, level)}
             </div>
             <div className="highlight-section">
-                {isUpgradeSelected && <div className={"highlight-store-button "} onClick={this.buyUpgrade(selectedUpgrade, king)}>
+                {isUpgradeSelected && !seeBought && <div className={"highlight-store-button "} onClick={this.buyUpgrade(selectedUpgrade, king)}>
                     <div className="highlight-store-name">
                         {this.productText.buy + " "+price}
                     </div>
@@ -225,10 +234,15 @@ class KingUI extends Component<IRecipeProps,IState> {
                 <div className="highlight-field">
                     {description}
                 </div>
-                
             </div>
         </div>
       )
+  }
+
+  renderBoughtUpgrades(king: King, level:number){
+    const upgrades = king.getUpgrades()
+    const bought = upgrades.filter((upgrade)=> king.getUpgradeLevel(upgrade.id)>0)
+    return bought.map((upgrade)=> this.renderItem(upgrade, king, level))
   }
 
   renderAvailableUpgrades(king: King, level:number){
@@ -238,11 +252,13 @@ class KingUI extends Component<IRecipeProps,IState> {
 
   renderItem(item:UpgradeKing, king: King, currentLevel: number){
     const canBuyClass = king.canBuyUpgrade(item.id, currentLevel) ? "" : "disabled"
+    const itemLevel = king.getUpgradeLevel(item.id)
     const iconStyle = {
         backgroundImage: `url(${item.getIcon().icon})`
     }
     return(
         <div className={"highlight-king-item "+canBuyClass} style={iconStyle} onClick={this.upgradeSelect(item.id)}>
+          <div className="highlight-king-item-level">{itemLevel}</div>
         </div>
     )
   }

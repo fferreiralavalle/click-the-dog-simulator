@@ -21,6 +21,10 @@
     flex-direction: column;
     flex: auto;
 }
+.king .highlight-section.options{
+    flex-direction: row;
+    justify-content: space-between;
+}
 .king-shop .highlight-section {
     flex-direction: row;
     justify-content: space-around;
@@ -35,15 +39,26 @@
 }
 .highlight-king-item {
     display: flex;
+    justify-content: center;
+    position: relative;
     width: 40px;
     height: 40px;
     background-position: center;
-    margin: 5px;
+    margin: 6px 3.5px;
     border: 1px solid;
     color: #fd3a00;
     border-radius: 5px;
     background-color: rgba(255,255,255,0.5);
     cursor: pointer;
+}
+.highlight-king-item-level {
+    position: absolute;
+    bottom: -10px;
+    width: 30px;
+    background: #fd3a00ba;
+    border: 1px solid;
+    color: white;
+    border-radius: 5px;
 }
 .king .highlight {
     flex-direction: column;

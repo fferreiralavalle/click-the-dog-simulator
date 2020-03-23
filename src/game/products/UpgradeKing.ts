@@ -109,7 +109,7 @@ export class King implements Product {
                 GameManager.getInstance().getNotificationManager().addNotification({
                     id:'king-unlcoked',
                     title: 'King Baby has returned?!',
-                    description:'Good evening dear subjects, I, the Baby King have finally returned from my morning stroll and my doogness, am I ready to rule again.',
+                    description:'Good evening dear subjects, I, the Baby King have finally returned from my morning stroll and my doogness, am I ready to rule again. I gain love for each building level you have (yes, ALL of them)',
                     image: getBuildingIcon(ids.upgradeShop).icon,
                     background: getBuildingIcon(ids.upgradeShop).background,
                     seen: false,
@@ -175,7 +175,15 @@ export class King implements Product {
             new UpgradeKingStandar(ids.upgradeProduct0A, baseUpgradeCostLove, ids.product0Level),
             new UpgradeKingStandar(ids.upgradeProduct1A, baseUpgradeCostLove, ids.product1Level),
             new UpgradeKingStandar(ids.upgradeProduct2A, baseUpgradeCostLove, ids.product2Level),
-            new UpgradeKingStandar(ids.upgradeProduct4A, multiplyCurrencyBy(baseUpgradeCostLove,5), ids.product4Level)]
+            new UpgradeKingStandar(ids.upgradeProduct2B, multiplyCurrencyBy(baseUpgradeCostLove,5), ids.product2Level),
+            new UpgradeKingStandar(ids.upgradeProduct4A, multiplyCurrencyBy(baseUpgradeCostLove,5), ids.product4Level),
+            new UpgradeKingStandar(ids.upgradeProduct5A, multiplyCurrencyBy(baseUpgradeCostLove,10), ids.upgradeShop)]
+    }
+
+    getMaxUpgradeLevel(level?:number): number{
+        const lvl = level ? level : this.getLevel()
+        const upgradeUpEvery = 10
+        return Math.floor(lvl/upgradeUpEvery + 1)
     }
 
     getUpgradeLevel(upgradeId: string) {
