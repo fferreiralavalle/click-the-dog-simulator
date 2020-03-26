@@ -6,6 +6,8 @@ import ids from "./VariableId"
 import permaIds from "./PermaVariablesId"
 import Clicks from "./Archivements/Clicks"
 import { DogSkinInterface, DogSkinMinLevel } from "./dogSkins/dogSkin"
+import { store } from "../App"
+import {actions as uiAction} from '../reducers/uiUtils'
 
 export interface DogSkinsList {
     [key: string] : DogSkinInterface
@@ -23,7 +25,7 @@ export default class DogSkinsManager {
         })
     }
 
-    getUnlockedArchivements(): Array<DogSkinInterface> {
+    getUnlockedSkins(): Array<DogSkinInterface> {
         const skins:DogSkinInterface[] = []
         Object.keys(this.skinList).forEach(key => {
             if (this.skinList[key].inUnlocked()){
@@ -34,9 +36,14 @@ export default class DogSkinsManager {
     }
 
     onTimePassed(): Currency {
+        let skinUnlocked = false
         Object.keys(this.skinList).forEach((key)=> {
-            this.skinList[key].checkForCompletion()
+            const result = this.skinList[key].checkForCompletion()
+            if (result){skinUnlocked=true}
         })
+        if (skinUnlocked){
+            store.dispatch(uiAction.updateBreedsAmount())
+        }
         return {currency: new Decimal(0), treats: new Decimal(0)}
     }
 

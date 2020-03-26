@@ -9,6 +9,8 @@ import LabMilestone from "./Archivements/LabMilestone"
 import WizPugMilestone from "./Archivements/WizPugMilestone"
 import ParkMilestone from "./Archivements/ParkMilestone"
 import KingMilestone from "./Archivements/KingMilestone"
+import {actions as uiAction} from '../reducers/uiUtils'
+import { store } from "../App"
 
 export interface ArchivementList {
     [key: string] : ArchivementInterface
@@ -37,9 +39,14 @@ export default class ArchivementManager {
     }
 
     onTimePassed(): Currency {
+        let archivementUnlocked = false
         Object.keys(this.archivementList).forEach((key)=> {
-            this.archivementList[key].checkForCompletion()
+            const result = this.archivementList[key].checkForCompletion()
+            if (result){archivementUnlocked=true}
         })
+        if (archivementUnlocked){
+            store.dispatch(uiAction.updateArchivementsAmount())
+        }
         return {currency: new Decimal(0), treats: new Decimal(0)}
     }
 

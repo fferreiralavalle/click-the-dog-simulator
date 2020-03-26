@@ -8,7 +8,7 @@ export interface DogSkinInterface {
     requiredValue: any
 
     inUnlocked(): boolean
-    checkForCompletion(): void
+    checkForCompletion(): boolean
 }
 
 export class DogSkinBase implements DogSkinInterface {
@@ -37,7 +37,7 @@ export class DogSkinBase implements DogSkinInterface {
         })
     }
     
-    checkForCompletion() {}
+    checkForCompletion() {return false}
 }
 
 export class DogSkinMinLevel extends DogSkinBase {
@@ -53,5 +53,6 @@ export class DogSkinMinLevel extends DogSkinBase {
         if (condition){
             GameManager.getInstance().setPermaVariable(1,this.varId)
         }
+        return condition
     }
 }

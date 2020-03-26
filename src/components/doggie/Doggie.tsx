@@ -4,23 +4,22 @@ import '../products/product.css'
 import './doggie.css'
 
 import {selecters, actions} from '../../reducers/GameVariables'
-import {actions as uiActions} from '../../reducers/uiUtils'
-import ids from '../../game/VariableId'
+import {selecters as uiSelecters,actions as uiActions} from '../../reducers/uiUtils'
 
 import GameManager from '../../game/GameManager'
-import { Variable } from '../../game/Variables'
-import {toFormat, clearPluses} from '../../utils/uiUtil'
+import {toFormat} from '../../utils/uiUtil'
 import { plusCurrency } from '../products/ProductPlus'
 import ProductPlusDog, {productPlusInterface} from '../products/ProductPlusDog'
 import { Currency } from '../../game/products/Product'
 import DoggiePicture from './DoggiePicture'
-import { events } from '../../game/products/Park'
 import DoggieName from './DoggieName'
 import permaVariables from '../../game/PermaVariablesId'
 
 interface IRecipeProps {
     dispatch: Function;
     selectedDogPicture: string
+    breedsAmount: number
+    archivementsAmount: number
 }
 
 interface IState {
@@ -83,7 +82,7 @@ class Doggies extends Component<IRecipeProps,IState> {
     }
 
     render(){
-        const {selectedDogPicture} = this.props
+        const {selectedDogPicture, breedsAmount, archivementsAmount} = this.props
         return (
             <div className="doggie-background boxed">
                 <DoggiePicture selectedDogBreed={selectedDogPicture} ref={this.dogPicture}/>
@@ -93,21 +92,22 @@ class Doggies extends Component<IRecipeProps,IState> {
                 <div className="doggie-click" onClick={(e:any)=>this.onClickedDog(e)}/>
                 <DoggieName/>
                 <div className="doggie-options">
-                    <div className="doogie-options-option" onClick={this.showArchivements()}>
+                    {archivementsAmount>0 && <div className="doogie-options-option" onClick={this.showArchivements()}>
                         <div className="doogie-options-option-icon"></div>
-                    </div>
-                    <div className="doogie-options-option" onClick={this.showDogSkins()}>
+                    </div>}
+                    {breedsAmount>0 && <div className="doogie-options-option" onClick={this.showDogSkins()}>
                         <div className="doogie-options-option-icon doggie-skins-icon"></div>
-                    </div>
+                    </div>}
                 </div>
-                
-        </div>
+            </div>
         )
     }
 }
 
 const mapStateToProps = (state:any) => ({
-    selectedDogPicture: selecters.getVariable(state, permaVariables.selectedDogBreed)?.getValue()
+    selectedDogPicture: selecters.getVariable(state, permaVariables.selectedDogBreed)?.getValue(),
+    breedsAmount: uiSelecters.getDogBreedsAmount(state),
+    archivementsAmount: uiSelecters.getArchivementsAmount(state),
 })
 
 export default connect(mapStateToProps)(Doggies);

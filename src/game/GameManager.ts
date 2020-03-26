@@ -1,6 +1,6 @@
 import {store} from '../App'
 import {actions} from '../reducers/GameVariables'
-import {actions as mailActions} from '../reducers/Mails'
+import {actions as uiActions} from '../reducers/uiUtils'
 import { TimeManager } from "./TimeManager";
 import ProductManager from './ProductManager';
 import variableIds from './VariableId'
@@ -50,6 +50,8 @@ class GameManager  {
 
     initializeUI(){
         store.dispatch(actions.updateVariables())
+        store.dispatch(uiActions.updateArchivementsAmount())
+        store.dispatch(uiActions.updateBreedsAmount())
         const updateUiTick = 'updateUITick'
         this.timeManger.susbcribe({
             id: updateUiTick,

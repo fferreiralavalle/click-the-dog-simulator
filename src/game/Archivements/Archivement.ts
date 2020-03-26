@@ -8,7 +8,7 @@ export interface ArchivementInterface {
     requiredValue: any
 
     inUnlocked(): boolean
-    checkForCompletion(): void
+    checkForCompletion(): boolean
 }
 
 export class ArchivementBase implements ArchivementInterface {
