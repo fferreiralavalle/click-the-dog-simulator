@@ -8,12 +8,13 @@ import ids from '../../game/VariableId'
 
 import GameManager from '../../game/GameManager'
 import { Variable } from '../../game/Variables'
-import {toFormat, clearPluses} from '../../utils/uiUtil'
+import {toFormat, clearPluses, getDogSkinIcon} from '../../utils/uiUtil'
 import ProductPlus, { plusCurrency } from '../products/ProductPlus'
 import { Currency } from '../../game/products/Product'
 
 interface IRecipeProps {
-    onClick?: Function
+    onClick?: Function,
+    selectedDogBreed: string
 }
 
 interface IState {
@@ -50,8 +51,15 @@ class DoggiePicture extends Component<IRecipeProps,IState> {
 
     render(){
         const {isPetted} = this.state
+        const {selectedDogBreed} = this.props
+        const dogPicture = getDogSkinIcon(selectedDogBreed).icon
+        const style = {
+            backgroundImage: `url(${dogPicture})`
+        }
         return (
-            <div className={`doggie ${isPetted ? "petted": ""}`} onClick={(e)=>this.onClickedDog(e)}>
+            <div className={`doggie ${isPetted ? "petted": ""}`} 
+                onClick={(e)=>this.onClickedDog(e)}
+                style={style}>
                 
             </div>
         )

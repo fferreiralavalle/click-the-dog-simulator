@@ -1,0 +1,49 @@
+.breed-info {
+    display: flex;
+    min-height: 280px;
+}
+.breed-icon {
+    flex: 3 1;
+    background-position: bottom;
+    margin: 10px;
+    margin-bottom: 40px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+.breed-icon.locked{
+    filter: brightness(0);
+}
+.breed-icon.exited {
+    animation-name: get-happy;
+    animation-duration: 0.05s;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+}
+.breed-info-text {
+    flex: 8 1 0%;
+}
+.breed-info-text-name {
+    font-weight: bold;
+    font-size: 150%;
+    margin: 5px 0;
+}
+.breed-info-text-description {
+    font-size: 14px;
+    text-align: left;
+    margin-bottom: 5px;
+}
+
+.breed-info-select {
+    background-color: rgba(255,255,255,0.7);
+    border: 1px solid;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    position: absolute;
+    bottom: -25px;
+    transition: transform 0.5s;
+}
+.breed-info-select:hover{
+    transform: scale(1.1);
+}

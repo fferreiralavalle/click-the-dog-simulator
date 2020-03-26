@@ -5,6 +5,7 @@ const variables = {
     patiencePoints: 'patiencePoints',
     turboTimeLeft: 'turboTimeLeft',
     timePassed: 'timePassed',
+    clicks: 'clicks',
     lastSaveDate: 'lastSaveDate',
     dogName: 'dogName',
     /* Products */
@@ -59,7 +60,14 @@ const variables = {
     upgradeProduct2B: 'upgradeProduct2B',
     upgradeProduct4A: 'upgradeProduct4A',
     upgradeProduct5A: 'upgradeProduct5A',
-    
+
+    /* Archivements */
+    archivementClicks: 'archivementClicks',
+    archivementProduct1LevelMilestone: 'archivementProduct1LevelMilestone',
+    archivementProduct2LevelMilestone: 'archivementProduct2LevelMilestone',
+    archivementProduct3LevelMilestone: 'archivementProduct3LevelMilestone',
+    archivementProduct4LevelMilestone: 'archivementProduct4LevelMilestone',
+    archivementUpgradeShopLevelMilestone: 'archivementUpgradeShopLevelMilestone',
 }
 
 export default variables;

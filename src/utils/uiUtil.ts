@@ -2,6 +2,7 @@ import numeral from 'numeral'
 import { plusCurrency } from '../components/products/ProductPlus'
 import Decimal from 'break_infinity.js'
 import variables from '../game/VariableId'
+import permaVariables from '../game/PermaVariablesId'
 
 export const toFormat = (number: string | number | Decimal): string => {
     if (number instanceof Decimal){
@@ -44,19 +45,91 @@ export class BuildingIcons {
     }
 }
 
-export const getBuildingIcon = (building: string)=>{
+export class ArchivementIcons {
+    icon: string
+    background: string
+
+    constructor(icon: string, background: string){
+        this.icon = icon
+        this.background = background
+    }
+}
+
+export class DogSkinIcon{
+    icon: string
+
+    constructor(icon: string){
+        this.icon = icon
+    }
+}
+
+export const getBuildingIcon = (building: string): BuildingIcons=>{
     switch(building){
         default:
             return new BuildingIcons('https://i.imgur.com/B00xNnt.png','https://i.imgur.com/6ZO4rY8.jpg')
         case variables.product1Level:
             return new BuildingIcons('https://i.imgur.com/L1eHWfM.png','https://i.imgur.com/G0KXJDf.jpg')
         case variables.product2Level:
-            return new BuildingIcons('https://i.imgur.com/mLU1yyE.png','https://i.imgur.com/icoqc1B.jpg')
+            return new BuildingIcons('https://i.imgur.com/ajP1c6E.png','https://i.imgur.com/icoqc1B.jpg')
         case variables.product3Level:
             return new BuildingIcons('https://i.imgur.com/RakeK3M.png','https://i.imgur.com/AIK9tpI.jpg')
         case variables.product4Level:
             return new BuildingIcons('https://i.imgur.com/QJ3nDVL.png','https://i.imgur.com/uenbC1V.jpg')
         case variables.upgradeShop:
             return new BuildingIcons('https://i.imgur.com/4VroGvm.png','https://i.imgur.com/ZskZX6W.jpg')
+    }
+}
+
+export const getArchivementIcon = (archivement: string): ArchivementIcons=>{
+    let buildingIcon;
+    let archivementDefaultBackground = 'https://i.imgur.com/GZl7HTq.jpg'
+    switch(archivement){
+        default:
+            buildingIcon = getBuildingIcon(variables.product0Level)
+            return new ArchivementIcons(buildingIcon.icon,archivementDefaultBackground)
+        case variables.archivementProduct1LevelMilestone:
+            buildingIcon = getBuildingIcon(variables.product1Level)
+            return new ArchivementIcons(buildingIcon.icon, archivementDefaultBackground)
+        case variables.archivementProduct2LevelMilestone:
+            buildingIcon = getBuildingIcon(variables.product2Level)
+            return new ArchivementIcons(buildingIcon.icon, archivementDefaultBackground)
+        case variables.archivementProduct3LevelMilestone:
+            buildingIcon = getBuildingIcon(variables.product3Level)
+            return new ArchivementIcons(buildingIcon.icon, archivementDefaultBackground)
+        case variables.archivementProduct4LevelMilestone:
+            buildingIcon = getBuildingIcon(variables.product4Level)
+            return new ArchivementIcons(buildingIcon.icon, archivementDefaultBackground)
+        case variables.archivementUpgradeShopLevelMilestone:
+            buildingIcon = getBuildingIcon(variables.upgradeShop)
+            return new ArchivementIcons(buildingIcon.icon, archivementDefaultBackground)
+    }
+}
+
+export const getDogSkinIcon = (skinId: string):DogSkinIcon => {
+    switch(skinId){
+        default:
+            return new DogSkinIcon('https://i.imgur.com/V70781h.png')
+        // Box Skins
+        case permaVariables.dogSkinShibaFarm:
+            return new DogSkinIcon(getBuildingIcon(variables.product1Level).icon)
+        case permaVariables.dogSkinLabLab:
+            return new DogSkinIcon(getBuildingIcon(variables.product2Level).icon)
+        case permaVariables.dogSkinWizPug:
+            return new DogSkinIcon(getBuildingIcon(variables.product3Level).icon)
+        case permaVariables.dogSkinKing:
+            return new DogSkinIcon(getBuildingIcon(variables.upgradeShop).icon)
+        case permaVariables.dogSkinDragon:
+            return new DogSkinIcon(getBuildingIcon(variables.product4Level).icon)
+        // Archivements Skins
+        case permaVariables.dogSkinBoxer:
+            return new DogSkinIcon('https://i.imgur.com/cEKJzRo.png')
+        case permaVariables.dogSkinShiba:
+            return new DogSkinIcon('https://i.imgur.com/JyOe1wK.png')
+        case permaVariables.dogSkinPug:
+            return new DogSkinIcon('https://i.imgur.com/18fj9KF.png?1')  
+        case permaVariables.dogSkinYorkshireTerrier:
+            return new DogSkinIcon('https://i.imgur.com/Imuzu4p.png')
+        case permaVariables.dogSkinPomerian:
+            return new DogSkinIcon('https://i.imgur.com/pAx8fi5.png')    
     }
 }

@@ -4,6 +4,7 @@ import '../products/product.css'
 import './doggie.css'
 
 import {selecters, actions} from '../../reducers/GameVariables'
+import {actions as uiActions} from '../../reducers/uiUtils'
 import ids from '../../game/VariableId'
 
 import GameManager from '../../game/GameManager'
@@ -15,9 +16,11 @@ import { Currency } from '../../game/products/Product'
 import DoggiePicture from './DoggiePicture'
 import { events } from '../../game/products/Park'
 import DoggieName from './DoggieName'
+import permaVariables from '../../game/PermaVariablesId'
 
 interface IRecipeProps {
     dispatch: Function;
+    selectedDogPicture: string
 }
 
 interface IState {
@@ -71,20 +74,40 @@ class Doggies extends Component<IRecipeProps,IState> {
         }
     }
 
+    showArchivements = () => () => {
+        this.props.dispatch(uiActions.showArchivements(true))
+    }
+
+    showDogSkins = () => () => {
+        this.props.dispatch(uiActions.showDogSkins(true))
+    }
+
     render(){
+        const {selectedDogPicture} = this.props
         return (
             <div className="doggie-background boxed">
-                <DoggiePicture ref={this.dogPicture}/>
+                <DoggiePicture selectedDogBreed={selectedDogPicture} ref={this.dogPicture}/>
                 <div className="doggie-plus">
                     <ProductPlusDog ref={this.plusDog}/>
                 </div>
                 <div className="doggie-click" onClick={(e:any)=>this.onClickedDog(e)}/>
                 <DoggieName/>
+                <div className="doggie-options">
+                    <div className="doogie-options-option" onClick={this.showArchivements()}>
+                        <div className="doogie-options-option-icon"></div>
+                    </div>
+                    <div className="doogie-options-option" onClick={this.showDogSkins()}>
+                        <div className="doogie-options-option-icon doggie-skins-icon"></div>
+                    </div>
+                </div>
+                
         </div>
         )
     }
 }
 
-const mapStateToProps = (state:any) => ({})
+const mapStateToProps = (state:any) => ({
+    selectedDogPicture: selecters.getVariable(state, permaVariables.selectedDogBreed)?.getValue()
+})
 
 export default connect(mapStateToProps)(Doggies);

@@ -1,5 +1,5 @@
 import ids from '../game/VariableId'
-import variables from '../game/VariableId'
+import permaIds from '../game/PermaVariablesId'
 
 export interface Text {
     products: {
@@ -74,7 +74,23 @@ export interface Text {
         upgrades: {
             [key: string]: RelicText
         }
-    }
+    },
+    archivements: {
+        archivementBaseTitle: string,
+        archivemntTitle: string,
+        archivements: {
+            [key: string]: RelicText
+        }
+    },
+    dogSkins: {
+        breeds: string,
+        origin: string,
+        dogSkins: string,
+        choose: string,
+        skins: {
+            [key: string]: DogSkinsTexts
+        },
+    },
     currencies: {
         love: string
         treats: string,
@@ -86,6 +102,14 @@ export interface Text {
 export interface RelicText {
     title: string
     description: string
+}
+
+export interface DogSkinsTexts {
+    breed: string,
+    description: string,
+    temperament: string,
+    maxSizeMts: number,
+    origin: string
 }
 
 export const english:Text = {
@@ -150,7 +174,7 @@ export const english:Text = {
             },
             relicTier0B: {
                 title:  "Ball of Rubs",
-                description: "Increases Belly Rub Day Love gained by 50%"
+                description: "Increases Belly Rub Day Love gained by 100%"
             },
             relicTier0C: {
                 title:  "Ball of Science",
@@ -184,7 +208,7 @@ export const english:Text = {
             },
             relicTier1D: {
                 title: "Hand Blessing",
-                description: "Increases Divine Petting hands amount by 50%"
+                description: "Increases Divine Petting hands amount by 25%"
             },
             relicTier1E: {
                 title:  "Bone of Farming",
@@ -225,6 +249,122 @@ export const english:Text = {
             },
         }
     },
+    archivements: {
+        archivementBaseTitle: "Archivement Unlocked",
+        archivemntTitle: "Archivements",
+        archivements: {
+            [ids.archivementClicks]: {
+                title: "Hand of Love",
+                description: "Pet your good boy 50 times."
+            },
+            [ids.archivementProduct1LevelMilestone]: {
+                title: "Farm of Love",
+                description: "Reach level 15 in the Farm."
+            },
+            [ids.archivementProduct2LevelMilestone]: {
+                title: "Lab of Love",
+                description: "Reach level 15 in the Lab."
+            },
+            [ids.archivementProduct3LevelMilestone]: {
+                title: "Wizard of Love & Time",
+                description: "Unlock the powerful Wizpug."
+            },
+            [ids.archivementProduct4LevelMilestone]: {
+                title: "Park of Love (& Dragons)",
+                description: "Reach level 15 in the Park."
+            },
+            [ids.archivementUpgradeShopLevelMilestone]: {
+                title: "Kingdom of Love",
+                description: "Reach level 15 with King Baby."
+            },
+        }
+    },
+    dogSkins: {
+        breeds: 'Breeds',
+        origin: 'Origin',
+        dogSkins: "Doggie Skins",
+        choose: "Choose",
+        skins: {
+            initial: {
+                breed: 'Golden Retriever (Puppy)',
+                description: 'The eyes are round and dark, which is in contrast to the triangular or slanted composition of their American counterparts. British Golden Retrievers can have a coat colour of any shade of gold or cream.',
+                temperament: 'They are described as "kindly, friendly and confident". Golden Retrievers make good family pets, particularly as they are patient with children. They are not "one-man dogs" and are generally equally amiable with both strangers and those familiar to them.',
+                maxSizeMts: 0.61,
+                origin: 'United Kingdom (Scotland)'
+            },
+            [permaIds.dogSkinBoxer]: {
+                breed: 'Boxer',
+                description: 'The Boxer is a short-haired breed, with a smooth coat that lies tight to the body. The recognized colors are fawn and brindle, frequently with a white underbelly and white on the feet.',
+                temperament: 'Boxers are a bright, energetic and playful breed and tend to be very good with children. They are patient and spirited with children but also protective, making them a popular choice for families.',
+                maxSizeMts: 0.64,
+                origin: 'Germany'
+            },
+            [permaIds.dogSkinShiba]: {
+                breed: 'Shiba Inu',
+                description: 'The Shiba is double coated, with the outer coat being stiff and straight and the undercoat soft and thick. Fur is short and even on the fox-like face, ears, and legs. The purpose of the guard hairs is to protect their underlying skin and to repel rain or snow.',
+                temperament: 'A relatively fastidious breed and feels the need to maintain itself in a clean state. Because of their fastidious and proud nature, Shiba puppies are easy to housebreak and in many cases will housebreak themselves.',
+                maxSizeMts: 0.43,
+                origin: 'Japan'
+            },
+            [permaIds.dogSkinPug]: {
+                breed: 'Pug',
+                description: 'Pugs have two distinct shapes for their ears, "rose" and "button". "Rose" ears are smaller than the standard style of "button" ears, and are folded with the front edge against the side of the head. Pugs legs are strong, straight, of moderate length.',
+                temperament: 'Pugs are strong willed but rarely aggressive, and are suitable for families with children. The majority of the breed is very fond of children and sturdy enough to properly play with them. Depending on their owners mood, they can be quiet and docile but also vivacious and teasing.',
+                maxSizeMts: 0.30,
+                origin: 'China'
+            },
+            [permaIds.dogSkinYorkshireTerrier]: {
+                breed: 'Yorkshire Terrier',
+                description: 'The Yorkshire Terrier is the smallest dog breed of terrier type, and of any dog breed. The typical fine, straight, and silky Yorkshire Terrier coat has also been listed by many popular dog information websites as being hypoallergenic. In comparison with many other breeds',
+                temperament: 'Yorkshire Terriers are very playful and energetic dogs. Many people who have a Yorkie as a pet have two, because they often have separation anxiety when left alone and "they don’t enjoy being alone."',
+                maxSizeMts: 0.30,
+                origin: 'United Kingdom (England)'
+            },
+            [permaIds.dogSkinPomerian]: {
+                breed: 'Pomerian',
+                description: 'Classed as a toy dog breed because of its small size, the Pomeranian is descended from larger Spitz-type dogs, specifically the German Spitz.',
+                temperament: 'Pomeranians are typically friendly, lively and playful. They can be aggressive with other dogs and humans to try to prove themselves.',
+                maxSizeMts: 0.30,
+                origin: 'Germany, Poland'
+            },
+            //Buildings
+            [permaIds.dogSkinShibaFarm]: {
+                breed: 'Shiba Inu (Farmer)',
+                description: 'Back in its days, this shiba was in charge of taking care of a japanese farm.',
+                temperament: 'It used its temperament to guard its farm. Its favorite part of the day was eating with his master near the fireplace.',
+                maxSizeMts: 0.43,
+                origin: 'Japan'
+            },
+            [permaIds.dogSkinLabLab]: {
+                breed: 'Labrador (Scientist)',
+                description: 'Believe or not, this pupper is the head of its own scientific lab. In it, the pupper and its team make very sciency stuff.',
+                temperament: 'Due to its hyper active nature, this pupper always motivates everyone to make their best sciency science work, making lots of science (and treats).',
+                maxSizeMts: 0.31,
+                origin: 'Science Factory (of Science) (Scotland)'
+            },
+            [permaIds.dogSkinWizPug]: {
+                breed: 'Pug (Wizard)',
+                description: 'Its breathing problems led him to strength its mind instead of its muscles. Because of that it is able to control time .',
+                temperament: 'Its patience is only rivaled by its power, if its master shows patience to him, amaizing powers await them.',
+                maxSizeMts: 0.30,
+                origin: 'China'
+            },
+            [permaIds.dogSkinKing]: {
+                breed: 'Yorkshire Terrier (King)',
+                description: 'For what seems like centuries, this dogs family has rule its kingdom, their servants always provide them with food and drink, and also tuck them into bed.',
+                temperament: 'The king favorite activies range between fetching forbidden artifacs and adventuring through its kingdom streets.',
+                maxSizeMts: 0.31,
+                origin: 'United Kingdom (England)'
+            },
+            [permaIds.dogSkinDragon]: {
+                breed: 'Pomerian (Dragon)',
+                description: 'This powerful dragon has rule the park all on its own, nothing can rival its all powerful roar.',
+                temperament: 'Although it doesnt really show it, this dragon really likes going on adventures with its owner and other pets.',
+                maxSizeMts: 0.30,
+                origin: 'Germany, Poland'
+            },
+        }
+    },
     currencies: {
         love: "Love",
         treats: "Treats",
@@ -248,4 +388,22 @@ export const getKingUpgradeText = (upgradeId: string):RelicText => {
     const upgrades = getText().kingUpgrades
     if (upgrades.upgrades[upgradeId]) return upgrades.upgrades[upgradeId]
     return upgrades.upgrades.upgradeProduct0A
+}
+
+export const getArchivementText = (archivement: string):RelicText => {
+    const {archivements} =  getText()
+    let archivementText = archivements.archivements[archivement]
+    if (archivementText){
+        return archivementText
+    }
+    return archivements.archivements[ids.archivementClicks]
+}
+
+export const getDogSkinText = (dogSkinId: string):DogSkinsTexts => {
+    const {dogSkins} =  getText()
+    let skinText = dogSkins.skins[dogSkinId]
+    if (skinText){
+        return skinText
+    }
+    return dogSkins.skins.initial
 }

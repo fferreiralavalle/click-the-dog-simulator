@@ -283,7 +283,7 @@ class Product1 extends Component<IRecipeProps, IState> {
             {title}
             <div className="highlight-field">
               <div className="highlight-attribute">Pet Mult</div>
-              <div className="highlight-value">{petMultiplier}</div>
+              <div className="highlight-value">{toFormat(petMultiplier)}</div>
             </div>
             <div className="highlight-field">
               <div className="highlight-attribute">Duration</div>

@@ -28,7 +28,7 @@ export const events:EventTypes = {
     pettingTraining: {
         id: 'pettingTraining',
         progressNeeded: 480,
-        baseReward: 4,
+        baseReward: 5,
         unlockLevel: 20
     },
     donationCampaign: {
@@ -145,6 +145,9 @@ export class PetAppreciationCenter implements Product {
                     }
                     GameManager.getInstance().setVariable(pts, ids.product1EventPettingTrainingDurations)
                     GameManager.getInstance().getProductManager().updateCurrenciesPerSecond()
+                    setTimeout(()=>{
+                        GameManager.getInstance().getProductManager().updateCurrenciesPerSecond()
+                    }, reward.pettingTrainingReward.duration+100)
                     break
                 default:
                     break
@@ -174,10 +177,10 @@ export class PetAppreciationCenter implements Product {
             pt.duration = pt.duration - timePassed
             return pt.duration > 0
         })
+        GameManager.getInstance().setVariable(newPtDurations, ids.product1EventPettingTrainingDurations)
         if (newPtDurations.length != ptDurations.length){
             GameManager.getInstance().getProductManager().updateCurrenciesPerSecond()
         }
-        GameManager.getInstance().setVariable(newPtDurations, ids.product1EventPettingTrainingDurations)
     }
     /** Gets the rewards the event gives once completed */    
     getEventReward(eventId:string,level?:number):RewardResult{
@@ -323,7 +326,7 @@ export class PetAppreciationCenter implements Product {
 
     getPettingTrainingData(currentLevel?: number): PettingTrainingData{
         const level = currentLevel ? currentLevel : this.getLevel()
-        const petMultiplier = events.pettingTraining.baseReward*(1+0.25*level)
+        const petMultiplier = events.pettingTraining.baseReward*(1+0.1*level)
         const duration = 4
         return {
             petMultiplier,

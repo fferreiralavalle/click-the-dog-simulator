@@ -120,7 +120,7 @@ export class Park implements Product {
     }
     getCurrencyPerRelic(level?:number):Currency{
         const currentLevel:number = level ? level : GameManager.getInstance().getVariable(this.variableId).getValue()
-        const base:Decimal = new Decimal(1)
+        const base:Decimal = new Decimal(4)
         // King Upgrade Bonus
         const king = GameManager.getInstance().productManager.getProduct(ids.upgradeShop) as King
         const kingBonus = Number(king.getUpgradeBonus(ids.upgradeProduct4A))
@@ -402,7 +402,7 @@ export class Park implements Product {
                 unlockLevel: events.pupsloration.unlockLevel,
                 relics: [
                 {id: ids.relicTier0A, base: 5, icon: 'https://i.imgur.com/DDm6ODQ.png'},
-                {id: ids.relicTier0B, base: 1.5, icon: 'https://i.imgur.com/0ZjGB7A.png'},
+                {id: ids.relicTier0B, base: 2, icon: 'https://i.imgur.com/0ZjGB7A.png'},
                 {id: ids.relicTier0C, base: 1.5, icon: 'https://i.imgur.com/qsbjSn1.png'},
                 {id: ids.relicTier0D, base: 1.25, icon: 'https://i.imgur.com/DDm6ODQ.png'},
                 {id: ids.relicTier0E, base: 1.5, icon: 'https://i.imgur.com/0ZjGB7A.png'},
@@ -417,8 +417,8 @@ export class Park implements Product {
                     {id: ids.relicTier1B, base: 0.9, icon: 'https://i.imgur.com/et49ttP.png'},
                     //doubles treats gained from alb
                     {id: ids.relicTier1C, base: 2, icon: 'https://i.imgur.com/d3CJRvY.png'},
-                    //Increases Hands amount by 50%
-                    {id: ids.relicTier1D, base: 1.5, icon: 'https://i.imgur.com/hfmuVYh.png'},
+                    //Increases Hands amount by 25%
+                    {id: ids.relicTier1D, base: 1.25, icon: 'https://i.imgur.com/hfmuVYh.png'},
                     //Doubles passive Love for Farm
                     {id: ids.relicTier1E, base: 2, icon: 'https://i.imgur.com/et49ttP.png'},
                     //Increases lab points by 50%

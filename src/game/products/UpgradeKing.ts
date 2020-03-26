@@ -48,9 +48,8 @@ export class King implements Product {
 
     getCurrencyMultiplier(level?:number){
         const currentLevel:number = Number(level ? level : this.getLevel())
-        const base = 0.1
-        const increasePerLevel = 0.05
-        return base + increasePerLevel * currentLevel
+        const base = 0.5
+        return base * currentLevel
     }
 
     onTimePassed(timePassed: number): Currency {

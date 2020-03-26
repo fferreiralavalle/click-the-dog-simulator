@@ -4,6 +4,7 @@ import {actions as mailActions} from '../reducers/Mails'
 import { TimeManager } from "./TimeManager";
 import ProductManager from './ProductManager';
 import variableIds from './VariableId'
+import permaIds from './PermaVariablesId'
 import {Variable} from './Variables'
 import { Currency } from './products/Product';
 import { PetPetting } from './products/PetPetting';
@@ -13,28 +14,37 @@ import NotificationManager from './NotificationManager';
 import { toFormat, getBuildingIcon } from '../utils/uiUtil';
 import Decimal from 'break_infinity.js';
 import { Park } from './products/Park';
+import ArchivementManager from './ArchivementManager';
+import DogSkinsManager from './DogSkinsManager';
 
 const devMegaPetMult = 1
 const saveEvery = 0.5
 const saveVarName = "variables"
+const saveVarPermaName = "variablesPerma"
 //Game Manager
 class GameManager  {
     timeManger: TimeManager
     productManager: ProductManager
     notificationManager: NotificationManager
+    archivementManager: ArchivementManager
+    dogSkinManager: DogSkinsManager
     variables: VariableStructure
+    permaVariables: VariableStructure
 
     constructor(){
         this.timeManger = new TimeManager()
         this.productManager = new ProductManager(this.timeManger)
         this.notificationManager = new NotificationManager()
+        this.archivementManager = new ArchivementManager(this.timeManger)
+        this.dogSkinManager = new DogSkinsManager(this.timeManger)
         this.variables = initializeVariables()
+        this.permaVariables = initializePermaVariables()
         this.timeManger.susbcribe({
             id: 'GMTimePassed',
             onTimePass: (timePassed:number)=> this.increaseTimePassed(timePassed)
         })
         setInterval(()=>{
-            saveGame(this.variables)
+            saveGame(this.variables, this.permaVariables)
         }, saveEvery * 60 * 1000)
     }
 
@@ -125,9 +135,21 @@ class GameManager  {
         }
         this.variables = newVariables
     }
+
+    setPermaVariable (value: any, variableId: string): void {
+        const newVariables: VariableStructure = {
+            ...this.permaVariables,
+            [variableId]:  new Variable({id:variableId, value:value})
+        }
+        this.permaVariables = newVariables
+    }
     
     getVariable(variableId: string): Variable {
         return this.variables[variableId]
+    }
+
+    getPermaVariable(variableId: string): Variable {
+        return this.permaVariables[variableId]
     }
 
     getTimeManager(): TimeManager {
@@ -140,6 +162,14 @@ class GameManager  {
 
     getNotificationManager(): NotificationManager {
         return this.notificationManager;
+    }
+
+    getArchivementManager(): ArchivementManager {
+        return this.archivementManager;
+    }
+
+    getDogSkinManager(): DogSkinsManager {
+        return this.dogSkinManager;
     }
     
     onClickedDog(): Currency{
@@ -155,11 +185,12 @@ class GameManager  {
             treats
         }
         this.addCurrency(currencyEarned)
+        this.addToVariable(1, variableIds.clicks)
         return currencyEarned
     }
 
     saveGame(){
-        saveGame(this.variables)
+        saveGame(this.variables, this.permaVariables)
     }
 
     resetGame(){
@@ -239,6 +270,16 @@ const initializeVariables = () => {
     return variablesObject;
 }
 
+const initializePermaVariables = () => {
+    let variablesObject:VariableStructure = {}
+    Object.keys(permaIds).map((id:string) => {
+        variablesObject[id] = new Variable({id, value:null})
+    })
+    variablesObject = loadPermaSaveData(variablesObject)
+    console.log(variablesObject)
+    return variablesObject;
+}
+
 const loadSavedData = (variablesObject:VariableStructure):VariableStructure => {
     const localSave = localStorage.getItem(saveVarName)
     let save:VariableStructure;
@@ -256,11 +297,27 @@ const loadSavedData = (variablesObject:VariableStructure):VariableStructure => {
     return variablesObject
 }
 
-const saveGame = (variables: VariableStructure)=> {
+const loadPermaSaveData = (permaVariablesObject: VariableStructure): VariableStructure => {
+    const localPermaSave = localStorage.getItem(saveVarPermaName)
+    let save:VariableStructure = {};
+    if (localPermaSave){
+        save = JSON.parse(localPermaSave) as VariableStructure
+    }
+    if (save){
+        Object.keys(save).map((id:string) => {
+            permaVariablesObject[id] = new Variable(save[id].properties)
+        })
+        console.log("perma data loaded", permaVariablesObject)
+    }
+    return permaVariablesObject
+}
+
+const saveGame = (variables: VariableStructure, permaVariables: VariableStructure)=> {
     variables.lastSaveDate = new Variable({id:variableIds.lastSaveDate, value:new Date()})
     const cook = Cookies.set(saveVarName, JSON.stringify(variables), { expires: (10 * 365) })
     localStorage.setItem(saveVarName, JSON.stringify(variables))
-    console.log('saved gamed', variables)
+    localStorage.setItem(saveVarPermaName, JSON.stringify(permaVariables))
+    console.log('saved gamed', variables, permaVariables)
     console.log('Cookie length', cook?.length)
 }
 

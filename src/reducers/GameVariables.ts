@@ -14,7 +14,10 @@ const variables = (state=INITIAL_STATE, action:any)=>{
         case types.UPDATE_VARIABLES:
             return {
                 ...state,
-                variables: GameManager.getInstance().variables
+                variables: {
+                    ...GameManager.getInstance().variables,
+                    ...GameManager.getInstance().permaVariables
+                },
             }
         default:
             return state          

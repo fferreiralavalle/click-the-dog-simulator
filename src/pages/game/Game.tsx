@@ -19,6 +19,8 @@ import Mail from '../../components/mail/Mail'
 import TimeWizard from '../../components/products/timeWizard/TimeWizard'
 import Park from '../../components/products/park/Park'
 import King from '../../components/products/King/King'
+import Dogchivements from '../../components/dogchivements/Dogchivements'
+import DogSkins from '../../components/dogSkins/DogSkins'
 
 interface IRecipeProps {
     dispatch: Function
@@ -73,6 +75,8 @@ class Game extends Component<IRecipeProps> {
                 {dogWizard?.getValue()>0 && <Box key={3} w={1}><TimeWizard/></Box>}
                 {this.renderProducts()}
             </div>
+            <Dogchivements />
+            <DogSkins/>
         </div>
         )
     }
