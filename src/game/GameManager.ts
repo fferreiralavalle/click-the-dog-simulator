@@ -217,6 +217,9 @@ class GameManager  {
             treats:new Decimal(0),
             patiencePoints: patiencePointsGained
         }
+        //park timers while AFK
+        const park = this.getProductManager().getProduct(variableIds.product4Level) as Park
+        park.passAfkTimeAdventure(diffInSeconds)
         return currencyGained
     }
 

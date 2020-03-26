@@ -35,7 +35,7 @@ export const events:EventTypes = {
         price: {currency:new Decimal(0),treats:new Decimal(100)}
     },
     bigBoysploration: {
-        id: 'bigbBoysploration',
+        id: 'bigBoysploration',
         secondsNeeded: 3600,
         unlockLevel: 20,
         price: {currency:new Decimal(0),treats:new Decimal(1000)}
@@ -153,6 +153,18 @@ export class Park implements Product {
         this.onCurrencyTime(add)
         return add
     }
+
+    passAfkTimeAdventure(timePassed: number){
+        if (this.isEventUnlocked(events.pupsloration)){
+            GameManager.getInstance().addToVariable(timePassed, ids.product4Tier0Progress)
+        }
+        if (this.isEventUnlocked(events.dogsploration)){
+            GameManager.getInstance().addToVariable(timePassed, ids.product4Tier1Progress)
+        }
+        if (this.isEventUnlocked(events.bigBoysploration)){
+            GameManager.getInstance().addToVariable(timePassed, ids.product4Tier2Progress)
+        }
+    }
     
     isEventReady(eventId: string): boolean{
         const event = events[eventId]
@@ -213,7 +225,7 @@ export class Park implements Product {
                     return reward
                 }
                 if (randomRewardChange<0.5){
-                    reward.currencyReward.patiencePoints = new Decimal(12)
+                    reward.currencyReward.patiencePoints = new Decimal(16)
                     GameManager.getInstance().unlockTimeWizard()
                     GameManager.getInstance().addToVariable(1,ids.relicTier2Misses)
                 }else{
@@ -321,7 +333,7 @@ export class Park implements Product {
         const basePrice:Decimal = new Decimal(23);
         const initialPrice:Decimal = new Decimal(977);
         const currentLevel:Decimal = new Decimal(Number(GameManager.getInstance().getVariable(this.variableId).getValue()))
-        const finalPrice:Decimal = initialPrice.add(basePrice.mul(currentLevel).mul(5)).add(basePrice.pow(currentLevel.div(3).add(1)))
+        const finalPrice:Decimal = initialPrice.add(basePrice.mul(currentLevel).mul(150)).add(basePrice.pow(currentLevel.div(4).add(1)))
         return {
             currency: finalPrice,
             treats: new Decimal(0)
