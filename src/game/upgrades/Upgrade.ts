@@ -32,8 +32,8 @@ export class UpgradeKingStandar implements UpgradeKing {
     
     isUnlocked(upgradeLevel: number, kingLevel: number): boolean {
         const relatedIdLevel = this.minLevel + GameManager.getInstance().getVariable(this.relatedId).getValue()
-        const requiredLevel = (upgradeLevel + 1) * 10
-        const isKingHighEnough = upgradeLevel * 10 <= kingLevel
+        const requiredLevel = (upgradeLevel + 1) * 5
+        const isKingHighEnough = upgradeLevel * 5 <= kingLevel
         return relatedIdLevel>=requiredLevel && isKingHighEnough
     }
 
@@ -45,7 +45,7 @@ export class UpgradeKingStandar implements UpgradeKing {
     }
 
     getCost(upgradeLevel: number): Currency {
-        const priceMult = Math.pow(100, upgradeLevel)
+        const priceMult = Math.pow(50, upgradeLevel)
         const finalPrice = multiplyCurrencyBy(this.basePrice, priceMult)
         return finalPrice
     }

@@ -181,7 +181,7 @@ export class King implements Product {
 
     getMaxUpgradeLevel(level?:number): number{
         const lvl = level ? level : this.getLevel()
-        const upgradeUpEvery = 10
+        const upgradeUpEvery = 5
         return Math.floor(lvl/upgradeUpEvery + 1)
     }
 

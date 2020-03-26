@@ -150,7 +150,7 @@ export const english:Text = {
         },
         king: {
             title: "King Baby",
-            description: "Hello human, have a look. Buildings get new upgrades every 10 levels.",
+            description: "Hello human, have a look. Buildings get new upgrades every 5 levels.",
             lovePerBuilding: "Per All Lvls",
             buy: "Buy",
             show: "Show Owned",

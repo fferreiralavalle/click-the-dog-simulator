@@ -211,13 +211,14 @@ class KingUI extends Component<IRecipeProps,IState> {
       const description = isUpgradeSelected ? upgradeText.description : this.productText.defaultDescription
       const upgradePrice = isUpgradeSelected ? king.getUpgradePrice(selectedUpgrade).currency : ''
       const price = toFormat(upgradePrice) 
+      const canBuy = selectedUpgrade!=='' ? king.canBuyUpgrade(selectedUpgrade) ? "" : "locked" : "locked"
       return (
         <div className="highlight king-shop">
             <div className="highlight-section upgrades-shop scroll-y">
                 {seeBought ? this.renderBoughtUpgrades(king,level) : this.renderAvailableUpgrades(king, level)}
             </div>
             <div className="highlight-section">
-                {isUpgradeSelected && !seeBought && <div className={"highlight-store-button "} onClick={this.buyUpgrade(selectedUpgrade, king)}>
+                {isUpgradeSelected && !seeBought && <div className={"highlight-store-button "+canBuy} onClick={this.buyUpgrade(selectedUpgrade, king)}>
                     <div className="highlight-store-name">
                         {this.productText.buy + " "+price}
                     </div>
