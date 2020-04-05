@@ -249,7 +249,7 @@ class Product1 extends Component<IRecipeProps, IState> {
             <div className="highlight-field">
               <div className="highlight-attribute">Love</div>
               <div className="highlight-value">
-                {product.getEventReward(eventId,level).currencyReward.currency.toString()}
+                {toFormat(product.getEventReward(eventId,level).currencyReward.currency)}
                 <div className="highlight-love-icon"/>
                 </div>
             </div>

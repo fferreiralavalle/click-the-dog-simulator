@@ -431,7 +431,7 @@ export class Park implements Product {
                 unlockLevel: events.pupsloration.unlockLevel,
                 relics: [
                 {id: ids.relicTier0A, base: 5, icon: 'https://i.imgur.com/DDm6ODQ.png'},
-                {id: ids.relicTier0B, base: 2, icon: 'https://i.imgur.com/0ZjGB7A.png'},
+                {id: ids.relicTier0B, base: 1, icon: 'https://i.imgur.com/0ZjGB7A.png'},
                 {id: ids.relicTier0C, base: 1.5, icon: 'https://i.imgur.com/qsbjSn1.png'},
                 {id: ids.relicTier0D, base: 1.25, icon: 'https://i.imgur.com/DDm6ODQ.png'},
                 {id: ids.relicTier0E, base: 1.5, icon: 'https://i.imgur.com/0ZjGB7A.png'},

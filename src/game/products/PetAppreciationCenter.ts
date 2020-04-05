@@ -206,10 +206,10 @@ export class PetAppreciationCenter implements Product {
             default:
                 //Relics
                 const relic0BBonus = park.getRelicBonus(ids.relicTier0B)
-                relicBonus = (relic0BBonus!==0 ? relic0BBonus : 1)
+                const relicBonusCurrency = this.getCurrencyPerSecond().currency.mul(relic0BBonus)
                 return {
                     currencyReward: {
-                        currency: new Decimal(this.getEvent(eventId).baseReward * (1 + 0.5 * finalLevel) * relicBonus),
+                        currency: new Decimal(this.getEvent(eventId).baseReward).add(relicBonusCurrency).mul(1 + 0.5 * finalLevel),
                         treats: new Decimal(0)
                     }
             }

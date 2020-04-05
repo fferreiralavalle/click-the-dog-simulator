@@ -222,7 +222,7 @@ export const english:Text = {
             },
             relicTier0B: {
                 title:  "Ball of Rubs",
-                description: "Increases Belly Rub Day Love gained by 100%"
+                description: "Adds the Farm's passive love production to Belly Rub Day's base Love gained."
             },
             relicTier0C: {
                 title:  "Ball of Science",
