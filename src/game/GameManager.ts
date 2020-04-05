@@ -11,12 +11,13 @@ import { PetPetting } from './products/PetPetting';
 
 import Cookies from 'js-cookie' 
 import NotificationManager from './NotificationManager';
-import { toFormat, getBuildingIcon } from '../utils/uiUtil';
+import { toFormat, getBuildingIcon, getDogSkinIcon } from '../utils/uiUtil';
 import Decimal from 'break_infinity.js';
 import { Park } from './products/Park';
 import ArchivementManager from './ArchivementManager';
 import DogSkinsManager from './DogSkinsManager';
 import { Tree } from './products/Tree';
+import permaVariables from './PermaVariablesId';
 
 const devMegaPetMult = 1
 const saveEvery = 0.5
@@ -68,14 +69,28 @@ class GameManager  {
         currencyOffline.patiencePoints = currencyOffline.patiencePoints?.min(72).mul(bonus)
         this.addCurrency(currencyOffline)
         if (this.getVariable(ids.lastSaveDate).getValue()!=null){
-            this.getNotificationManager().addNotification({
-                id:'welcomed-back',
-                background: getBuildingIcon(ids.product3Level).background,
-                description:'Your dogs have been waiting for you. They gained '+toFormat(currencyOffline.patiencePoints? currencyOffline.patiencePoints : 0)+' patience points for waiting like good boys. Spend them to speed up the game!',
-                image: 'https://i.imgur.com/DIPnpA9.png',
-                seen: false,
-                title: 'Welcomed Back!1!ONE!'
-              })
+            const timesReset = Number(this.getPermaVariable(permaIds.timesReset)?.getValue())
+            debugger
+            if (timesReset > 0){
+                const selectedDog = this.getPermaVariable(permaIds.selectedDogBreed)?.getValue()
+                this.getNotificationManager().addNotification({
+                    id:'welcomed-back',
+                    background: getBuildingIcon(ids.product3Level).background,
+                    description:'IT IS!1!! They told me there was a human who gave puptastic PETS! HELLO HELLO!',
+                    image: getDogSkinIcon(selectedDog).icon,
+                    seen: false,
+                    title: 'Hello? Is that a human?'
+                  })
+            }else {
+                this.getNotificationManager().addNotification({
+                    id:'welcomed-back',
+                    background: getBuildingIcon(ids.product3Level).background,
+                    description:'Your dogs have been waiting for you. They gained '+toFormat(currencyOffline.patiencePoints? currencyOffline.patiencePoints : 0)+' patience points for waiting like good boys. Spend them to speed up the game!',
+                    image: 'https://i.imgur.com/DIPnpA9.png',
+                    seen: false,
+                    title: 'Welcomed Back!1!ONE!'
+                  })
+            }
             this.unlockTimeWizard()
         }else{
             this.getNotificationManager().addNotification({
@@ -249,6 +264,25 @@ class GameManager  {
                 title: 'The Wizpug is here!'
                 })
         }
+    }
+
+    letGo(){
+        const patiencePoints = this.getVariable(ids.patiencePoints).getValue()
+        const goodBoyPointsEarned = (this.productManager.getProduct(ids.treeOfGoodBoys) as Tree).getGoodBoyPointsThisGame()
+        const previosGbp = new Decimal(Number(this.getPermaVariable(permaVariables.goodBoypoints).getValue()))
+        const newgpb = previosGbp.add(goodBoyPointsEarned)
+        const timesReset = 1 + Number(this.getPermaVariable(permaIds.timesReset).getValue())
+        debugger
+        resetGameSave()
+        this.variables = initializeVariables()
+        this.permaVariables = initializePermaVariables()
+        this.setPermaVariable(newgpb ,permaVariables.goodBoypoints)
+        this.setPermaVariable(timesReset ,permaVariables.timesReset)
+        this.setVariable(patiencePoints, ids.patiencePoints)
+        this.setVariable(1, ids.treeOfGoodBoys)
+        saveGame(this.variables, this.permaVariables)
+        this.initializeUI()
+        this.getProductManager().updateCurrenciesPerSecond()
     }
 }
 

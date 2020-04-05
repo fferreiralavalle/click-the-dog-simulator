@@ -9,7 +9,7 @@ import ids from '../../../game/VariableId'
 import variableIds from  '../../../game/VariableId'
 import { Variable } from '../../../game/Variables'
 import GameManager from '../../../game/GameManager'
-import { Park, RewardResult, events, RelicTier, Relic } from '../../../game/products/Park'
+import { Park, events } from '../../../game/products/Park'
 import LevelUpButton from '../LevelUpButton'
 import ProductPlus, {plusCurrency} from '../ProductPlus'
 import { Currency } from '../../../game/products/Product'
@@ -29,12 +29,11 @@ interface IRecipeProps {
 
 interface IState {
   isHover: boolean;
-  plusCurrencies: Array<plusCurrency>
-  rewardsList: Array<plusCurrency>
   hoverLevel: boolean
   displayedEvent: string
   viewRelics: boolean
   displayedBlessing: string
+  pickedBlessings: string[]
 }
 
 class TreeUi extends Component<IRecipeProps, IState> {
@@ -46,12 +45,11 @@ class TreeUi extends Component<IRecipeProps, IState> {
     super(props)
     this.state = {
       isHover: false,
-      plusCurrencies: [],
-      rewardsList: [],
       hoverLevel: false,
       displayedEvent: events.pupsloration.id,
       viewRelics: false,
-      displayedBlessing: ids.relicTier0A
+      displayedBlessing: ids.relicTier0A,
+      pickedBlessings: []
     }
     const product = GameManager.getInstance().getProductManager().getProduct(ids.treeOfGoodBoys) as Tree
     product.subscribeToCurrency({
@@ -62,7 +60,8 @@ class TreeUi extends Component<IRecipeProps, IState> {
   onCurrencyGain = (product: Tree) => {
     const myRef = this.refs.goodBoyPointsSign as GoodBoyPointsSignUI
     const points = product.getGoodBoyPointsThisGame()
-    myRef.setNewPoints(points)
+    if (myRef)
+      myRef.setNewPoints(points)
   }
 
   getBlessingData = (blessingId: string)=> {
@@ -83,9 +82,10 @@ class TreeUi extends Component<IRecipeProps, IState> {
 
   render(){
     const {level} = this.props;
-    const {plusCurrencies, isHover, viewRelics} = this.state
+    const {isHover, viewRelics} = this.state
     const product = GameManager.getInstance().getProductManager().getProduct(ids.treeOfGoodBoys) as Tree
     const points = product.getGoodBoyPointsThisGame()
+    const canPickBlessings = product.canPickBlessings()
     return (
       <div className="product tree boxed" onMouseEnter={this.onHover(true)} onMouseLeave={this.onHover(false)}>
         <div className="tree-building">
@@ -96,13 +96,12 @@ class TreeUi extends Component<IRecipeProps, IState> {
         <div className="tree-title">
           {this.productText.title}
         </div>
-        <ProductPlus plusCurrencies={plusCurrencies}/>
         <LevelUpButton productId={ids.treeOfGoodBoys} 
           onMouseEnter={this.onLevelHover(true)}
           onMouseLeave={this.onLevelHover(false)}/>
         <GoodBoyPointsSignUI ref="goodBoyPointsSign" points={points}/>
         {isHover &&
-          (viewRelics ? this.renderBlessigsView(product): this.renderHighlight(product))}
+          (viewRelics ? this.renderBlessigsView(product, canPickBlessings): this.renderHighlight(product))}
       </div>
     )
   }
@@ -146,7 +145,7 @@ class TreeUi extends Component<IRecipeProps, IState> {
           <div className="highlight-field title">
                 {this.productText.options}
             </div>
-          {this.renderEventOptions()}
+          {this.renderEventOptions(product)}
         </div>
         <div className="highlight-section">
           
@@ -161,21 +160,31 @@ class TreeUi extends Component<IRecipeProps, IState> {
     )
   }
 
-  renderEventOptions() {
-    const uiEvents:any = [
+  renderEventOptions(tree: Tree) {
+    const canletGo = tree.canLetGo()
+    const uiEvents = [
         (<div className={"highlight-field highlight-event-select"} onClick={this.toggleBlessingView(true)}>
             {this.productText.blessings}
-        </div>),
-        (<div className={"highlight-field highlight-event-select special-option"} onClick={()=>this.showLetGoScreen()}>
-            {this.productText.letGo}
         </div>)
     ]
+    if (canletGo){
+      uiEvents.push(
+        (<div className={"highlight-field highlight-event-select special-option"} onClick={()=>this.showLetGoScreen()}>
+          {this.productText.letGo}
+        </div>))
+    }
+    else {
+      uiEvents.push(
+        (<div className={"highlight-field highlight-event-select special-option"}>
+          {this.productText.notReady}
+        </div>))
+    }
     return uiEvents
   }
 
-  renderBlessigsView(tree: Tree){
+  renderBlessigsView(tree: Tree, buyMode: boolean){
     const blessings = tree.getBlessings()
-    const {displayedBlessing} = this.state
+    const {displayedBlessing, pickedBlessings} = this.state
     const {title, description} = getBlessingText(displayedBlessing)
     const price = tree.getBlessingPrice(displayedBlessing)
     const {icon} = getBlessingIcon(displayedBlessing)
@@ -185,12 +194,39 @@ class TreeUi extends Component<IRecipeProps, IState> {
     const tiers = blessings.map((tier, index)=> {
         return this.renderBlessingTier(tier, index)
     })
+    const points = tree.getUsableGoodBoyPointsPoints()
+    const usedPoints = this.getPickedBlessingsCost(tree)
+    const availablePoints = points.sub(usedPoints)
+    const isPicked = pickedBlessings.indexOf(displayedBlessing)>-1 ? " picked" : ""
+    const finishPickingText = availablePoints.gte(0) ? this.productText.finish : this.productText.notEnough
+    const buyButton = buyMode ? 
+      (<div className={"highlight-blessing-options"}>
+        <div className={"highlight-field blessing-view-field"}>
+          <span className="highlight-value">{"Have "}</span>
+          <span className="highlight-value"> {toFormat(availablePoints)}<div className="gbp-icon"/></span>
+        </div>
+        <div className={"highlight-store-button"} onClick={this.toogleBlessing(displayedBlessing)}>
+          <span className="highlight-value"> {toFormatPure(price)}<div className="gbp-icon"/></span>
+        </div>
+      </div>
+      ) : 
+      (<div className={"highlight-field blessing-view-field"}>
+        <span className="highlight-attribute title">{this.commonText.price}</span>
+        <span className="highlight-value">{price.toString()}<div className="gbp-icon"/></span>
+      </div>)
+    const clarification = buyMode ? 
+        (<div className={"highlight-store-button finish-picking"} onClick={()=>this.finishPickingBlessings(tree)}>
+          <span className="highlight-value">{finishPickingText}</span>
+        </div>) :
+        (<div className={"highlight-field italic"}>
+          {this.productText.blessingsRules}
+        </div>)
     return (
       <div className={"highlight relic-view"}>
         <div className="highlight-section scroll-y">
             {tiers}
         </div>
-        <div className="highlight-section ">
+        <div className={"highlight-section "+isPicked}>
           <div className={"highlight-field title"}>
             <div className="relic-icon" style={iconStyle}/>
             <span className="relic-title">{title}</span>
@@ -198,17 +234,22 @@ class TreeUi extends Component<IRecipeProps, IState> {
           <div className="highlight-field">
             <span className="relic-description">{description}</span>
           </div>
-          <div className={"highlight-field blessing-view-field"}>
-            <span className="highlight-attribute title">{this.commonText.price}</span>
-            <span className="highlight-value">{price.toString()}<div className="gbp-icon"/></span>
-          </div>
-          <div className={"highlight-field italic"}>
-            {this.productText.blessingsRules}
-          </div>
+          {buyButton}
+          {clarification}
         </div>
         <div className="highlight-closeButton" onClick={this.toggleBlessingView(false)}>X</div>
         </div>
     )
+  }
+
+  getPickedBlessingsCost = (tree: Tree):Decimal => {
+    const {pickedBlessings} = this.state
+    let cost = new Decimal(0)
+    pickedBlessings.forEach((blessing)=>{
+      const price = tree.getBlessingPrice(blessing)
+      cost = cost.add(price)
+    })
+    return cost;
   }
 
   renderBlessingTier(tier: BlessingTier, index:number){
@@ -226,12 +267,14 @@ class TreeUi extends Component<IRecipeProps, IState> {
   }
 
   renderBlessing(blessing: Blessing){
+    const {pickedBlessings} = this.state
     const {icon} = getBlessingIcon(blessing.id)
     const iconStyle = {
       backgroundImage: icon ? `url(${icon})` : ""
     }
+    const isPicked = pickedBlessings.indexOf(blessing.id)>-1 ? " picked" : ""
     return (
-      <div className={"highlight-field"} onClick={this.selectBlessingView(blessing.id)}>
+      <div className={"highlight-field"+isPicked} onClick={this.selectBlessingView(blessing.id)}>
         <div className="relic-icon" style={iconStyle}></div>
       </div>
     )
@@ -241,6 +284,26 @@ class TreeUi extends Component<IRecipeProps, IState> {
     this.setState({
         displayedEvent: eventId
     })
+  }
+
+  toogleBlessing = (blessingId: string) => ()=>{
+    const {pickedBlessings} = this.state
+    const index = pickedBlessings.indexOf(blessingId);
+    if (index > -1) {
+      pickedBlessings.splice(index, 1);
+    }
+    else {
+      pickedBlessings.push(blessingId)
+    }
+    this.setState({
+      pickedBlessings
+    })
+  }
+
+  finishPickingBlessings = (tree: Tree) => {
+    const {pickedBlessings} = this.state
+    const result = tree.pickBlessings(pickedBlessings)
+    console.log("Blessing picked successful", result)
   }
 
   selectBlessingView = (blessingId: string) => () =>{

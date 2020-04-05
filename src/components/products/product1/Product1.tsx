@@ -77,7 +77,8 @@ class Product1 extends Component<IRecipeProps, IState> {
       size: 1.5
     }
     const pluses = this.refs.farmPlus as ProductPlusDog
-    pluses.addCurrency(plusCurrency)
+    if (pluses)
+      pluses.addCurrency(plusCurrency)
   }
 
   onCurrencyGain = (currency: Currency) => {
@@ -92,7 +93,9 @@ class Product1 extends Component<IRecipeProps, IState> {
       size: 1
     }
     const pluses = this.refs.farmPlus as ProductPlusDog
-    pluses.addCurrency(plusCurrency)
+    if (pluses){
+      pluses.addCurrency(plusCurrency)
+    }
   }
 
   renderCurrentEvent = () => {
@@ -134,7 +137,7 @@ class Product1 extends Component<IRecipeProps, IState> {
   }
 
   render(){
-    const {isHover, plusCurrencies} = this.state
+    const {isHover} = this.state
     return (
       <div className="product product1 boxed" onMouseEnter={this.onHover(true)} onMouseLeave={this.onHover(false)}>
         {isHover ? this.renderHighlight() : this.renderContent()}

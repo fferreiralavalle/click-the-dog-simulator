@@ -205,7 +205,8 @@ export class PetAppreciationCenter implements Product {
                 }
             default:
                 //Relics
-                const relic0BBonus = park.getRelicBonus(ids.relicTier0B)
+                const isUnlocked = park.isRelicUnlocked(ids.relicTier0B)
+                const relic0BBonus = isUnlocked ? park.getRelicBonus(ids.relicTier0B) : 0
                 const relicBonusCurrency = this.getCurrencyPerSecond().currency.mul(relic0BBonus)
                 return {
                     currencyReward: {

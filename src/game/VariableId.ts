@@ -8,6 +8,7 @@ const variables = {
     clicks: 'clicks',
     lastSaveDate: 'lastSaveDate',
     dogName: 'dogName',
+    hasPickedBlessings: 'hasPickedBlessings',
     /* Products */
     product0Level: 'product0Level',
     product1Level: 'product1Level',

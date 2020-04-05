@@ -59,6 +59,7 @@ export interface Text {
             seeBlessings: string,
             blessings: string,
             letGo: string,
+            notReady: string
             tier: string,
             perSecond: string,
             theDesition: string,
@@ -66,7 +67,11 @@ export interface Text {
             letGoScreenText: string,
             letGoScreenClarification: string,
             imReady: string,
-            notYet: string
+            notYet: string,
+            pick: string,
+            remove: string
+            finish: string,
+            notEnough: string
         },
         common: {
             info: string,
@@ -200,11 +205,16 @@ export const english:Text = {
             tier: "Bleesings Level",
             perSecond: "Per Second",
             letGo: "Let Go",
+            notReady: "Can't let go yet",
             imReady: "I'm ready to let go",
             notYet: "Not yet",
             areYouSure: "Are you sure?",
             letGoScreenText: "You will meet your new Dogs with the following:",
-            letGoScreenClarification: "You will also keep the Breeds you unlocked."
+            letGoScreenClarification: "You will also keep the Breeds you unlocked.",
+            pick: "Pick",
+            remove: "Remove",
+            finish: "Finish Picking Blessings",
+            notEnough: "Not Enough Points :c"
         },
         common: {
             info: "Info",

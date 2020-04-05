@@ -53,7 +53,7 @@ export class King implements Product {
 
     getCurrencyMultiplier(level?:number){
         const currentLevel:number = Number(level ? level : this.getLevel())
-        const base = 1
+        const base = 0.5
         const upgradeBonus = this.getUpgradeBonus(ids.upgradeProduct5A)
         return base * currentLevel * upgradeBonus
     }

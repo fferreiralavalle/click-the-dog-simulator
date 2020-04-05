@@ -5,6 +5,7 @@ import Decimal from 'break_infinity.js';
 import { multiplyCurrencyBy } from '../../utils/mathUtils';
 import { getBuildingIcon } from '../../utils/uiUtil';
 import { Blessing, BlessingDefault0 } from '../blessings/Blessing';
+import permaVariables from '../PermaVariablesId';
 
 export class BlessingTier {
     requiredPoints: Decimal
@@ -70,7 +71,8 @@ export class Tree implements Product {
 
     canUnlock(): boolean{
         const myRelic = GameManager.getInstance().getVariable(ids.relicTier2SpecialBuildingA)?.getValue()
-        const condition = myRelic > 0
+        const timesReset = Number(GameManager.getInstance().getPermaVariable(permaVariables.timesReset)?.getValue())
+        const condition = myRelic > 0 || timesReset > 0
         return condition
     }
 
@@ -124,11 +126,16 @@ export class Tree implements Product {
         const lvl = level ? level : this.getLevel()
         const allLevels = new Decimal(this.getAllBuildingLevels())
         const goodBoyPointsPerLevel = this.getPointsPerAllLevel()
-        const timePassed = GameManager.getInstance().getVariable(ids.timePassed)?.getValue()
+        const timePassed = Number(GameManager.getInstance().getVariable(ids.timePassed)?.getValue())
         const goodBoyPointsPerSecond = this.getIncreasePerSecondPlayed()
         const mult = this.getGoodBoyPointsMultiplier(lvl)
         const goodBoyPointsThisGame = (new Decimal(mult)).mul(allLevels.mul(goodBoyPointsPerLevel).add(goodBoyPointsPerSecond.mul(timePassed)))
         return goodBoyPointsThisGame
+    }
+
+    getUsableGoodBoyPointsPoints(): Decimal {
+        const points = new Decimal(Number(GameManager.getInstance().getPermaVariable(permaVariables.goodBoypoints).getValue()))
+        return points;
     }
 
     getGoodBoyPointsMultiplier(level?:number){
@@ -194,6 +201,35 @@ export class Tree implements Product {
 
     getPointsPerAllLevel(){
         return new Decimal(5)
+    }
+
+    canPickBlessings(){
+        const timesReset = Number(GameManager.getInstance().getPermaVariable(permaVariables.timesReset)?.getValue())
+        const hasPickedBlessings = Number(GameManager.getInstance().getVariable(ids.hasPickedBlessings)?.getValue())
+        return timesReset > 0 && hasPickedBlessings == 0
+    }
+
+    pickBlessings(blessingsIds: string[]): boolean{
+        const points = this.getUsableGoodBoyPointsPoints()
+        let prices = new Decimal(0)
+        const blessings = blessingsIds.map((id) => {
+            prices = prices.add(this.getBlessingPrice(id))
+            return this.getBlessing(id)
+        })
+        if (prices.lte(points)){
+            blessings.forEach((e)=> {
+                GameManager.getInstance().setVariable(1, e.id)
+            })
+            GameManager.getInstance().setVariable(1, ids.hasPickedBlessings)
+            return true
+        }
+        return false
+    }
+
+    canLetGo(): boolean {
+        const myRelic = GameManager.getInstance().getVariable(ids.relicTier2SpecialBuildingA)?.getValue()
+        const condition = myRelic > 0
+        return condition
     }
 
     initializeBlessings(): BlessingTier[]{

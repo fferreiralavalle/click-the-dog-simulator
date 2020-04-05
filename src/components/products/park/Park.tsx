@@ -101,7 +101,7 @@ class ParkUI extends Component<IRecipeProps, IState> {
       className:'love-icon',
       size: 1
     }
-    if (currency.currency.gt(0)){
+    if (currency.currency.gt(0) && currentPlus){
       currentPlus.addCurrency(plusCurrency)
     }
     const timer0 = this.refs.progress0 as ProductProgressBar

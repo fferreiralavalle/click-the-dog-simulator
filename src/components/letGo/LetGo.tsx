@@ -66,7 +66,7 @@ class DogSkinsUI extends Component<IRecipeProps,IState> {
                 </div>
                 <div className="let-go-options">
                     <div className="let-go-option" onClick={this.close()}>{this.text.notYet}</div>
-                    <div className="let-go-option let-go-button">{this.text.imReady}</div>
+                    <div className="let-go-option let-go-button" onClick={this.letGo(tree)}>{this.text.imReady}</div>
                 </div>
             </div>
          </div>
@@ -76,6 +76,13 @@ class DogSkinsUI extends Component<IRecipeProps,IState> {
 
   close = ()=> ()=>{
       this.props.dispatch(actions.setLetGoScreenLevel(0))
+  }
+
+  letGo = (tree: Tree)=> ()=> {
+    this.close()()
+    if (tree.canLetGo()){
+      GameManager.getInstance().letGo()
+    }
   }
 }
 
