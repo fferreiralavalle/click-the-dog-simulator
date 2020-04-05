@@ -79,7 +79,9 @@ export class Tree implements Product {
         const initialPrice:Decimal = new Decimal(9970);
         const linearIncrease:Decimal = new Decimal(1000);
         const currentLevel:number = Number(GameManager.getInstance().getVariable(this.variableId).getValue())
-        const finalPrice = initialPrice.add( basePrice.mul(linearIncrease.mul(currentLevel)).add(basePrice.pow(currentLevel/3+1)) )
+        const tree = GameManager.getInstance().getProductManager().getProduct(ids.treeOfGoodBoys) as Tree
+        const discount:number = tree.getBlessing(ids.blessing0A).getBonus()
+        const finalPrice = initialPrice.add( basePrice.mul(linearIncrease.mul(currentLevel)).add(basePrice.pow(currentLevel/3+1)) ).mul(discount)
         return {
             currency: finalPrice.floor(),
             treats: new Decimal(0)
@@ -140,7 +142,7 @@ export class Tree implements Product {
         return this.blessings
     }
 
-    getBlessing(blessingId: string): Blessing | undefined {
+    getBlessing(blessingId: string): Blessing {
         const blessings = this.getBlessings()
         let bless;
         blessings.forEach((blessingTier)=> {
@@ -153,7 +155,10 @@ export class Tree implements Product {
                 return true
             }
         })
-        return bless
+        if (bless){
+            return bless
+        }
+        return this.blessings[0].blessings[0]
     }
 
     getBlessingPrice(blessingId: string): Decimal {
@@ -201,7 +206,7 @@ export class Tree implements Product {
             new BlessingTier(
                 new Decimal(3000), 
                 [new Blessing(ids.blessing1A,1.1),
-                new Blessing(ids.blessing1B,0.75),
+                new Blessing(ids.blessing1B,1.25),
                 new BlessingDefault0(ids.blessing1C,20)]),
             new BlessingTier(
                 new Decimal(5000), 

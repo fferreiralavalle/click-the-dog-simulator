@@ -6,6 +6,7 @@ import Decimal from 'break_infinity.js';
 import { Park } from './Park';
 import { King } from './UpgradeKing';
 import { UpgradeKing } from '../upgrades/Upgrade';
+import { Tree } from './Tree';
 
 export interface EventType{
     id: string,
@@ -52,8 +53,11 @@ export class Laboratory implements Product {
         //Relic
         const park = GameManager.getInstance().getProductManager().getProduct(ids.product4Level) as Park
         const bonus = park.getRelicBonus(ids.relicTier1G)
+        // Tree Blessing
+        const tree = GameManager.getInstance().getProductManager().getProduct(ids.treeOfGoodBoys) as Tree
+        const blessing0C:number = tree.getBlessing(ids.blessing0C).getBonus()
         const currency:Currency = {
-            currency: new Decimal(currencyUpgrade).mul(bonus),
+            currency: new Decimal(currencyUpgrade).mul(bonus).mul(blessing0C),
             treats: new Decimal(0)
         }
         this.currencyPerSecond = currency
@@ -125,10 +129,11 @@ export class Laboratory implements Product {
         return farmNeeded <= farmLevel && handsNeeded <= handsLevel
     }
     getLevelUpPrice(level?:number): Currency {
-        const basePrice:number = 2;
-        const initialPrice:number = 0;
+        const basePrice = new Decimal(2);
         const lvl:number = level ? level : GameManager.getInstance().getVariable(this.variableId).getValue()
-        const finalPrice = initialPrice + Math.pow(basePrice,1+Math.floor(lvl/3))
+        const tree = GameManager.getInstance().getProductManager().getProduct(ids.treeOfGoodBoys) as Tree
+        const discount:number = tree.getBlessing(ids.blessing0A).getBonus()
+        const finalPrice =basePrice.pow(1+Math.floor(lvl/3)).mul(discount)
         return {
             currency: new Decimal(0),
             treats: new Decimal(finalPrice)
@@ -232,7 +237,11 @@ export class Laboratory implements Product {
         const relic0CBonus = park.getRelicBonus(ids.relicTier0C)
         const relic1FBonus = park.getRelicBonus(ids.relicTier1F)
         const relic2FBonus = park.getRelicBonus(ids.relicTier2F)
-        points = Math.floor(points * relic0CBonus * relic1FBonus * relic2FBonus)
+        // Tree Blessing
+        const tree = GameManager.getInstance().getProductManager().getProduct(ids.treeOfGoodBoys) as Tree
+        const blessing1C:number = tree.getBlessing(ids.blessing1C).getBonus()
+        
+        points = Math.floor((points + blessing1C) * relic0CBonus * relic1FBonus * relic2FBonus )
         return points
     }
 

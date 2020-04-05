@@ -8,6 +8,7 @@ import Decimal from 'break_infinity.js';
 import { Park } from './Park';
 import { King } from './UpgradeKing';
 import { multiplyCurrencyBy } from '../../utils/mathUtils';
+import { Tree } from './Tree';
 
 export class PetPetting implements Product {
     currencySubscribers: CurrencySubscriber[];
@@ -77,8 +78,12 @@ export class PetPetting implements Product {
         //King Upgrade Bonus
         const king = GameManager.getInstance().productManager.getProduct(ids.upgradeShop) as King
         const kingBonus = king.getUpgradeBonus(ids.upgradeProduct0A)
+        //Tree Blessing
+        const tree = GameManager.getInstance().getProductManager().getProduct(ids.treeOfGoodBoys) as Tree
+        const blessingGlobal:number = tree.getBlessing(ids.blessing0C).getBonus()
+        const blessingPetting:number = tree.getBlessing(ids.blessing1A).getBonus()
         //Final Gain
-        const final = new Decimal(base).add(Math.floor(lvl/3)).mul(petTrainingMult).mul(labMult).mul(relic0D).mul(relic1A).mul(kingBonus).mul(relic2A)
+        const final = new Decimal(base).add(Math.floor(lvl/3)).mul(petTrainingMult).mul(labMult).mul(relic0D).mul(relic1A).mul(kingBonus).mul(relic2A).mul(blessingGlobal).mul(blessingPetting)
         const newCurrencyPerPet = {
             currency: final,
             treats: new Decimal(0)
@@ -123,7 +128,9 @@ export class PetPetting implements Product {
     getLevelUpPrice(): Currency {
         const basePrice:Decimal = new Decimal(5);
         const currentLevel:number = Number(GameManager.getInstance().getVariable(this.variableId).getValue())
-        const finalPrice = new Decimal(basePrice).mul(currentLevel).plus(basePrice.pow(currentLevel/4+1))
+        const tree = GameManager.getInstance().getProductManager().getProduct(ids.treeOfGoodBoys) as Tree
+        const discount:number = tree.getBlessing(ids.blessing0A).getBonus()
+        const finalPrice = new Decimal(basePrice).mul(currentLevel).plus(basePrice.pow(currentLevel/4+1)).mul(discount)
         return {
             currency: finalPrice.floor(),
             treats: new Decimal(0)

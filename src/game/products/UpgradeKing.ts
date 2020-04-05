@@ -6,6 +6,7 @@ import Decimal from 'break_infinity.js';
 import { Park } from './Park';
 import { UpgradeKing, UpgradeKingStandar } from '../upgrades/Upgrade';
 import { getBuildingIcon } from '../../utils/uiUtil';
+import { Tree } from './Tree';
 
 const baseUpgradeCostLove:Currency = {currency: new Decimal(1000), treats: new Decimal(0)}
 
@@ -35,7 +36,11 @@ export class King implements Product {
         const parkLvl = Number(GameManager.getInstance().getVariable(ids.product4Level).getValue())
         const allLevels = currentLevel + farmLvl + LabLvl + wizLvl + parkLvl;
         const multiplier = this.getCurrencyMultiplier(currentLevel)
-        const lovePerSecond = new Decimal(allLevels).mul(multiplier)
+        // Tree Blessing
+        const tree = GameManager.getInstance().getProductManager().getProduct(ids.treeOfGoodBoys) as Tree
+        const blessing0C:number = tree.getBlessing(ids.blessing0C).getBonus()
+        
+        const lovePerSecond = new Decimal(allLevels).mul(multiplier).mul(blessing0C)
         const newCurrencyPerSecond:Currency = {
             currency: lovePerSecond,
             treats: new Decimal(0)
@@ -88,7 +93,9 @@ export class King implements Product {
         const basePrice:Decimal = new Decimal(15);
         const initialPrice:Decimal = new Decimal(285);
         const lvl:number = level ? level : GameManager.getInstance().getVariable(this.variableId).getValue()
-        const finalPrice:Decimal = initialPrice.add(basePrice.mul(lvl*100)).add(basePrice.pow(1+lvl/4))
+        const tree = GameManager.getInstance().getProductManager().getProduct(ids.treeOfGoodBoys) as Tree
+        const discount:number = tree.getBlessing(ids.blessing0A).getBonus()
+        const finalPrice:Decimal = initialPrice.add(basePrice.mul(lvl*100)).add(basePrice.pow(1+lvl/4)).mul(discount)
         return {
             currency: finalPrice,
             treats: new Decimal(0)
@@ -129,7 +136,11 @@ export class King implements Product {
         const lvl = Number(GameManager.getInstance().getVariable(upgradeId).getValue())
         const park = GameManager.getInstance().getProductManager().getProduct(ids.product4Level) as Park
         const discountRelic = park.getRelicBonus(ids.relicTier2D)
-        const cost = multiplyCurrencyBy(upgrade.getCost(lvl),discountRelic)
+        // Tree Blessing
+        const tree = GameManager.getInstance().getProductManager().getProduct(ids.treeOfGoodBoys) as Tree
+        const blessing2A:number = tree.getBlessing(ids.blessing2A).getBonus()
+        
+        const cost = multiplyCurrencyBy(upgrade.getCost(lvl),discountRelic * blessing2A)
         return cost
     }
 
@@ -139,7 +150,10 @@ export class King implements Product {
         const kingLvl = level ? level : this.getLevel()
         const park = GameManager.getInstance().getProductManager().getProduct(ids.product4Level) as Park
         const discountRelic = park.getRelicBonus(ids.relicTier2D)
-        const currency: Currency = multiplyCurrencyBy(GameManager.getInstance().getCurrency(),1/discountRelic)
+        // Tree Blessing
+        const tree = GameManager.getInstance().getProductManager().getProduct(ids.treeOfGoodBoys) as Tree
+        const blessing2A:number = tree.getBlessing(ids.blessing2A).getBonus()
+        const currency: Currency = multiplyCurrencyBy(GameManager.getInstance().getCurrency(),1/discountRelic/blessing2A)
         const result = upgrade.canUpgrade(lvl, kingLvl, currency)
         return result
     }

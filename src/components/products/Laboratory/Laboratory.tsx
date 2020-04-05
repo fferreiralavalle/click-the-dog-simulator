@@ -14,6 +14,7 @@ import ProductPlus, {plusCurrency} from '../ProductPlus'
 import { Currency } from '../../../game/products/Product'
 import { toFormat, clearPluses } from '../../../utils/uiUtil'
 import { Laboratory, Upgrade, UpgradeTier } from '../../../game/products/Laboratory'
+import ProductPlusDog from '../ProductPlusDog'
 
 interface IRecipeProps {
   level: Variable;
@@ -45,12 +46,6 @@ class LaboratoryUI extends Component<IRecipeProps, IState> {
       id: 'UiLaboratory',
       onCurrency: (currency:Currency)=> this.onEventReward(currency)
     })
-    setInterval(()=>{
-      const newPlus = clearPluses(this.state.plusCurrencies)
-      this.setState({
-        plusCurrencies: newPlus
-      })
-    },5 * 1000)
   }
 
   onEventReward = (result:Currency)=> {
@@ -75,7 +70,8 @@ class LaboratoryUI extends Component<IRecipeProps, IState> {
       className,
       size
     }
-    this.addPlusCurrency(plusCurrency)
+    const currency = this.refs.labLove as ProductPlusDog
+    currency.addCurrency(plusCurrency)
   }
 
   onCurrencyGain = (currency: Currency) => {
@@ -172,7 +168,7 @@ class LaboratoryUI extends Component<IRecipeProps, IState> {
         <LevelUpButton productId={ids.product2Level} 
           onMouseEnter={this.onLevelHover(true)}
           onMouseLeave={this.onLevelHover(false)}/>
-        <ProductPlus plusCurrencies={plusCurrencies}/>
+        <ProductPlusDog ref="labLove"/>
       </div>
     )
   }

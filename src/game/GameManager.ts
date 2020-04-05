@@ -3,7 +3,7 @@ import {actions} from '../reducers/GameVariables'
 import {actions as uiActions} from '../reducers/uiUtils'
 import { TimeManager } from "./TimeManager";
 import ProductManager from './ProductManager';
-import variableIds from './VariableId'
+import ids from './VariableId'
 import permaIds from './PermaVariablesId'
 import {Variable} from './Variables'
 import { Currency } from './products/Product';
@@ -16,6 +16,7 @@ import Decimal from 'break_infinity.js';
 import { Park } from './products/Park';
 import ArchivementManager from './ArchivementManager';
 import DogSkinsManager from './DogSkinsManager';
+import { Tree } from './products/Tree';
 
 const devMegaPetMult = 1
 const saveEvery = 0.5
@@ -62,12 +63,14 @@ class GameManager  {
         })
         this.getProductManager().updateCurrenciesPerSecond()
         let currencyOffline = this.handleOfflineTimePassed()
-        currencyOffline.patiencePoints = currencyOffline.patiencePoints?.min(72)
+        const tree = this.getProductManager().getProduct(ids.treeOfGoodBoys) as Tree
+        const bonus:number = tree.getBlessing(ids.blessing0B).getBonus()
+        currencyOffline.patiencePoints = currencyOffline.patiencePoints?.min(72).mul(bonus)
         this.addCurrency(currencyOffline)
-        if (this.getVariable(variableIds.lastSaveDate).getValue()!=null){
+        if (this.getVariable(ids.lastSaveDate).getValue()!=null){
             this.getNotificationManager().addNotification({
                 id:'welcomed-back',
-                background: getBuildingIcon(variableIds.product3Level).background,
+                background: getBuildingIcon(ids.product3Level).background,
                 description:'Your dogs have been waiting for you. They gained '+toFormat(currencyOffline.patiencePoints? currencyOffline.patiencePoints : 0)+' patience points for waiting like good boys. Spend them to speed up the game!',
                 image: 'https://i.imgur.com/DIPnpA9.png',
                 seen: false,
@@ -104,25 +107,25 @@ class GameManager  {
 
     addCurrency (add: Currency): void {
         const {currency,treats, patiencePoints} = add
-        let myCurrency:Decimal = new Decimal(Number(this.getVariable(variableIds.currency).getValue()))
-        let myTreats:Decimal = new Decimal(Number(this.getVariable(variableIds.treats).getValue()))
-        let myPatiencePoints:Decimal = new Decimal(Number(this.getVariable(variableIds.patiencePoints).getValue()))
+        let myCurrency:Decimal = new Decimal(Number(this.getVariable(ids.currency).getValue()))
+        let myTreats:Decimal = new Decimal(Number(this.getVariable(ids.treats).getValue()))
+        let myPatiencePoints:Decimal = new Decimal(Number(this.getVariable(ids.patiencePoints).getValue()))
         myCurrency = myCurrency.add(currency)
         myTreats = myTreats.add(treats)
 
         if (patiencePoints){
             myPatiencePoints = myPatiencePoints.add(patiencePoints? patiencePoints : 0)
-            this.setVariable(myPatiencePoints,variableIds.patiencePoints)
+            this.setVariable(myPatiencePoints,ids.patiencePoints)
         }
 
-        this.setVariable(myCurrency,variableIds.currency)
-        this.setVariable(myTreats,variableIds.treats)
+        this.setVariable(myCurrency,ids.currency)
+        this.setVariable(myTreats,ids.treats)
     }
 
     getCurrency(): Currency {
-        let currency:Decimal = new Decimal(Number(this.getVariable(variableIds.currency).getValue()))
-        let treats:Decimal = new Decimal(Number(this.getVariable(variableIds.treats).getValue()))
-        let patiencePoints:Decimal = new Decimal(Number(this.getVariable(variableIds.patiencePoints).getValue()))
+        let currency:Decimal = new Decimal(Number(this.getVariable(ids.currency).getValue()))
+        let treats:Decimal = new Decimal(Number(this.getVariable(ids.treats).getValue()))
+        let patiencePoints:Decimal = new Decimal(Number(this.getVariable(ids.patiencePoints).getValue()))
         return {
             currency,
             treats,
@@ -175,11 +178,11 @@ class GameManager  {
     }
     
     onClickedDog(): Currency{
-        const PetPetting = this.productManager.getProduct(variableIds.product0Level) as PetPetting
+        const PetPetting = this.productManager.getProduct(ids.product0Level) as PetPetting
         const {currency, treats} = PetPetting.getCurrencyPerPet()
         //Relics
-        const park = this.productManager.getProduct(variableIds.product4Level) as Park
-        const relic0ABonus = park.getRelicBonus(variableIds.relicTier0A)
+        const park = this.productManager.getProduct(ids.product4Level) as Park
+        const relic0ABonus = park.getRelicBonus(ids.relicTier0A)
         const baseClickCurrency = currency.mul(devMegaPetMult).mul(relic0ABonus!==0 ? relic0ABonus : 1)
         
         const currencyEarned: Currency = {
@@ -187,7 +190,7 @@ class GameManager  {
             treats
         }
         this.addCurrency(currencyEarned)
-        this.addToVariable(1, variableIds.clicks)
+        this.addToVariable(1, ids.clicks)
         return currencyEarned
     }
 
@@ -200,47 +203,48 @@ class GameManager  {
     }
 
     increaseTimePassed(timePassed: number): Currency{
-        let totalTime:number = this.getVariable(variableIds.timePassed).getValue()
+        let totalTime:number = this.getVariable(ids.timePassed).getValue()
         totalTime += timePassed
-        this.setVariable(totalTime, variableIds.timePassed)
+        this.setVariable(totalTime, ids.timePassed)
         return {currency: new Decimal(0),treats:new Decimal(0)}
     }
 
     handleOfflineTimePassed(): Currency{
-        let lastSaveTime:Date = this.getVariable(variableIds.lastSaveDate).getValue()
+        let lastSaveTime:Date = this.getVariable(ids.lastSaveDate).getValue()
         lastSaveTime = lastSaveTime ? new Date(lastSaveTime) : new Date()
         const today = new Date()
         const diffInSeconds = Math.abs(today.getTime() - lastSaveTime.getTime())/1000;
         const patiencePointsGained = this.getTimeManager().getPatiencePoints(diffInSeconds)
+        
         const currencyGained:Currency = {
             currency:new Decimal(0),
             treats:new Decimal(0),
             patiencePoints: patiencePointsGained
         }
         //park timers while AFK
-        const park = this.getProductManager().getProduct(variableIds.product4Level) as Park
+        const park = this.getProductManager().getProduct(ids.product4Level) as Park
         park.passAfkTimeAdventure(diffInSeconds)
         return currencyGained
     }
 
     buyTurboTime(patienceSpent: Decimal){
-        const patiencePoints = new Decimal(Number(this.getVariable(variableIds.patiencePoints).getValue()))
+        const patiencePoints = new Decimal(Number(this.getVariable(ids.patiencePoints).getValue()))
         if (patienceSpent.lte(patiencePoints)){
             const turboSeconds = this.getTimeManager().buyTurboTime(patienceSpent)
-            this.addToVariable(patienceSpent.mul(-1), variableIds.patiencePoints)
-            this.addToVariable(turboSeconds.toNumber(), variableIds.turboTimeLeft)
+            this.addToVariable(patienceSpent.mul(-1), ids.patiencePoints)
+            this.addToVariable(turboSeconds.toNumber(), ids.turboTimeLeft)
         }
     }
 
     unlockTimeWizard(){
-        const dogWizardLvl = this.getVariable(variableIds.product3Level).getValue()
+        const dogWizardLvl = this.getVariable(ids.product3Level).getValue()
         if (dogWizardLvl<1){
-            this.setVariable(1, variableIds.product3Level)
+            this.setVariable(1, ids.product3Level)
             this.getNotificationManager().addNotification({
                 id:'time-wizard-unlcok',
-                background: getBuildingIcon(variableIds.product3Level).background,
+                background: getBuildingIcon(ids.product3Level).background,
                 description:'Greetings human, it is I, the Wizpug! With my powers you can use your dogs stored patience to speed time ITSELF.',
-                image: getBuildingIcon(variableIds.product3Level).icon,
+                image: getBuildingIcon(ids.product3Level).icon,
                 seen: false,
                 title: 'The Wizpug is here!'
                 })
@@ -267,7 +271,7 @@ export interface VariableStructure {
 }
 const initializeVariables = () => {
     let variablesObject:VariableStructure = {}
-    Object.keys(variableIds).map((id:string) => {
+    Object.keys(ids).map((id:string) => {
         variablesObject[id] = new Variable({id, value:null})
     })
     variablesObject = loadSavedData(variablesObject)
@@ -318,7 +322,7 @@ const loadPermaSaveData = (permaVariablesObject: VariableStructure): VariableStr
 }
 
 const saveGame = (variables: VariableStructure, permaVariables: VariableStructure)=> {
-    variables.lastSaveDate = new Variable({id:variableIds.lastSaveDate, value:new Date()})
+    variables.lastSaveDate = new Variable({id:ids.lastSaveDate, value:new Date()})
     const cook = Cookies.set(saveVarName, JSON.stringify(variables), { expires: (10 * 365) })
     localStorage.setItem(saveVarName, JSON.stringify(variables))
     localStorage.setItem(saveVarPermaName, JSON.stringify(permaVariables))

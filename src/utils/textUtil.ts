@@ -61,7 +61,12 @@ export interface Text {
             letGo: string,
             tier: string,
             perSecond: string,
-            theDesition: string
+            theDesition: string,
+            areYouSure:string,
+            letGoScreenText: string,
+            letGoScreenClarification: string,
+            imReady: string,
+            notYet: string
         },
         common: {
             info: string,
@@ -192,9 +197,14 @@ export const english:Text = {
             theDesition: "The Desition",
             blessings: "Blessings",
             seeBlessings: "See Blessings",
-            letGo: "Let Go",
             tier: "Bleesings Level",
-            perSecond: "Per Second"
+            perSecond: "Per Second",
+            letGo: "Let Go",
+            imReady: "I'm ready to let go",
+            notYet: "Not yet",
+            areYouSure: "Are you sure?",
+            letGoScreenText: "You will meet your new Dogs with the following:",
+            letGoScreenClarification: "You will also keep the Breeds you unlocked."
         },
         common: {
             info: "Info",

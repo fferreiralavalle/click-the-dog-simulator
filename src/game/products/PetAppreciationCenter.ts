@@ -6,6 +6,7 @@ import { addCurrency, multiplyCurrencyBy } from '../../utils/mathUtils';
 import Decimal from 'break_infinity.js';
 import { Park } from './Park';
 import { King } from './UpgradeKing';
+import { Tree } from './Tree';
 
 export interface EventType{
     id: string,
@@ -89,8 +90,11 @@ export class PetAppreciationCenter implements Product {
         // King Upgrade Bonus
         const king = GameManager.getInstance().productManager.getProduct(ids.upgradeShop) as King
         const kingBonus = king.getUpgradeBonus(ids.upgradeProduct1A)
+        // Tree Blessing
+        const tree = GameManager.getInstance().getProductManager().getProduct(ids.treeOfGoodBoys) as Tree
+        const blessing0C:number = tree.getBlessing(ids.blessing0C).getBonus()
         //Final
-        const currencyPerSecond = new Decimal(base).mul(currentLevel).mul(relic0EBonus).mul(relic1EBonus).mul(relic2EBonus).mul(kingBonus)
+        const currencyPerSecond = new Decimal(base).mul(currentLevel).mul(relic0EBonus).mul(relic1EBonus).mul(relic2EBonus).mul(kingBonus).mul(blessing0C)
         const newCurrencyPerSecond = {
             currency: currencyPerSecond,
             treats: new Decimal(0)
@@ -103,7 +107,10 @@ export class PetAppreciationCenter implements Product {
     getProgressPerSecond(level?: number): number {
         const currentLevel:number = level ? level : GameManager.getInstance().getVariable(this.variableId).getValue()
         const baseProgress = !currentLevel ? 0 : 1
-        const progressPerSecond = baseProgress + currentLevel/2
+        // Tree Blessing
+        const tree = GameManager.getInstance().getProductManager().getProduct(ids.treeOfGoodBoys) as Tree
+        const blessing1B:number = tree.getBlessing(ids.blessing1B).getBonus()
+        const progressPerSecond = (baseProgress + currentLevel/2) * blessing1B
         return progressPerSecond
     }
     onTimePassed(timePassed: number): Currency {
@@ -245,9 +252,11 @@ export class PetAppreciationCenter implements Product {
         const basePrice:number = 13;
         const initialPrice:number = 17;
         const currentLevel:number = GameManager.getInstance().getVariable(this.variableId).getValue()
-        const finalPrice = initialPrice + basePrice * currentLevel + Math.pow(basePrice,currentLevel/4+1)
+        const tree = GameManager.getInstance().getProductManager().getProduct(ids.treeOfGoodBoys) as Tree
+        const discount:number = tree.getBlessing(ids.blessing0A).getBonus()
+        const finalPrice = new Decimal(initialPrice).add(basePrice * currentLevel).add(Math.pow(basePrice,currentLevel/4+1))
         return {
-            currency: new Decimal(finalPrice),
+            currency: new Decimal(finalPrice).mul(discount),
             treats: new Decimal(0)
         };
         

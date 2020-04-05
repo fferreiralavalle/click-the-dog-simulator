@@ -22,6 +22,7 @@ import King from '../../components/products/King/King'
 import Dogchivements from '../../components/dogchivements/Dogchivements'
 import DogSkins from '../../components/dogSkins/DogSkins'
 import Tree from '../../components/products/tree/Tree'
+import LetGo from '../../components/letGo/LetGo'
 
 interface IRecipeProps {
     dispatch: Function
@@ -80,6 +81,7 @@ class Game extends Component<IRecipeProps> {
             </div>
             <Dogchivements />
             <DogSkins/>
+            <LetGo/>
         </div>
         )
     }

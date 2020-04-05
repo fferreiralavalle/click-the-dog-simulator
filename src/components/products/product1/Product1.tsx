@@ -15,6 +15,7 @@ import LevelUpButton from '../LevelUpButton'
 import ProductPlus, {plusCurrency} from '../ProductPlus'
 import { Currency } from '../../../game/products/Product'
 import { toFormat, clearPluses } from '../../../utils/uiUtil'
+import ProductPlusDog from '../ProductPlusDog'
 
 interface IRecipeProps {
   level: Variable;
@@ -46,12 +47,6 @@ class Product1 extends Component<IRecipeProps, IState> {
       id: 'UIOnCurrency',
       onCurrency: (result:Currency) => this.onCurrencyGain(result),
     })
-    this.uiCleaner = setInterval(()=>{
-      const newPlus = clearPluses(this.state.plusCurrencies)
-      this.setState({
-        plusCurrencies: newPlus
-      })
-    },3 * 1000)
   }
 
   componentWillUnmount(){
@@ -81,7 +76,8 @@ class Product1 extends Component<IRecipeProps, IState> {
       className,
       size: 1.5
     }
-    this.addPlusCurrency(plusCurrency)
+    const pluses = this.refs.farmPlus as ProductPlusDog
+    pluses.addCurrency(plusCurrency)
   }
 
   onCurrencyGain = (currency: Currency) => {
@@ -95,13 +91,8 @@ class Product1 extends Component<IRecipeProps, IState> {
       className:'love-icon',
       size: 1
     }
-    this.addPlusCurrency(plusCurrency)
-  }
-
-  addPlusCurrency = (pc: plusCurrency) => {
-    this.setState({
-      plusCurrencies: [...this.state.plusCurrencies,pc]
-    })
+    const pluses = this.refs.farmPlus as ProductPlusDog
+    pluses.addCurrency(plusCurrency)
   }
 
   renderCurrentEvent = () => {
@@ -150,7 +141,7 @@ class Product1 extends Component<IRecipeProps, IState> {
         <LevelUpButton productId={ids.product1Level} 
           onMouseEnter={this.onLevelHover(true)}
           onMouseLeave={this.onLevelHover(false)}/>
-        <ProductPlus plusCurrencies={plusCurrencies}/>
+        <ProductPlusDog ref="farmPlus"/>
         {isHover && this.renderHighlight()}
       </div>
     )

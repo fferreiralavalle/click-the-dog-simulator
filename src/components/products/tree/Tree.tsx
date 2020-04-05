@@ -20,9 +20,11 @@ import Decimal from 'break_infinity.js'
 import permaVariables from '../../../game/PermaVariablesId'
 import { Blessing } from '../../../game/blessings/Blessing'
 import GoodBoyPointsSignUI from './GoodBoySign'
+import { actions } from '../../../reducers/uiUtils'
 
 interface IRecipeProps {
   level: Variable;
+  dispatch: Function
 }
 
 interface IState {
@@ -161,10 +163,10 @@ class TreeUi extends Component<IRecipeProps, IState> {
 
   renderEventOptions() {
     const uiEvents:any = [
-        (<div className={"highlight-field highlight-event-select"} onClick={this.toggleRelicView(true)}>
+        (<div className={"highlight-field highlight-event-select"} onClick={this.toggleBlessingView(true)}>
             {this.productText.blessings}
         </div>),
-        (<div className={"highlight-field highlight-event-select special-option"} onClick={this.toggleRelicView(true)}>
+        (<div className={"highlight-field highlight-event-select special-option"} onClick={()=>this.showLetGoScreen()}>
             {this.productText.letGo}
         </div>)
     ]
@@ -204,7 +206,7 @@ class TreeUi extends Component<IRecipeProps, IState> {
             {this.productText.blessingsRules}
           </div>
         </div>
-        <div className="highlight-closeButton" onClick={this.toggleRelicView(false)}>X</div>
+        <div className="highlight-closeButton" onClick={this.toggleBlessingView(false)}>X</div>
         </div>
     )
   }
@@ -247,10 +249,14 @@ class TreeUi extends Component<IRecipeProps, IState> {
     })
   }
 
-  toggleRelicView = (view:boolean) => () => {
+  toggleBlessingView = (view:boolean) => () => {
     this.setState({
       viewRelics: view
     })
+  }
+
+  showLetGoScreen = () => {
+    this.props.dispatch(actions.setLetGoScreenLevel(1))
   }
 
   claimReward = (eventId: string, park: Park) => () => {

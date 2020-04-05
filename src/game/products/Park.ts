@@ -6,6 +6,7 @@ import { addCurrency, multiplyCurrencyBy } from '../../utils/mathUtils';
 import Decimal from 'break_infinity.js';
 import { getRelicText } from '../../utils/textUtil';
 import { King } from './UpgradeKing';
+import { Tree } from './Tree';
 
 export interface EventType{
     id: string,
@@ -109,9 +110,13 @@ export class Park implements Product {
         const currentLevel:number = level ? level : GameManager.getInstance().getVariable(this.variableId).getValue()
         const relics = this.getRelicsUnlockedAmount()
         const currencyPerRelic = this.getCurrencyPerRelic(currentLevel)
+        // Tree Blessing
+        const tree = GameManager.getInstance().getProductManager().getProduct(ids.treeOfGoodBoys) as Tree
+        const blessing0C:number = tree.getBlessing(ids.blessing0C).getBonus()
+        
         const newCurrencyPerSecond:Currency = {
-            currency: currencyPerRelic.currency.mul(relics),
-            treats: currencyPerRelic.treats.mul(relics)
+            currency: currencyPerRelic.currency.mul(relics).mul(blessing0C),
+            treats: new Decimal(0)
         }
         if (!dontApply){
             this.currencyPerSecond = newCurrencyPerSecond
@@ -172,8 +177,18 @@ export class Park implements Product {
             return false
         }
         let timePassed = this.getEventTimePassed(eventId)
-        let eventGoal = event.secondsNeeded
+        let eventGoal = this.getEventTimeNeeded(eventId)
         return timePassed >= eventGoal
+    }
+
+    getEventTimeNeeded(eventId: string): number {
+        const event = events[eventId]
+        // Tree Blessing
+        const tree = GameManager.getInstance().getProductManager().getProduct(ids.treeOfGoodBoys) as Tree
+        const blessing2B:number = tree.getBlessing(ids.blessing2B).getBonus()
+        const time = event.secondsNeeded * blessing2B
+        return time
+
     }
 
     claimEventReward(eventId:string){
@@ -333,7 +348,9 @@ export class Park implements Product {
         const basePrice:Decimal = new Decimal(23);
         const initialPrice:Decimal = new Decimal(977);
         const currentLevel:Decimal = new Decimal(Number(GameManager.getInstance().getVariable(this.variableId).getValue()))
-        const finalPrice:Decimal = initialPrice.add(basePrice.mul(currentLevel).mul(150)).add(basePrice.pow(currentLevel.div(4).add(1)))
+        const tree = GameManager.getInstance().getProductManager().getProduct(ids.treeOfGoodBoys) as Tree
+        const discount:number = tree.getBlessing(ids.blessing0A).getBonus()
+        const finalPrice:Decimal = initialPrice.add(basePrice.mul(currentLevel).mul(150)).add(basePrice.pow(currentLevel.div(4).add(1))).mul(discount)
         return {
             currency: finalPrice,
             treats: new Decimal(0)

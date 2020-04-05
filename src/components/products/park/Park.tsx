@@ -195,27 +195,21 @@ class ParkUI extends Component<IRecipeProps, IState> {
   }
 
   renderTimeLeftBar(evId: string, park:Park){
-    let progressNeeeded = 1
     let order = 0
     let {title} = this.getEventData(evId)
-    let progressUsed = park.getEventTimePassed(evId)
       switch(evId){
           case events.bigBoysploration.id:
             if (!park.isEventUnlocked(events.bigBoysploration)){
               return null
             }
-            progressNeeeded = events.bigBoysploration.secondsNeeded
             order = 2
             break
           case events.dogsploration.id:
             if (!park.isEventUnlocked(events.dogsploration)){
               return null
             }
-            progressNeeeded = events.dogsploration.secondsNeeded
             order = 1
             break
-          default:
-            progressNeeeded = events.pupsloration.secondsNeeded
       }
       const {text, progress} = this.getUpdatedBarValues(evId, park)
       return (
@@ -232,7 +226,7 @@ class ParkUI extends Component<IRecipeProps, IState> {
   getUpdatedBarValues(eventId: string, park: Park): {text: string, progress: number}{
     const isReady = park.isEventReady(eventId)
     const progress = park.getEventTimePassed(eventId)
-    const progressNeeded = events[eventId].secondsNeeded
+    const progressNeeded = park.getEventTimeNeeded(eventId)
     const text = isReady ? this.productText.claimPreview : `${toFormatTime(Math.max(progressNeeded-progress,0))}`
     const progressValue = progress/progressNeeded
     return {
@@ -453,6 +447,7 @@ class ParkUI extends Component<IRecipeProps, IState> {
 
   claimReward = (eventId: string, park: Park) => () => {
       park.claimEventReward(eventId)
+      this.forceUpdate()
   }
 }
 
