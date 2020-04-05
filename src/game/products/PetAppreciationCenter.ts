@@ -29,7 +29,7 @@ export const events:EventTypes = {
     pettingTraining: {
         id: 'pettingTraining',
         progressNeeded: 480,
-        baseReward: 5,
+        baseReward: 7,
         unlockLevel: 20
     },
     donationCampaign: {
@@ -335,7 +335,7 @@ export class PetAppreciationCenter implements Product {
 
     getPettingTrainingData(currentLevel?: number): PettingTrainingData{
         const level = currentLevel ? currentLevel : this.getLevel()
-        const petMultiplier = events.pettingTraining.baseReward*(1+0.1*level)
+        const petMultiplier = events.pettingTraining.baseReward + 0.02*level
         const duration = 4
         return {
             petMultiplier,

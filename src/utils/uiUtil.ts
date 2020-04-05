@@ -111,7 +111,7 @@ export const getBlessingIcon = (blessingId: string): BlessingIcon => {
         case ids.blessing1B:
             return new BlessingIcon(getBuildingIcon(ids.product1Level).icon)
         case ids.blessing1C:
-            return new BlessingIcon(getBuildingIcon(ids.product3Level).icon)
+            return new BlessingIcon(getBuildingIcon(ids.product2Level).icon)
         case ids.blessing2A:
             return new BlessingIcon(getBuildingIcon(ids.upgradeShop).icon)
         case ids.blessing2B:
