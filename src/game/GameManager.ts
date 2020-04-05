@@ -70,8 +70,9 @@ class GameManager  {
         this.addCurrency(currencyOffline)
         if (this.getVariable(ids.lastSaveDate).getValue()!=null){
             const timesReset = Number(this.getPermaVariable(permaIds.timesReset)?.getValue())
+            const wizpugLevel =  Number(this.getVariable(ids.product3Level)?.getValue())
             debugger
-            if (timesReset > 0){
+            if (timesReset > 0 && wizpugLevel<=0){
                 const selectedDog = this.getPermaVariable(permaIds.selectedDogBreed)?.getValue()
                 this.getNotificationManager().addNotification({
                     id:'welcomed-back',
