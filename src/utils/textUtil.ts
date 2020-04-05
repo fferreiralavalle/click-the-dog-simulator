@@ -47,6 +47,22 @@ export interface Text {
             defaultDescription: string,
             maxUpgradeLevel: string
         },
+        tree: {
+            title: string,
+            description: string,
+            letGoInfo: string,
+            blessingsRules: string,
+            multiplier: string,
+            goodBoyPoints: string,
+            totalLevels: string,
+            options: string,
+            seeBlessings: string,
+            blessings: string,
+            letGo: string,
+            tier: string,
+            perSecond: string,
+            theDesition: string
+        },
         common: {
             info: string,
             stats: string,
@@ -67,6 +83,9 @@ export interface Text {
             relicTier1B: RelicText,
             relicTier1C: RelicText,
             [key: string]: RelicText
+        },
+        tier2: {
+            [key: string]: RelicText
         }
     },
     kingUpgrades: {
@@ -74,6 +93,9 @@ export interface Text {
         upgrades: {
             [key: string]: RelicText
         }
+    },
+    treeUpgrades: {
+        blessings: {[key: string]: RelicText}
     },
     archivements: {
         archivementBaseTitle: string,
@@ -158,6 +180,22 @@ export const english:Text = {
             defaultDescription: "",
             maxUpgradeLevel: "Upgrade Max"
         },
+        tree: {
+            title: "Tree of Good Boys",
+            description: "Come closer human, I've been watching your work for a while now. You've made these Good Boys very happy, but I need to ask you something.",
+            letGoInfo: "Your Good Boys are all grown up, they can take care of each other now. When you are ready, you can let them go and help me raise more dogs.",
+            blessingsRules: "You can only buy blessings after you Let Go.",
+            multiplier: "Multiplier",
+            goodBoyPoints: "Good Boy Points",
+            totalLevels: "Per All levels",
+            options: "Desitions",
+            theDesition: "The Desition",
+            blessings: "Blessings",
+            seeBlessings: "See Blessings",
+            letGo: "Let Go",
+            tier: "Bleesings Level",
+            perSecond: "Per Second"
+        },
         common: {
             info: "Info",
             stats: "Stats",
@@ -218,6 +256,40 @@ export const english:Text = {
                 title:  "Rope of Science",
                 description:  "Increases your Lab points by 50%"
             },
+            [ids.relicTier1G]: {
+                title:  "Rope of Puptivities",
+                description:  "Doubles the Labs love production"
+            },
+        },
+        tier2: {
+            [ids.relicTier2SpecialBuildingA]: {
+                title:  "Mysterious Tree",
+                description:  "This tree has a weird aura around it... Interesting."
+            },
+            [ids.relicTier2A]: {
+                title:  "Ducky of Petting",
+                description:  "Increases Pet Power by 75%"
+            },
+            [ids.relicTier2B]: {
+                title:  "Moo Cow of Donations",
+                description:  "Increases Treat Donations treats by 100%"
+            },
+            [ids.relicTier2C]: {
+                title:  "Steak of Cooking",
+                description:  "Double the amount of artificial treats the Lab produces"
+            },
+            [ids.relicTier2D]: {
+                title:  "Ducky Negotiator",
+                description:  "Decreases King Baby prices by 20%"
+            },
+            [ids.relicTier2E]: {
+                title:  "Moo Cow of Farming",
+                description:  "Increases The Farms passive love gain by 300%"
+            },
+            [ids.relicTier2F]: {
+                title:  "Ducky the Scientist",
+                description:  "Increases lab points by 100%. He's so smort."
+            },
         }
     },
     kingUpgrades: {
@@ -247,6 +319,19 @@ export const english:Text = {
                 title: "Kingdom Management",
                 description: "Even I need upgrades. With your help I can double my love production."
             },
+        }
+    },
+    treeUpgrades: {
+        blessings: {
+            [ids.blessing0A]: {title: "Fond of You", description: "Leveling up your Boxes is 10% cheaper."},
+            [ids.blessing0B]: {title: "Welcome Back Party", description: "You gain 100% more Patience Points while the game is closed."},
+            [ids.blessing0C]: {title: "Know them Well", description: "Gained 5% more love."},
+            [ids.blessing1A]: {title: "The Right Spot", description: "Increases Petting Power by 10%."},
+            [ids.blessing1B]: {title: "Farm Expert", description: "The Farm prepares events 25% faster."},
+            [ids.blessing1C]: {title: "Lab Teacher", description: "The Lab start with 20 extra points."},
+            [ids.blessing2A]: {title: "Royal Understanding", description: "King Baby's upgrades are 30% cheaper."},
+            [ids.blessing2B]: {title: "Dragon Motivator", description: "Reduces the parks timers 20%"},
+            [ids.blessing2C]: {title: "Feline Rights", description: "The Museum produces five times more love."},
         }
     },
     archivements: {
@@ -381,6 +466,7 @@ export const getRelicText = (relicId: string):RelicText => {
     const relics = getText().relics
     if (relics.tier0[relicId]) return relics.tier0[relicId]
     if (relics.tier1[relicId]) return relics.tier1[relicId]
+    if (relics.tier2[relicId]) return relics.tier2[relicId]
     return relics.tier0.relicTier0A
 }
 
@@ -388,6 +474,13 @@ export const getKingUpgradeText = (upgradeId: string):RelicText => {
     const upgrades = getText().kingUpgrades
     if (upgrades.upgrades[upgradeId]) return upgrades.upgrades[upgradeId]
     return upgrades.upgrades.upgradeProduct0A
+}
+
+export const getBlessingText = (blessingId: string): RelicText => {
+    const {blessings} = getText().treeUpgrades
+    const blessing = blessings[blessingId]
+    if (blessing) return blessing
+    return blessings[ids.blessing0A]
 }
 
 export const getArchivementText = (archivement: string):RelicText => {

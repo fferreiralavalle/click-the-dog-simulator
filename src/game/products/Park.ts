@@ -434,15 +434,28 @@ export class Park implements Product {
                     //Doubles passive Love for Farm
                     {id: ids.relicTier1E, base: 2, icon: 'https://i.imgur.com/et49ttP.png'},
                     //Increases lab points by 50%
-                    {id: ids.relicTier1F, base: 1.5, icon: 'https://i.imgur.com/d3CJRvY.png'}
+                    {id: ids.relicTier1F, base: 1.5, icon: 'https://i.imgur.com/d3CJRvY.png'},
+                    //Doubles lab love Production
+                    {id: ids.relicTier1G, base: 2, icon: 'https://i.imgur.com/d3CJRvY.png'}
                 ]
             },
             tier2: {
                 unlockLevel: events.bigBoysploration.unlockLevel,
                 relics: [
-                    /*{id: ids.relicTier2A, base: 1},
-                    {id: ids.relicTier2B, base: 1},
-                    {id: ids.relicTier2C, base: 1}*/
+
+                        {id: ids.relicTier2SpecialBuildingA, base: 1, icon: 'https://i.imgur.com/zYb3z9n.jpg'},
+                        //Increases Pet Power by 75%
+                        {id: ids.relicTier2A, base: 1.75, icon: 'https://i.imgur.com/lYnJrc9.png'},
+                        //Doubles Treat Donations
+                        {id: ids.relicTier2B, base: 2, icon: 'https://i.imgur.com/PaEoZHp.png'},
+                        //Doubles treats gained from lab
+                        {id: ids.relicTier2C, base: 2, icon: 'https://i.imgur.com/UDLIwWS.png'},
+                        //Decreases King Baby prices by 20%
+                        {id: ids.relicTier2D, base: 0.8, icon: 'https://i.imgur.com/lYnJrc9.png'},
+                        //Quadruples passive Love for Farm
+                        {id: ids.relicTier2E, base: 4, icon: 'https://i.imgur.com/PaEoZHp.png'},
+                        //Increases lab points by 100%
+                        {id: ids.relicTier2F, base: 2, icon: 'https://i.imgur.com/lYnJrc9.png'}
                 ]
             }
         }

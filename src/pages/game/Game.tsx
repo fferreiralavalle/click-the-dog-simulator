@@ -21,6 +21,7 @@ import Park from '../../components/products/park/Park'
 import King from '../../components/products/King/King'
 import Dogchivements from '../../components/dogchivements/Dogchivements'
 import DogSkins from '../../components/dogSkins/DogSkins'
+import Tree from '../../components/products/tree/Tree'
 
 interface IRecipeProps {
     dispatch: Function
@@ -55,6 +56,8 @@ class Game extends Component<IRecipeProps> {
                     return <Box key={4} w={2} productId={p.variableId}><Park/></Box>
                 case ids.upgradeShop:
                     return <Box key={5} w={1} productId={p.variableId}><King/></Box>
+                case ids.treeOfGoodBoys:
+                    return <Box key={6} w={2} productId={p.variableId}><Tree/></Box>
                 default:
                     return <Box key={0} productId={p.variableId} w={1}><Product0/></Box>
             }

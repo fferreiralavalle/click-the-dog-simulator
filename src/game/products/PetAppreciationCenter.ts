@@ -84,14 +84,13 @@ export class PetAppreciationCenter implements Product {
         // Relics
         const park = GameManager.getInstance().productManager.getProduct(ids.product4Level) as Park
         const relic0EBonus = park.getRelicBonus(ids.relicTier0E)
-        const relic0EFinal = (relic0EBonus!==0 ? relic0EBonus : 1)
         const relic1EBonus = park.getRelicBonus(ids.relicTier1E)
-        const relic1EFinal = (relic0EBonus!==0 ? relic1EBonus : 1)
+        const relic2EBonus = park.getRelicBonus(ids.relicTier2E)
         // King Upgrade Bonus
         const king = GameManager.getInstance().productManager.getProduct(ids.upgradeShop) as King
         const kingBonus = king.getUpgradeBonus(ids.upgradeProduct1A)
         //Final
-        const currencyPerSecond = new Decimal(base).mul(currentLevel).mul(relic0EFinal).mul(relic1EFinal).mul(kingBonus)
+        const currencyPerSecond = new Decimal(base).mul(currentLevel).mul(relic0EBonus).mul(relic1EBonus).mul(relic2EBonus).mul(kingBonus)
         const newCurrencyPerSecond = {
             currency: currencyPerSecond,
             treats: new Decimal(0)
@@ -190,10 +189,11 @@ export class PetAppreciationCenter implements Product {
         let relicBonus = 1
         switch (event.id){
             case events.donationCampaign.id:
+                const relicTier2B = park.getRelicBonus(ids.relicTier2B)
                 return {
                     currencyReward: {
                         currency: new Decimal(0),
-                        treats: new Decimal(this.getEvent(eventId).baseReward + Math.floor(finalLevel/5-2)),
+                        treats: new Decimal(this.getEvent(eventId).baseReward + Math.floor(finalLevel/5-2)).mul(relicTier2B),
                     }
                 }
             default:

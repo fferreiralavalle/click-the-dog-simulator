@@ -15,6 +15,7 @@ const variables = {
     product3Level: 'product3Level',
     product4Level: 'product4Level',
     upgradeShop: 'upgradeShop',
+    treeOfGoodBoys: 'treeOfGoodBoys',
     /* Progress */
     product1Progress: 'product1Progress',
     product1Event: 'product1Event',
@@ -48,10 +49,15 @@ const variables = {
     relicTier1D: 'relicTier1D',
     relicTier1E: 'relicTier1E',
     relicTier1F: 'relicTier1F',
+    relicTier1G: 'relicTier1G',
     /* Tier 2 */
+    relicTier2SpecialBuildingA: 'relicTier2SpecialBuildingA',
     relicTier2A: 'relicTier2A',
     relicTier2B: 'relicTier2B',
     relicTier2C: 'relicTier2C',
+    relicTier2D: 'relicTier2D',
+    relicTier2E: 'relicTier2E',
+    relicTier2F: 'relicTier2F',
 
     /* Upgrades KING */
     upgradeProduct0A: 'upgradeProduct0A',
@@ -60,6 +66,17 @@ const variables = {
     upgradeProduct2B: 'upgradeProduct2B',
     upgradeProduct4A: 'upgradeProduct4A',
     upgradeProduct5A: 'upgradeProduct5A',
+
+    /* Tree Blessings */
+    blessing0A: 'blessing0A',
+    blessing0B: 'blessing0B',
+    blessing0C: 'blessing0C',
+    blessing1A: 'blessing1A',
+    blessing1B: 'blessing1B',
+    blessing1C: 'blessing1C',
+    blessing2A: 'blessing2A',
+    blessing2B: 'blessing2B',
+    blessing2C: 'blessing2C',
 
     /* Archivements */
     archivementClicks: 'archivementClicks',

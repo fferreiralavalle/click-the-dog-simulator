@@ -141,11 +141,11 @@
     padding: 2.5px;
     text-align: left;
 }
-.highlight-field.title {
+.highlight-field.title, .highlight-attribute.title {
     font-weight: bold;
 }
 .highlight-attribute {
-    flex: 1 1;
+    flex: 1.5 1;
     height: auto;
     text-align: left;
 }

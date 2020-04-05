@@ -1,0 +1,69 @@
+.tree-building {
+    height: 100%;
+    width: 180px;
+    background-image: url(https://i.imgur.com/iP4T4aC.png);
+    background-position: bottom;
+    position: absolute;
+    left: 0px;
+    bottom: -3px;
+}
+
+.tree {
+    background-image: url(https://i.imgur.com/zYb3z9n.jpg);
+    background-size: cover;
+    padding: 5px;
+}
+.tree-title {
+    z-index: 20;
+    position: absolute;
+    top: 0;
+    background-image: url(https://i.imgur.com/HVo7Kdj.png);
+    background-position: bottom;
+    padding: 20px 40px;
+    padding-top: 30px;
+    background-size: 100%;
+    color: black;
+    font-weight: 500;
+    font-size: 20px;
+}
+.tree .product-level {
+    top: 162px;
+    z-index: 20;
+}
+.tree .special-option {
+    color: #0ec747;
+    font-family: serif;
+}
+.tree .relic-icon {
+    color: #0ec747;
+    background-size: contain;
+}
+.blessing-view-field {
+    font-size: 18px;
+}
+.tree-gbp {
+    position: absolute;
+    top: 48px;
+    color: black;
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 140px;
+    height: 110px;
+    padding: 20px;
+    padding-top: 30px;
+    background-image: url(https://i.imgur.com/bh53UKp.png);
+}
+.tree-gbp-title {
+    margin: 5px;
+}
+.tree-gbp-value {
+    font-size: 1.3em;
+    display: flex;
+    width: 100%;
+    margin-right: 15px;
+    justify-content: flex-end;
+    align-items: flex-end;
+}

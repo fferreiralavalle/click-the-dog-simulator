@@ -49,8 +49,11 @@ export class Laboratory implements Product {
     }
     updateCurrencyPerSecond(): Currency {
         const currencyUpgrade = this.getUpgradeBonus(ids.labUpgradeTier2C).baseBonus
+        //Relic
+        const park = GameManager.getInstance().getProductManager().getProduct(ids.product4Level) as Park
+        const bonus = park.getRelicBonus(ids.relicTier1G)
         const currency:Currency = {
-            currency: new Decimal(currencyUpgrade),
+            currency: new Decimal(currencyUpgrade).mul(bonus),
             treats: new Decimal(0)
         }
         this.currencyPerSecond = currency
@@ -80,14 +83,14 @@ export class Laboratory implements Product {
             // Relic Bonus
             const park = GameManager.getInstance().productManager.getProduct(ids.product4Level) as Park
             const relic1CBonus = park.getRelicBonus(ids.relicTier1C)
-            const relicBonus = (relic1CBonus!==0 ? relic1CBonus : 1)
+            const relic2CBonus = park.getRelicBonus(ids.relicTier2C)
             // King Upgrade Bonus
             const king = GameManager.getInstance().productManager.getProduct(ids.upgradeShop) as King
             const kingBonus = king.getUpgradeBonus(ids.upgradeProduct2A)
         
             const currencyEvent:Currency = {
                 currency: new Decimal(0),
-                treats: new Decimal(1 * relicBonus * kingBonus)
+                treats: new Decimal(1 * kingBonus).mul(relic1CBonus).mul(relic2CBonus)
             }
             totalCurrency = addCurrency(totalCurrency,currencyEvent)
             GameManager.getInstance().addToVariable(currencyEvent.treats,ids.treats)
@@ -228,7 +231,8 @@ export class Laboratory implements Product {
         const park = GameManager.getInstance().productManager.getProduct(ids.product4Level) as Park
         const relic0CBonus = park.getRelicBonus(ids.relicTier0C)
         const relic1FBonus = park.getRelicBonus(ids.relicTier1F)
-        points = Math.floor(points * relic0CBonus * relic1FBonus)
+        const relic2FBonus = park.getRelicBonus(ids.relicTier2F)
+        points = Math.floor(points * relic0CBonus * relic1FBonus * relic2FBonus)
         return points
     }
 

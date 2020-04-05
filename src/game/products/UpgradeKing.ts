@@ -126,7 +126,9 @@ export class King implements Product {
     getUpgradePrice(upgradeId: string): Currency{
         const upgrade = this.getUpgrade(upgradeId)
         const lvl = Number(GameManager.getInstance().getVariable(upgradeId).getValue())
-        const cost = upgrade.getCost(lvl)
+        const park = GameManager.getInstance().getProductManager().getProduct(ids.product4Level) as Park
+        const discountRelic = park.getRelicBonus(ids.relicTier2D)
+        const cost = multiplyCurrencyBy(upgrade.getCost(lvl),discountRelic)
         return cost
     }
 
@@ -134,7 +136,9 @@ export class King implements Product {
         const upgrade = this.getUpgrade(upgradeId)
         const lvl = GameManager.getInstance().getVariable(upgradeId).getValue()
         const kingLvl = level ? level : this.getLevel()
-        const currency: Currency = GameManager.getInstance().getCurrency()
+        const park = GameManager.getInstance().getProductManager().getProduct(ids.product4Level) as Park
+        const discountRelic = park.getRelicBonus(ids.relicTier2D)
+        const currency: Currency = multiplyCurrencyBy(GameManager.getInstance().getCurrency(),1/discountRelic)
         const result = upgrade.canUpgrade(lvl, kingLvl, currency)
         return result
     }
@@ -174,9 +178,9 @@ export class King implements Product {
             new UpgradeKingStandar(ids.upgradeProduct0A, baseUpgradeCostLove, ids.product0Level),
             new UpgradeKingStandar(ids.upgradeProduct1A, baseUpgradeCostLove, ids.product1Level),
             new UpgradeKingStandar(ids.upgradeProduct2A, baseUpgradeCostLove, ids.product2Level),
-            new UpgradeKingStandar(ids.upgradeProduct2B, multiplyCurrencyBy(baseUpgradeCostLove,5), ids.product2Level),
+            new UpgradeKingStandar(ids.upgradeProduct2B, baseUpgradeCostLove, ids.product2Level),
             new UpgradeKingStandar(ids.upgradeProduct4A, multiplyCurrencyBy(baseUpgradeCostLove,5), ids.product4Level),
-            new UpgradeKingStandar(ids.upgradeProduct5A, multiplyCurrencyBy(baseUpgradeCostLove,10), ids.upgradeShop)]
+            new UpgradeKingStandar(ids.upgradeProduct5A, multiplyCurrencyBy(baseUpgradeCostLove,5), ids.upgradeShop)]
     }
 
     getMaxUpgradeLevel(level?:number): number{

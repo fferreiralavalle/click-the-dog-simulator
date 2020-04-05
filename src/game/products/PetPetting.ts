@@ -71,15 +71,14 @@ export class PetPetting implements Product {
         const labMult = lab.getUpgradeBonus(ids.labUpgradeTier1A).baseBonus
         //Relic Bonus
         const park = GameManager.getInstance().productManager.getProduct(ids.product4Level) as Park
-        const relic0DBonus = park.getRelicBonus(ids.relicTier0D)
-        const relic0DFinal = (relic0DBonus!==0 ? relic0DBonus : 1)
-        const relic1ABonus = park.getRelicBonus(ids.relicTier1A)
-        const relic1Final = (relic1ABonus!==0 ? relic1ABonus : 1)
+        const relic0D = park.getRelicBonus(ids.relicTier0D)
+        const relic1A = park.getRelicBonus(ids.relicTier1A)
+        const relic2A = park.getRelicBonus(ids.relicTier2A)
         //King Upgrade Bonus
         const king = GameManager.getInstance().productManager.getProduct(ids.upgradeShop) as King
         const kingBonus = king.getUpgradeBonus(ids.upgradeProduct0A)
         //Final Gain
-        const final = new Decimal(base).add(Math.floor(lvl/3)).mul(petTrainingMult).mul(labMult).mul(relic1Final).mul(relic0DFinal).mul(kingBonus)
+        const final = new Decimal(base).add(Math.floor(lvl/3)).mul(petTrainingMult).mul(labMult).mul(relic0D).mul(relic1A).mul(kingBonus).mul(relic2A)
         const newCurrencyPerPet = {
             currency: final,
             treats: new Decimal(0)

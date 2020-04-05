@@ -15,19 +15,15 @@ import ProductPlus, {plusCurrency} from '../ProductPlus'
 import { Currency } from '../../../game/products/Product'
 import { toFormat, clearPluses, toFormatTime } from '../../../utils/uiUtil'
 import { getText, getRelicText } from '../../../utils/textUtil'
+import ProductPlusDog, { productPlusInterface } from '../ProductPlusDog'
+import ProductProgressBar from '../ProductProgressBar'
 
 interface IRecipeProps {
   level: Variable;
-  eventId: Variable
-  progress0: any,
-  progress1: any,
-  progress2: any,
 }
 
 interface IState {
   isHover: boolean;
-  plusCurrencies: Array<plusCurrency>
-  rewardsList: Array<plusCurrency>
   hoverLevel: boolean
   displayedEvent: string
   viewRelics: boolean
@@ -44,8 +40,6 @@ class ParkUI extends Component<IRecipeProps, IState> {
     super(props)
     this.state = {
       isHover: false,
-      plusCurrencies: [],
-      rewardsList: [],
       hoverLevel: false,
       displayedEvent: events.pupsloration.id,
       viewRelics: false,
@@ -58,16 +52,8 @@ class ParkUI extends Component<IRecipeProps, IState> {
     })
     product.subscribeToCurrency({
       id: 'UIOnCurrency',
-      onCurrency: (result:Currency) => this.onCurrencyGain(result),
+      onCurrency: (result:Currency) => this.onCurrencyGain(result, product),
     })
-    this.uiCleaner = setInterval(()=>{
-      const newPlus = clearPluses(this.state.plusCurrencies)
-      const newReward = clearPluses(this.state.rewardsList)
-      this.setState({
-        plusCurrencies: newPlus,
-        rewardsList: newReward
-      })
-    },3 * 1000)
   }
 
   componentWillUnmount(){
@@ -75,7 +61,6 @@ class ParkUI extends Component<IRecipeProps, IState> {
   }
 
   onEventReward = (result:RewardResult)=> {
-    const {eventId} = this.props;
     const x = (10+Math.random() * 30)+"%"
     const y = (30+Math.random() * 40)+"%"
     let value = ('+'+toFormat(result.currencyReward.currency.toString()))
@@ -100,14 +85,14 @@ class ParkUI extends Component<IRecipeProps, IState> {
       className,
       size: 1.5
     }
-    this.setState({
-      rewardsList: [...this.state.rewardsList,plusCurrency]
-    })
+    const ppd = this.refs.prodSpecial as ProductPlusDog
+    ppd.addCurrency(plusCurrency)
   }
 
-  onCurrencyGain = (currency: Currency) => {
+  onCurrencyGain = (currency: Currency, product: Park) => {
     const x = (10+Math.random() * 50)+"%"
     const y = (30+Math.random() * 50)+"%"
+    const currentPlus = this.refs.productPlus as ProductPlusDog
     const plusCurrency:plusCurrency = {
       value: ('+'+toFormat(currency.currency.toString())),
       key: Date.UTC.toString()+(Math.random()),
@@ -117,20 +102,26 @@ class ParkUI extends Component<IRecipeProps, IState> {
       size: 1
     }
     if (currency.currency.gt(0)){
-      this.addPlusCurrency(plusCurrency)
+      currentPlus.addCurrency(plusCurrency)
     }
-  }
-
-  addPlusCurrency = (pc: plusCurrency) => {
-    this.setState({
-      plusCurrencies: [...this.state.plusCurrencies,pc]
-    })
-  }
-
-  renderCurrentEvent = () => {
-    const {eventId} = this.props
-    const eventData = this.getEventData(eventId.getValue())
-    return (<div className="event-type">{eventData.title}</div>)
+    const timer0 = this.refs.progress0 as ProductProgressBar
+    if (timer0){
+      const {text, progress} = this.getUpdatedBarValues(events.pupsloration.id, product)
+      timer0.setNewValue(text)
+      timer0.setNewProgress(progress)
+    }
+    const timer1 = this.refs.progress1 as ProductProgressBar
+    if (timer1){
+      const {text, progress} =  this.getUpdatedBarValues(events.dogsploration.id, product)
+      timer1.setNewValue(text)
+      timer1.setNewProgress(progress)
+    }
+    const timer2 = this.refs.progress2 as ProductProgressBar
+    if (timer2){
+      const {text, progress} =  this.getUpdatedBarValues(events.bigBoysploration.id, product)
+      timer2.setNewValue(text)
+      timer2.setNewProgress(progress)
+    }
   }
 
   getEventData = (eventId: string)=> {
@@ -164,7 +155,7 @@ class ParkUI extends Component<IRecipeProps, IState> {
 
   render(){
     const {level} = this.props;
-    const {plusCurrencies, isHover, displayedEvent, viewRelics} = this.state
+    const {isHover, viewRelics} = this.state
     const product = GameManager.getInstance().getProductManager().getProduct(ids.product4Level) as Park
     const plusCurrencyStyle = {
       bottom: '80px',
@@ -183,12 +174,12 @@ class ParkUI extends Component<IRecipeProps, IState> {
           {this.productText.title}
         </div>
         {!isHover && this.renderBars(product)}
-        <ProductPlus plusCurrencies={plusCurrencies}/>
+        <ProductPlusDog ref="productPlus"/>
         <LevelUpButton productId={ids.product4Level} 
           onMouseEnter={this.onLevelHover(true)}
           onMouseLeave={this.onLevelHover(false)}/>
         {isHover && (viewRelics ? this.renderRelicView(product): this.renderHighlight(product))}
-        <ProductPlus plusCurrencies={this.state.rewardsList} style={plusCurrencyStyle}/>
+        <ProductPlusDog ref="prodSpecial" style={plusCurrencyStyle}/>
       </div>
     )
   }
@@ -204,17 +195,15 @@ class ParkUI extends Component<IRecipeProps, IState> {
   }
 
   renderTimeLeftBar(evId: string, park:Park){
-      const {progress0, progress1, progress2} = this.props;
-      let progressUsed = 0
-      let progressNeeeded = 1
-      let order = 0
-      let {title} = this.getEventData(evId)
+    let progressNeeeded = 1
+    let order = 0
+    let {title} = this.getEventData(evId)
+    let progressUsed = park.getEventTimePassed(evId)
       switch(evId){
           case events.bigBoysploration.id:
             if (!park.isEventUnlocked(events.bigBoysploration)){
               return null
             }
-            progressUsed = progress2
             progressNeeeded = events.bigBoysploration.secondsNeeded
             order = 2
             break
@@ -222,32 +211,34 @@ class ParkUI extends Component<IRecipeProps, IState> {
             if (!park.isEventUnlocked(events.dogsploration)){
               return null
             }
-            progressUsed = progress1
             progressNeeeded = events.dogsploration.secondsNeeded
             order = 1
             break
           default:
-            progressUsed = progress0
             progressNeeeded = events.pupsloration.secondsNeeded
       }
-      const progressStyle = {
-        width: `${progressUsed/progressNeeeded*100}%`
-      }
-      const isReady = park.isEventReady(evId)
-      const text = isReady ? this.productText.claimPreview : `${toFormatTime(Math.max(progressNeeeded-progressUsed,0))}`
+      const {text, progress} = this.getUpdatedBarValues(evId, park)
       return (
-          <div className={"progress progress-order-"+order}>
-            <div className="event-title">
-                {title}
-            </div>
-            <div className={"progress-bar"}>
-                <div className="progress-bar-progress" style={progressStyle}></div>
-                <div className="progress-bar-value">
-                    {text}
-                </div>
-            </div>
-          </div>
+          <ProductProgressBar
+            ref={"progress"+order}
+            className={"progress-order-"+order}
+            title={title}
+            value={text}
+            progress={progress}
+            />
       )
+  }
+
+  getUpdatedBarValues(eventId: string, park: Park): {text: string, progress: number}{
+    const isReady = park.isEventReady(eventId)
+    const progress = park.getEventTimePassed(eventId)
+    const progressNeeded = events[eventId].secondsNeeded
+    const text = isReady ? this.productText.claimPreview : `${toFormatTime(Math.max(progressNeeded-progress,0))}`
+    const progressValue = progress/progressNeeded
+    return {
+      text,
+      progress: progressValue
+    }
   }
 
   renderHighlight(park: Park){
@@ -467,10 +458,6 @@ class ParkUI extends Component<IRecipeProps, IState> {
 
 const mapStateToProps = (state:any) => ({
   level: selecters.getVariable(state, ids.product4Level),
-  progress0: selecters.getVariable(state, ids.product4Tier0Progress).getValue(),
-  progress1: selecters.getVariable(state, ids.product4Tier1Progress).getValue(),
-  progress2: selecters.getVariable(state, ids.product4Tier2Progress).getValue(),
-  eventId: selecters.getVariable(state, ids.product1Event),
 })
 
 export default connect(mapStateToProps)(ParkUI);

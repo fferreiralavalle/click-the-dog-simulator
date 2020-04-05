@@ -79,7 +79,7 @@
 }
 .relic-view .highlight-field .relic-description{
     margin-top: 5px;
-    font-size: 20px;
+    font-size: 16px;
 }
 .relic-view .highlight-field.locked .relic-icon {
     filter: brightness(0.1);

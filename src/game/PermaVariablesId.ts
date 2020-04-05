@@ -1,4 +1,6 @@
 const permaVariables = {
+    /* Tree */
+    goodBoypoints: 'goodBoypoints',
     /* Customization Options*/
     selectedDogBreed: '',
     /* Dogs Skins */
