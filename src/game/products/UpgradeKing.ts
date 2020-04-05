@@ -35,9 +35,9 @@ export class King implements Product {
         const parkLvl = Number(GameManager.getInstance().getVariable(ids.product4Level).getValue())
         const allLevels = currentLevel + farmLvl + LabLvl + wizLvl + parkLvl;
         const multiplier = this.getCurrencyMultiplier(currentLevel)
-        const lovePerSecond = allLevels * multiplier
+        const lovePerSecond = new Decimal(allLevels).mul(multiplier)
         const newCurrencyPerSecond:Currency = {
-            currency: new Decimal(lovePerSecond),
+            currency: lovePerSecond,
             treats: new Decimal(0)
         }
         if (!dontApply){
@@ -48,8 +48,9 @@ export class King implements Product {
 
     getCurrencyMultiplier(level?:number){
         const currentLevel:number = Number(level ? level : this.getLevel())
-        const base = 0.5
-        return base * currentLevel
+        const base = 1
+        const upgradeBonus = this.getUpgradeBonus(ids.upgradeProduct5A)
+        return base * currentLevel * upgradeBonus
     }
 
     onTimePassed(timePassed: number): Currency {
