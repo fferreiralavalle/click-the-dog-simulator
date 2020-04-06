@@ -175,10 +175,6 @@ class Product1 extends Component<IRecipeProps, IState> {
             </div>
           </div>
         </div>
-        
-        <LevelUpButton productId={ids.product1Level} 
-          onMouseEnter={this.onLevelHover(true)}
-          onMouseLeave={this.onLevelHover(false)}/>
       </React.Fragment>
     )
   }

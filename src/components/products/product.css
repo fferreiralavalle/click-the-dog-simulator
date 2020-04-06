@@ -67,7 +67,7 @@
     display: flex;
     height: 100%;
     background-color: rgba(255, 255, 255, 0.5);
-    transition: width 0.5s;
+    transition: width 0.4s;
 }
 .progress-bar-value {
     position: absolute;

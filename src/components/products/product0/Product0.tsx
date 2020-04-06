@@ -13,6 +13,7 @@ import { PetPetting } from '../../../game/products/PetPetting'
 import ProductPlus, { plusCurrency } from '../ProductPlus'
 import { Currency } from '../../../game/products/Product'
 import LevelUpButton from '../LevelUpButton'
+import ProductPlusDog from '../ProductPlusDog'
 
 interface IRecipeProps {
   level: Variable
@@ -39,12 +40,6 @@ class Product0 extends Component<IRecipeProps,IState> {
       id: 'UIOnCurrency',
       onCurrency: (result:Currency) => this.onCurrencyGain(result),
     })
-    this.uiCleaner = setInterval(()=>{
-      const newPlus = clearPluses(this.state.plusCurrencies)
-      this.setState({
-        plusCurrencies: newPlus
-      })
-    },5 * 1000)
   }
 
   componentWillUnmount(){
@@ -52,6 +47,8 @@ class Product0 extends Component<IRecipeProps,IState> {
   }
 
   onCurrencyGain = (currency: Currency) => {
+    const pluses = this.refs.plusLove as ProductPlusDog
+    
     if (!currency.currency.equals(0)){
       let x = (10+Math.random() * 50)+"%"
       let y = (60+Math.random() * 40)+"%"
@@ -63,7 +60,8 @@ class Product0 extends Component<IRecipeProps,IState> {
         className:'love-icon',
         size: 1
       }
-      this.addPlusCurrency(plusCurrency)
+      if (pluses)
+        pluses.addCurrency(plusCurrency)
     }
     if (!currency.treats.equals(0)){
         let x = (10+Math.random() * 50)+"%"
@@ -76,14 +74,9 @@ class Product0 extends Component<IRecipeProps,IState> {
         className:'treat-icon',
         size: 1
       }
-      this.addPlusCurrency(plusCurrency)
+      if (pluses)
+        pluses.addCurrency(plusCurrency)
     } 
-  }
-
-  addPlusCurrency = (pc: plusCurrency) => {
-    this.setState({
-      plusCurrencies: [...this.state.plusCurrencies,pc]
-    })
   }
 
   onHover = (isHover: boolean) => () => {
@@ -113,7 +106,7 @@ class Product0 extends Component<IRecipeProps,IState> {
         <LevelUpButton productId={ids.product0Level} 
           onMouseEnter={this.onLevelHover(true)}
           onMouseLeave={this.onLevelHover(false)}/>
-        <ProductPlus plusCurrencies={plusCurrencies}/>
+        <ProductPlusDog ref="plusLove"/>
       </div>
     )
   }
