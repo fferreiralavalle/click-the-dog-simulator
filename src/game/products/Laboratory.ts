@@ -46,9 +46,6 @@ export class Laboratory implements Product {
     }
     updateCurrencyPerSecond(): Currency {
         const currencyUpgrade = this.getUpgradeBonus(ids.labUpgradeTier2C).baseBonus
-        // King Upgrade Bonus
-        const king = GameManager.getInstance().productManager.getProduct(ids.upgradeShop) as King
-        const kingBonus = Number(king.getUpgradeBonus(ids.upgradeProduct2A))
         //Relic
         const park = GameManager.getInstance().getProductManager().getProduct(ids.product4Level) as Park
         const bonus = park.getRelicBonus(ids.relicTier1G)
@@ -56,7 +53,7 @@ export class Laboratory implements Product {
         const tree = GameManager.getInstance().getProductManager().getProduct(ids.treeOfGoodBoys) as Tree
         const blessing0C:number = tree.getBlessing(ids.blessing0C).getBonus()
         const currency:Currency = {
-            currency: new Decimal(currencyUpgrade).mul(bonus).mul(blessing0C).mul(kingBonus),
+            currency: new Decimal(currencyUpgrade).mul(bonus).mul(blessing0C),
             treats: new Decimal(0)
         }
         this.currencyPerSecond = currency
@@ -306,7 +303,7 @@ export class Laboratory implements Product {
                 }
             /* Gain love for each Farm and Pet lvl */
             case ids.labUpgradeTier2C:
-                base = 0.25
+                base = 0.5
                 let petLvl = GameManager.getInstance().getVariable(ids.product0Level).getValue()
                 let farmLvl = GameManager.getInstance().getVariable(ids.product1Level).getValue()
                 const kingLoveBonus = king.getUpgradeBonus(ids.upgradeProduct2B) 
