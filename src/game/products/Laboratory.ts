@@ -42,15 +42,13 @@ export class Laboratory implements Product {
         this.currencyPerSecond = {currency:new Decimal(0), treats: new Decimal(0)}
     }
     getCurrencyPerSecond(): Currency {
-        const currencyUpgrade = this.getUpgradeBonus(ids.labUpgradeTier2C).baseBonus
-        const currency:Currency = {
-            currency: new Decimal(currencyUpgrade),
-            treats: new Decimal(0)
-        }
-        return currency
+        return this.currencyPerSecond
     }
     updateCurrencyPerSecond(): Currency {
         const currencyUpgrade = this.getUpgradeBonus(ids.labUpgradeTier2C).baseBonus
+        // King Upgrade Bonus
+        const king = GameManager.getInstance().productManager.getProduct(ids.upgradeShop) as King
+        const kingBonus = Number(king.getUpgradeBonus(ids.upgradeProduct2A))
         //Relic
         const park = GameManager.getInstance().getProductManager().getProduct(ids.product4Level) as Park
         const bonus = park.getRelicBonus(ids.relicTier1G)
@@ -58,7 +56,7 @@ export class Laboratory implements Product {
         const tree = GameManager.getInstance().getProductManager().getProduct(ids.treeOfGoodBoys) as Tree
         const blessing0C:number = tree.getBlessing(ids.blessing0C).getBonus()
         const currency:Currency = {
-            currency: new Decimal(currencyUpgrade).mul(bonus).mul(blessing0C),
+            currency: new Decimal(currencyUpgrade).mul(bonus).mul(blessing0C).mul(kingBonus),
             treats: new Decimal(0)
         }
         this.currencyPerSecond = currency
