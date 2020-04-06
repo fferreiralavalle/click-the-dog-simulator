@@ -2,18 +2,9 @@ import React, {Component} from 'react'
 import { connect } from 'react-redux'
 import '../products/product.css'
 import './saveManager.css'
-
-import {selecters} from '../../reducers/GameVariables'
-import ids from '../../game/VariableId'
-
-import { Variable } from '../../game/Variables'
 import GameManager from '../../game/GameManager'
 
-interface IRecipeProps {
-    
-}
-
-class Currencies extends Component<IRecipeProps> {
+class Currencies extends Component {
 
     onSave = () => ()=>{
         GameManager.getInstance().saveGame()
@@ -23,13 +14,18 @@ class Currencies extends Component<IRecipeProps> {
         GameManager.getInstance().resetGame()
     }
 
+    onHardReset = ()=> () => {
+        GameManager.getInstance().hardResetGame()
+    }
+
     render(){
         
         return (
         <div className="save-manager">
             <div className="save-option">
-                <div className="product-upgrade button-save" onClick={this.onSave()}>Save</div>
-                <div className="product-upgrade button-reset" onClick={this.onReset()}>Reset</div>
+                <div className="save-button button-save" onClick={this.onSave()}>Save</div>
+                <div className="save-button button-reset" title="Resfresh page to see changes" onClick={this.onReset()}>Reset</div>
+                <div className="save-button button-reset-hard" title="Resfresh page to see changes" onClick={this.onHardReset()}>Hard Reset</div>
             </div>
         </div>
         )

@@ -28,11 +28,19 @@ export default class ProductManager {
 
     onTimePassed(timeMult: number): Currency {
         this.products.forEach((prod) => {
-            if (prod.canUnlock() && !prod.isUnlocked){
-                prod.isUnlocked = true
+            if (!prod.isUnlocked){
+                if (prod.canUnlock()){
+                    prod.isUnlocked = true
+                }
             }
         })
         return {currency: new Decimal(0), treats: new Decimal(0)}
+    }
+
+    lockAllProducts(){
+        this.products.forEach((prod) => {
+            prod.isUnlocked = false
+        })
     }
 
     subscribeBuildings(timeManager: TimeManager): void {

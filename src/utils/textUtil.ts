@@ -58,6 +58,7 @@ export interface Text {
             options: string,
             seeBlessings: string,
             blessings: string,
+            previous: string,
             letGo: string,
             notReady: string
             tier: string,
@@ -197,6 +198,7 @@ export const english:Text = {
             blessingsRules: "You can only buy blessings after you Let Go.",
             multiplier: "Multiplier",
             goodBoyPoints: "Good Boy Points",
+            previous: "Previous",
             totalLevels: "Per All levels",
             options: "Desitions",
             theDesition: "The Desition",

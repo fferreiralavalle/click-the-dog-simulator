@@ -71,7 +71,6 @@ class GameManager  {
         if (this.getVariable(ids.lastSaveDate).getValue()!=null){
             const timesReset = Number(this.getPermaVariable(permaIds.timesReset)?.getValue())
             const wizpugLevel =  Number(this.getVariable(ids.product3Level)?.getValue())
-            debugger
             if (timesReset > 0 && wizpugLevel<=0){
                 const selectedDog = this.getPermaVariable(permaIds.selectedDogBreed)?.getValue()
                 this.getNotificationManager().addNotification({
@@ -218,6 +217,11 @@ class GameManager  {
         resetGameSave()
     }
 
+    hardResetGame(){
+        resetGameSave()
+        localStorage.removeItem(saveVarPermaName)
+    }
+
     increaseTimePassed(timePassed: number): Currency{
         let totalTime:number = this.getVariable(ids.timePassed).getValue()
         totalTime += timePassed
@@ -273,13 +277,13 @@ class GameManager  {
         const previosGbp = new Decimal(Number(this.getPermaVariable(permaVariables.goodBoypoints).getValue()))
         const newgpb = previosGbp.add(goodBoyPointsEarned)
         const timesReset = 1 + Number(this.getPermaVariable(permaIds.timesReset).getValue())
-        debugger
         resetGameSave()
         this.variables = initializeVariables()
         this.permaVariables = initializePermaVariables()
         this.setPermaVariable(newgpb ,permaVariables.goodBoypoints)
         this.setPermaVariable(timesReset ,permaVariables.timesReset)
         this.setVariable(patiencePoints, ids.patiencePoints)
+        this.getProductManager().lockAllProducts()
         this.setVariable(1, ids.treeOfGoodBoys)
         saveGame(this.variables, this.permaVariables)
         this.initializeUI()
@@ -309,6 +313,8 @@ const initializeVariables = () => {
     Object.keys(ids).map((id:string) => {
         variablesObject[id] = new Variable({id, value:null})
     })
+    variablesObject[ids.currency] = new Variable({id: ids.currency, value:new Decimal(0)})
+    variablesObject[ids.treats] = new Variable({id: ids.treats, value:new Decimal(0)})
     variablesObject = loadSavedData(variablesObject)
     console.log(variablesObject)
     return variablesObject;

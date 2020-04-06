@@ -48,7 +48,7 @@ class TreeUi extends Component<IRecipeProps, IState> {
       hoverLevel: false,
       displayedEvent: events.pupsloration.id,
       viewRelics: false,
-      displayedBlessing: ids.relicTier0A,
+      displayedBlessing: ids.blessing0A,
       pickedBlessings: []
     }
     const product = GameManager.getInstance().getProductManager().getProduct(ids.treeOfGoodBoys) as Tree
@@ -85,6 +85,7 @@ class TreeUi extends Component<IRecipeProps, IState> {
     const {isHover, viewRelics} = this.state
     const product = GameManager.getInstance().getProductManager().getProduct(ids.treeOfGoodBoys) as Tree
     const points = product.getGoodBoyPointsThisGame()
+    const previousPoints = product.getUsableGoodBoyPointsPoints()
     const canPickBlessings = product.canPickBlessings()
     return (
       <div className="product tree boxed" onMouseEnter={this.onHover(true)} onMouseLeave={this.onHover(false)}>
@@ -100,6 +101,13 @@ class TreeUi extends Component<IRecipeProps, IState> {
           onMouseEnter={this.onLevelHover(true)}
           onMouseLeave={this.onLevelHover(false)}/>
         <GoodBoyPointsSignUI ref="goodBoyPointsSign" points={points}/>
+        {previousPoints.gt(0) && 
+        (<React.Fragment>
+          <div className="tree-gbp-total">
+            {this.productText.previous}
+          </div>
+          <GoodBoyPointsSignUI ref="goodBoyPointsSignTotal" className="gbp-sign-total" points={previousPoints}/>
+        </React.Fragment>)}
         {isHover &&
           (viewRelics ? this.renderBlessigsView(product, canPickBlessings): this.renderHighlight(product))}
       </div>
@@ -145,7 +153,7 @@ class TreeUi extends Component<IRecipeProps, IState> {
           <div className="highlight-field title">
                 {this.productText.options}
             </div>
-          {this.renderEventOptions(product)}
+          {this.renderOptions(product)}
         </div>
         <div className="highlight-section">
           
@@ -160,11 +168,12 @@ class TreeUi extends Component<IRecipeProps, IState> {
     )
   }
 
-  renderEventOptions(tree: Tree) {
+  renderOptions(tree: Tree) {
     const canletGo = tree.canLetGo()
+    const canPickBlessings = tree.canPickBlessings()
     const uiEvents = [
         (<div className={"highlight-field highlight-event-select"} onClick={this.toggleBlessingView(true)}>
-            {this.productText.blessings}
+            {(canPickBlessings ? this.productText.pick+" " : "") + this.productText.blessings}
         </div>)
     ]
     if (canletGo){
@@ -197,7 +206,8 @@ class TreeUi extends Component<IRecipeProps, IState> {
     const points = tree.getUsableGoodBoyPointsPoints()
     const usedPoints = this.getPickedBlessingsCost(tree)
     const availablePoints = points.sub(usedPoints)
-    const isPicked = pickedBlessings.indexOf(displayedBlessing)>-1 ? " picked" : ""
+    const isUnlocked = tree.getBlessing(displayedBlessing).isUnlocked()
+    const isPicked = pickedBlessings.indexOf(displayedBlessing)>-1 || isUnlocked ? " picked" : ""
     const finishPickingText = availablePoints.gte(0) ? this.productText.finish : this.productText.notEnough
     const buyButton = buyMode ? 
       (<div className={"highlight-blessing-options"}>
@@ -272,7 +282,8 @@ class TreeUi extends Component<IRecipeProps, IState> {
     const iconStyle = {
       backgroundImage: icon ? `url(${icon})` : ""
     }
-    const isPicked = pickedBlessings.indexOf(blessing.id)>-1 ? " picked" : ""
+    const isUnlocked = blessing.isUnlocked()
+    const isPicked = pickedBlessings.indexOf(blessing.id)>-1 || isUnlocked ? " picked" : ""
     return (
       <div className={"highlight-field"+isPicked} onClick={this.selectBlessingView(blessing.id)}>
         <div className="relic-icon" style={iconStyle}></div>

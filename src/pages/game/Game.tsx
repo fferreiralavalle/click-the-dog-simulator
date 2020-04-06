@@ -23,6 +23,7 @@ import Dogchivements from '../../components/dogchivements/Dogchivements'
 import DogSkins from '../../components/dogSkins/DogSkins'
 import Tree from '../../components/products/tree/Tree'
 import LetGo from '../../components/letGo/LetGo'
+import FadeGame from '../../components/fadeGame/FadeGame'
 
 interface IRecipeProps {
     dispatch: Function
@@ -82,6 +83,7 @@ class Game extends Component<IRecipeProps> {
             <Dogchivements />
             <DogSkins/>
             <LetGo/>
+            <FadeGame animationDuration={12}/>
         </div>
         )
     }

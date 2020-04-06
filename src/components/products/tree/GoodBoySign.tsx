@@ -31,10 +31,10 @@ class GoodBoyPointsSignUI extends GoodBoyPointsSign {
     }
 
     render(){
-        const {points, ref, product, ...rest} = this.props
+        const {points, ref, product, className, ...rest} = this.props
         const {points: statePoints} = this.state
         return (
-        <div className="tree-gbp">
+        <div className={"tree-gbp "+className}>
             <div className="tree-gbp-value">
                 {toFormatPure(statePoints)}
                 <div className="gbp-icon"></div>

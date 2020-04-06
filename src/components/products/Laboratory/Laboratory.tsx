@@ -71,7 +71,8 @@ class LaboratoryUI extends Component<IRecipeProps, IState> {
       size
     }
     const currency = this.refs.labLove as ProductPlusDog
-    currency.addCurrency(plusCurrency)
+    if (currency)
+      currency.addCurrency(plusCurrency)
   }
 
   onCurrencyGain = (currency: Currency) => {

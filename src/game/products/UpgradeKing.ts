@@ -53,7 +53,7 @@ export class King implements Product {
 
     getCurrencyMultiplier(level?:number){
         const currentLevel:number = Number(level ? level : this.getLevel())
-        const base = 0.5
+        const base = 0.25
         const upgradeBonus = this.getUpgradeBonus(ids.upgradeProduct5A)
         return base * currentLevel * upgradeBonus
     }
@@ -116,7 +116,7 @@ export class King implements Product {
                 GameManager.getInstance().getNotificationManager().addNotification({
                     id:'king-unlcoked',
                     title: 'King Baby has returned?!',
-                    description:'Good evening dear subjects, I, the Baby King have finally returned from my morning stroll and my doogness, am I ready to rule again. I gain love for each building level you have (yes, ALL of them)',
+                    description:'Good evening dear subjects, I, King Baby have finally returned from my morning stroll and my doogness, am I ready to rule again. I gain love for each Box level you have (Divine Petting, Pet Farm, Lab, etc)',
                     image: getBuildingIcon(ids.upgradeShop).icon,
                     background: getBuildingIcon(ids.upgradeShop).background,
                     seen: false,

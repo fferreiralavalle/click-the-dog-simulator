@@ -7,6 +7,7 @@ import { Park } from './Park';
 import { King } from './UpgradeKing';
 import { UpgradeKing } from '../upgrades/Upgrade';
 import { Tree } from './Tree';
+import { getBuildingIcon } from '../../utils/uiUtil';
 
 export interface EventType{
     id: string,
@@ -153,9 +154,9 @@ export class Laboratory implements Product {
             if (this.getLevel()===1){
                 GameManager.getInstance().getNotificationManager().addNotification({
                     id:'lab-unlock',
-                    background: 'https://i.imgur.com/icoqc1B.jpg',
+                    background: getBuildingIcon(this.variableId).background,
                     description:'Thank you for the treats mister! Hover over my lab to pupgrade your buildings.',
-                    image: 'https://i.imgur.com/mLU1yyE.png',
+                    image: getBuildingIcon(this.variableId).icon,
                     seen: false,
                     title: 'Lab Unlocked!'
                   })

@@ -96,3 +96,15 @@
 .tree .highlight-value {
     flex: none;
 }
+.tree-gbp.gbp-sign-total {
+    top: 0;
+    right: 0;
+}
+
+.tree-gbp-total {
+    position: absolute;
+    top: 34px;
+    right: 48px;
+    z-index: 5;
+    font-size: 12px;
+}

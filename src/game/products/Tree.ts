@@ -91,7 +91,7 @@ export class Tree implements Product {
         
     }
     canLevelUp(): boolean {
-        const currency:Decimal = GameManager.getInstance().getVariable(ids.currency).getValue()
+        const currency:Decimal = new Decimal(GameManager.getInstance().getVariable(ids.currency).getValue())
         const levelUpPrice = this.getLevelUpPrice().currency
         const condition = levelUpPrice.lte(currency) 
         return condition 

@@ -44,6 +44,7 @@ class DogSkinsUI extends Component<IRecipeProps,IState> {
     const {level, patiencePoints} = this.props
     const tree = GameManager.getInstance().getProductManager().getProduct(ids.treeOfGoodBoys) as Tree
     const goodBoyPoints = tree.getGoodBoyPointsThisGame()
+    const goodBoyPointsPrevious = tree.getUsableGoodBoyPointsPoints()
     return (
       level>0 && 
       <div className="archivements let-go" id="letGo" onClick={this.closeArchivements()}>
@@ -57,7 +58,7 @@ class DogSkinsUI extends Component<IRecipeProps,IState> {
                     {this.text.letGoScreenText}
                     <div className={"highlight-field blessing-view-field"}>
                         <span className="highlight-attribute title">{this.text.goodBoyPoints}</span>
-                        <span className="highlight-value">{toFormatPure(goodBoyPoints)}<div className="gbp-icon"/></span>
+                        <span className="highlight-value">{toFormatPure(goodBoyPoints.add(goodBoyPointsPrevious))}<div className="gbp-icon"/></span>
                     </div>
                     <div className={"highlight-field blessing-view-field"}>
                         <span className="highlight-attribute title">{this.currencies.pattience}</span>
@@ -79,10 +80,13 @@ class DogSkinsUI extends Component<IRecipeProps,IState> {
   }
 
   letGo = (tree: Tree)=> ()=> {
-    this.close()()
-    if (tree.canLetGo()){
-      GameManager.getInstance().letGo()
-    }
+    this.props.dispatch(actions.showFadeGame(true))
+    setTimeout(()=>{
+      this.close()()
+      if (tree.canLetGo()){
+        GameManager.getInstance().letGo()
+      }
+    },2500)
   }
 }
 
