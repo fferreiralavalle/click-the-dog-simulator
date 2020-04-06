@@ -10,7 +10,7 @@ import ids from '../../../game/VariableId'
 import GameManager from '../../../game/GameManager'
 import {toFormat, clearPluses} from '../../../utils/uiUtil'
 import { PetPetting } from '../../../game/products/PetPetting'
-import ProductPlus, { plusCurrency } from '../ProductPlus'
+import { plusCurrency } from '../ProductPlus'
 import { Currency } from '../../../game/products/Product'
 import LevelUpButton from '../LevelUpButton'
 import ProductPlusDog from '../ProductPlusDog'
@@ -22,17 +22,14 @@ interface IRecipeProps {
 
 interface IState {
   isHover: boolean;
-  plusCurrencies: Array<plusCurrency>
   hoverLevel: boolean
 }
 
 class Product0 extends Component<IRecipeProps,IState> {
-  uiCleaner: any
   constructor(props:any){
     super(props)
     this.state = {
       isHover: false,
-      plusCurrencies: [],
       hoverLevel: false
     }
     const product = GameManager.getInstance().getProductManager().getProduct(ids.product0Level) as PetPetting
@@ -40,10 +37,6 @@ class Product0 extends Component<IRecipeProps,IState> {
       id: 'UIOnCurrency',
       onCurrency: (result:Currency) => this.onCurrencyGain(result),
     })
-  }
-
-  componentWillUnmount(){
-    clearTimeout(this.uiCleaner)
   }
 
   onCurrencyGain = (currency: Currency) => {
@@ -97,7 +90,7 @@ class Product0 extends Component<IRecipeProps,IState> {
   }
   
   render(){
-    const {isHover, plusCurrencies} = this.state;
+    const {isHover} = this.state;
     return (
       <div className="product product0 boxed" 
         onMouseEnter={this.onHover(true)}

@@ -15,10 +15,10 @@ import { Currency } from '../../../game/products/Product'
 import { toFormat, clearPluses } from '../../../utils/uiUtil'
 import { Laboratory, Upgrade, UpgradeTier } from '../../../game/products/Laboratory'
 import ProductPlusDog from '../ProductPlusDog'
+import ProductProgressBar from '../ProductProgressBar'
 
 interface IRecipeProps {
   level: Variable;
-  progress: Variable
   eventId: Variable,
   dispatch: Function
 }
@@ -44,11 +44,11 @@ class LaboratoryUI extends Component<IRecipeProps, IState> {
     const product = GameManager.getInstance().getProductManager().getProduct(ids.product2Level) as Laboratory
     product.subscribeToCurrency({
       id: 'UiLaboratory',
-      onCurrency: (currency:Currency)=> this.onEventReward(currency)
+      onCurrency: (currency:Currency)=> this.onEventReward(currency, product)
     })
   }
 
-  onEventReward = (result:Currency)=> {
+  onEventReward = (result:Currency, product: Laboratory)=> {
     
     if (result.treats.lessThanOrEqualTo(0) && result.currency.lessThanOrEqualTo(0))
       return
@@ -71,8 +71,17 @@ class LaboratoryUI extends Component<IRecipeProps, IState> {
       size
     }
     const currency = this.refs.labLove as ProductPlusDog
-    if (currency)
+    if (currency){
       currency.addCurrency(plusCurrency)
+    }
+    
+    const progressBar = this.refs.progress as ProductProgressBar;
+    debugger
+    if (progressBar){
+      const {text, progress} = this.getUpdatedBarValues(product)
+      progressBar.setNewProgress(progress)
+      progressBar.setNewValue(text)
+    }
   }
 
   onCurrencyGain = (currency: Currency) => {
@@ -87,6 +96,7 @@ class LaboratoryUI extends Component<IRecipeProps, IState> {
       size: 1
     }
     this.addPlusCurrency(plusCurrency)
+    
   }
 
   addPlusCurrency = (pc: plusCurrency) => {
@@ -116,6 +126,7 @@ class LaboratoryUI extends Component<IRecipeProps, IState> {
   onUpgrade = (product:Laboratory, upgradeId:string, amount:number)=>()=> {
     product.buyUpgrade(upgradeId,amount)
     this.props.dispatch(actions.updateVariables())
+    this.forceUpdate()
   }
 
   getUpgradeData= (eventId: string)=> {
@@ -175,11 +186,9 @@ class LaboratoryUI extends Component<IRecipeProps, IState> {
   }
 
   renderContent(product: Laboratory){
-    const {level, progress} = this.props;
-    const progressStyle = {
-      width: `${progress.getValue()/product.getProgressGoal()*100}%`
-    }
+    const {level} = this.props;
     const freePoints = product.getAvailablePoints()
+    const {text, progress} = this.getUpdatedBarValues(product)
     return (
       <React.Fragment>
         <div className="laboratory-building">
@@ -191,17 +200,24 @@ class LaboratoryUI extends Component<IRecipeProps, IState> {
           LABoratory
         </div>
         {freePoints>0 && <div className="available-points">{freePoints} Unspent Points</div>}
-          <div className="progress">
-            <div className="event-type">Artificial Treats</div>
-            <div className="progress-bar">
-              <div className="progress-bar-progress" style={progressStyle}></div>
-              <div className="progress-bar-value">
-                {`${Math.floor(progress.getValue())} / ${Math.floor(product.getProgressGoal())}`}
-              </div>
-          </div>
-        </div>
+        <ProductProgressBar
+          ref={"progress"}
+          title={"Artificial Treats"}
+          value={text}
+          progress={progress}
+          />
       </React.Fragment>
       )
+  }
+
+  getUpdatedBarValues(lab: Laboratory): {text: string, progress: number}{
+    const currentProgress = lab.getProgress()
+    const progress = currentProgress/lab.getProgressGoal()
+    const text = `${Math.floor(currentProgress)}/${lab.getProgressGoal()}`
+    return {
+      text,
+      progress
+    }
   }
 
   renderHighlight(product: Laboratory){
@@ -387,7 +403,6 @@ class LaboratoryUI extends Component<IRecipeProps, IState> {
 
 const mapStateToProps = (state:any) => ({
   level: selecters.getVariable(state, ids.product2Level),
-  progress: selecters.getVariable(state, ids.product2Progress),
   eventId: selecters.getVariable(state, ids.product1Event),
 })
 
