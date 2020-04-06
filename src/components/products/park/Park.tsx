@@ -306,10 +306,11 @@ class ParkUI extends Component<IRecipeProps, IState> {
     const isEventReady = product.isEventReady(displayedEvent)
     const price = product.getEvent(displayedEvent).price.treats
     let buttontext = this.productText.notReady
-    if (isEventReady){
-      buttontext = this.productText.claim
-    }else if (!product.canPayReward(displayedEvent)){
+    if (!product.canPayReward(displayedEvent)){
       buttontext = this.productText.notEnough
+    }
+    else if (isEventReady){
+      buttontext = this.productText.claim
     }
     const readyClass = isEventReady ? "" : " disabled"
     return (
