@@ -132,7 +132,7 @@ class Product0 extends Component<IRecipeProps,IState> {
     const usedLevel:number = level.getValue() + (this.state.hoverLevel ? 1 : 0)
     const lps = toFormat(product.updateCurrencyPerSecond(usedLevel, true).currency)
     const thropiesLove = toFormat(product.getCurrencyPerArchivement(usedLevel))
-    const timeIncrease = Math.floor(product.getTimePassedMult() * 100) + '%'
+    const timeIncrease = Math.floor((product.getTimePassedMult()-1) * 100) + '%'
     const levelClass = this.state.hoverLevel ? " hover-level" : ""
     return (
       <div className={"highlight "+levelClass}>
