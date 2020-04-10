@@ -123,7 +123,7 @@ export class Museum implements Product {
                 GameManager.getInstance().getNotificationManager().addNotification({
                   id:'pet-museum-unlock-doubt',
                   title: 'A cat???',
-                  description:"Do not worry human, I will take this trespasser down with by DRAGON BREATH! *bark bork*",
+                  description:"Do not worry human, I will take this trespasser down with my DRAGON BREATH! *bark bork*",
                   image: getBuildingIcon(ids.product4Level).icon,
                   background: getBuildingIcon(ids.product4Level).background,
                   seen: false,
