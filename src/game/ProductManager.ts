@@ -9,6 +9,7 @@ import { Park } from "./products/Park"
 import Decimal from "break_infinity.js"
 import { King } from "./products/UpgradeKing"
 import { Tree } from "./products/Tree"
+import { Museum } from "./products/Museum"
 
 export default class ProductManager {
     products: Array<Product>
@@ -83,6 +84,7 @@ function initializeProducts(): Array<Product> {
         new PetAppreciationCenter(VariableIds.product1Level, false),
         new Laboratory(VariableIds.product2Level, false),
         new Park(VariableIds.product4Level,false),
+        new Museum(VariableIds.museum, false),
         new Tree(VariableIds.treeOfGoodBoys,false),
     ]
 }

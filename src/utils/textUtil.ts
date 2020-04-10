@@ -47,6 +47,12 @@ export interface Text {
             defaultDescription: string,
             maxUpgradeLevel: string
         },
+        museum: {
+            title: string,
+            description: string,
+            perArchivement: string,
+            timeMult: string
+        }
         tree: {
             title: string,
             description: string,
@@ -191,6 +197,12 @@ export const english:Text = {
             defaultDescription: "",
             maxUpgradeLevel: "Upgrade Max"
         },
+        museum: {
+            title: "Museum",
+            description: "Welcome Human, your archivements will grow with time. But don't expect any cat puns from me.",
+            perArchivement: "Per Archivement",
+            timeMult: "Time Increase"
+        },
         tree: {
             title: "Tree of Good Boys",
             description: "Come closer human, I've been watching your work for a while now. You've made these Good Boys very happy, but I need to ask you something.",
@@ -282,6 +294,10 @@ export const english:Text = {
                 title:  "Rope of Puptivities",
                 description:  "Doubles the Labs love production"
             },
+            [ids.relicMuseum]: {
+                title:  "Scratched Map",
+                description:  "A map that leads to an old building, it has scratch marks all over it."
+            },
         },
         tier2: {
             [ids.relicTier2SpecialBuildingA]: {
@@ -337,9 +353,13 @@ export const english:Text = {
                 title: "Park Management",
                 description: "My doogness, a dragon! Good thing I know how to double its love production."
             },
-            upgradeProduct5A: {
+            [ids.upgradeProduct5A]: {
                 title: "Kingdom Management",
                 description: "Even I need upgrades. With your help I can double my love production."
+            },
+            [ids.upgradeProduct7A]: {
+                title: "Feline management",
+                description: "Getting to a cat can seem hard, but with my help we will double its love production."
             },
         }
     },

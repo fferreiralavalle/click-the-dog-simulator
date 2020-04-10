@@ -93,6 +93,8 @@ export const getBuildingIcon = (building: string): BuildingIcons=>{
             return new BuildingIcons('https://i.imgur.com/QJ3nDVL.png','https://i.imgur.com/uenbC1V.jpg')
         case ids.upgradeShop:
             return new BuildingIcons('https://i.imgur.com/4VroGvm.png','https://i.imgur.com/ZskZX6W.jpg')
+        case ids.museum:
+            return new BuildingIcons('https://i.imgur.com/BJqakl1.png','https://i.imgur.com/uWH6XXJ.jpg')
         case ids.treeOfGoodBoys:
             return new BuildingIcons('https://i.imgur.com/iP4T4aC.png','https://i.imgur.com/zYb3z9n.jpg')
     }

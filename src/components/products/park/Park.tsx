@@ -36,6 +36,7 @@ class ParkUI extends Component<IRecipeProps, IState> {
   productText = getText().products.park
   relicsText = getText().relics
   uiCleaner: any
+
   constructor(props:any){
     super(props)
     this.state = {
@@ -161,7 +162,6 @@ class ParkUI extends Component<IRecipeProps, IState> {
       bottom: '80px',
       right: '35px',
       zIndex: 105,
-      
     }
     return (
       <div className="product product4 boxed" onMouseEnter={this.onHover(true)} onMouseLeave={this.onHover(false)}>

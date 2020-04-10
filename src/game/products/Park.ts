@@ -7,6 +7,7 @@ import Decimal from 'break_infinity.js';
 import { getRelicText } from '../../utils/textUtil';
 import { King } from './UpgradeKing';
 import { Tree } from './Tree';
+import { getBuildingIcon } from '../../utils/uiUtil';
 
 export interface EventType{
     id: string,
@@ -440,20 +441,22 @@ export class Park implements Product {
             tier1: {
                 unlockLevel: events.dogsploration.unlockLevel,
                 relics: [
-                    //Increases Pet Power by 50%
+                    // Increases Pet Power by 50%
                     {id: ids.relicTier1A, base: 1.5, icon: 'https://i.imgur.com/hfmuVYh.png'},
-                    //Lowers farm goal by 10%
+                    // Lowers farm goal by 10%
                     {id: ids.relicTier1B, base: 0.9, icon: 'https://i.imgur.com/et49ttP.png'},
-                    //doubles treats gained from alb
+                    // Doubles treats gained from alb
                     {id: ids.relicTier1C, base: 2, icon: 'https://i.imgur.com/d3CJRvY.png'},
-                    //Increases Hands amount by 25%
+                    // Increases Hands amount by 25%
                     {id: ids.relicTier1D, base: 1.25, icon: 'https://i.imgur.com/hfmuVYh.png'},
-                    //Doubles passive Love for Farm
+                    // Doubles passive Love for Farm
                     {id: ids.relicTier1E, base: 2, icon: 'https://i.imgur.com/et49ttP.png'},
-                    //Increases lab points by 50%
+                    // Increases lab points by 50%
                     {id: ids.relicTier1F, base: 1.5, icon: 'https://i.imgur.com/d3CJRvY.png'},
-                    //Doubles lab love Production
-                    {id: ids.relicTier1G, base: 2, icon: 'https://i.imgur.com/d3CJRvY.png'}
+                    // Doubles lab love Production
+                    {id: ids.relicTier1G, base: 2, icon: 'https://i.imgur.com/d3CJRvY.png'},
+                    // Unlocks Museum
+                    {id: ids.relicMuseum, base: 1, icon: getBuildingIcon(ids.museum).background},
                 ]
             },
             tier2: {
@@ -591,43 +594,6 @@ export class Park implements Product {
         return bonus
     }
 
-    /*getEquippedRelics(currentLevel?:number): RelicTiersSlots{
-        const lvl = currentLevel ? currentLevel : this.getLevel()
-        const availableSlots = this.getAvaiableTierSlots(lvl)
-        const equippedSlotsTier0 = GameManager.getInstance().getVariable(ids.relicsEquippedTier0).getValue() as Array<string>
-        const equippedSlotsTier1 = GameManager.getInstance().getVariable(ids.relicsEquippedTier1).getValue() as Array<string>
-        const equippedSlotsTier2 = GameManager.getInstance().getVariable(ids.relicsEquippedTier2).getValue() as Array<string>
-        return {
-            tier0: {
-                availableSlots: availableSlots.tier0,
-                equippedRelics: equippedSlotsTier0
-            },
-            tier1: {
-                availableSlots: availableSlots.tier1,
-                equippedRelics: equippedSlotsTier1
-            },
-            tier2: {
-                availableSlots: availableSlots.tier1,
-                equippedRelics: equippedSlotsTier2
-            },
-        }
-    }*/
-
-    /*getAvaiableTierSlots(currentLevel?:number): AvailableSlots{
-        const lvl = currentLevel ? currentLevel : this.getLevel()
-        const tier1UnlockLevel = events.dogsploration.unlockLevel
-        const tier2UnlockLevel = events.bigbBoysploration.unlockLevel
-        const tier0:number = Math.min(Math.floor(1 + lvl/3), maxSlots)
-        const tier1:number = Math.min(Math.floor(1 + (lvl - tier1UnlockLevel)/3), maxSlots)
-        const tier2:number = Math.min(Math.floor(1 + (lvl - tier2UnlockLevel)/3), maxSlots)
-        return {
-            tier0,
-            tier1,
-            tier2
-        }
-    }*/
-
     getLevel(): number { return GameManager.getInstance().getVariable(this.variableId).getValue()}
-    
 
 }

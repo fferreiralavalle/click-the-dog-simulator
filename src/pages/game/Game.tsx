@@ -10,7 +10,9 @@ import { Variable } from '../../game/Variables'
 
 import Currencies from '../../components/currencies/Currencies'
 import SaveManager from '../../components/saveManager/SaveManager'
+
 import Box from '../../components/box/Box'
+//Buildings
 import Doggie from '../../components/doggie/Doggie'
 import Product0 from '../../components/products/product0/Product0'
 import Product1 from '../../components/products/product1/Product1'
@@ -19,10 +21,12 @@ import Mail from '../../components/mail/Mail'
 import TimeWizard from '../../components/products/timeWizard/TimeWizard'
 import Park from '../../components/products/park/Park'
 import King from '../../components/products/King/King'
-import Dogchivements from '../../components/dogchivements/Dogchivements'
-import DogSkins from '../../components/dogSkins/DogSkins'
 import Tree from '../../components/products/tree/Tree'
+import Museum from '../../components/products/museum/Museum'
 import LetGo from '../../components/letGo/LetGo'
+// Ui
+import DogSkins from '../../components/dogSkins/DogSkins'
+import Dogchivements from '../../components/dogchivements/Dogchivements'
 import FadeGame from '../../components/fadeGame/FadeGame'
 
 interface IRecipeProps {
@@ -60,6 +64,8 @@ class Game extends Component<IRecipeProps> {
                     return <Box key={5} w={1} productId={p.variableId}><King/></Box>
                 case ids.treeOfGoodBoys:
                     return <Box key={6} w={2} productId={p.variableId}><Tree/></Box>
+                case ids.museum:
+                    return <Box key={7} w={1} productId={p.variableId}><Museum/></Box>
                 default:
                     return <Box key={0} productId={p.variableId} w={1}><Product0/></Box>
             }

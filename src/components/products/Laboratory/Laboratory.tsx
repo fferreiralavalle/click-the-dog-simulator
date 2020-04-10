@@ -76,7 +76,6 @@ class LaboratoryUI extends Component<IRecipeProps, IState> {
     }
     
     const progressBar = this.refs.progress as ProductProgressBar;
-    debugger
     if (progressBar){
       const {text, progress} = this.getUpdatedBarValues(product)
       progressBar.setNewProgress(progress)

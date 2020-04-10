@@ -17,6 +17,7 @@ const variables = {
     product4Level: 'product4Level',
     upgradeShop: 'upgradeShop',
     treeOfGoodBoys: 'treeOfGoodBoys',
+    museum: 'museum',
     /* Progress */
     product1Progress: 'product1Progress',
     product1Event: 'product1Event',
@@ -51,6 +52,7 @@ const variables = {
     relicTier1E: 'relicTier1E',
     relicTier1F: 'relicTier1F',
     relicTier1G: 'relicTier1G',
+    relicMuseum: 'relicMuseum',
     /* Tier 2 */
     relicTier2SpecialBuildingA: 'relicTier2SpecialBuildingA',
     relicTier2A: 'relicTier2A',
@@ -67,6 +69,7 @@ const variables = {
     upgradeProduct2B: 'upgradeProduct2B',
     upgradeProduct4A: 'upgradeProduct4A',
     upgradeProduct5A: 'upgradeProduct5A',
+    upgradeProduct7A: 'upgradeProduct7A',
 
     /* Tree Blessings */
     blessing0A: 'blessing0A',

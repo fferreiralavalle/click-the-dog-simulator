@@ -195,7 +195,8 @@ export class King implements Product {
             new UpgradeKingStandar(ids.upgradeProduct2A, baseUpgradeCostLove, ids.product2Level),
             new UpgradeKingStandar(ids.upgradeProduct2B, baseUpgradeCostLove, ids.product2Level),
             new UpgradeKingStandar(ids.upgradeProduct4A, multiplyCurrencyBy(baseUpgradeCostLove,5), ids.product4Level),
-            new UpgradeKingStandar(ids.upgradeProduct5A, multiplyCurrencyBy(baseUpgradeCostLove,5), ids.upgradeShop)]
+            new UpgradeKingStandar(ids.upgradeProduct5A, multiplyCurrencyBy(baseUpgradeCostLove,5), ids.upgradeShop),
+            new UpgradeKingStandar(ids.upgradeProduct7A, multiplyCurrencyBy(baseUpgradeCostLove,5), ids.museum)]
     }
 
     getMaxUpgradeLevel(level?:number): number{

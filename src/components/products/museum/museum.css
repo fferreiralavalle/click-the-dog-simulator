@@ -1,0 +1,23 @@
+.museum {
+    background-image: url(https://i.imgur.com/uWH6XXJ.jpg);
+    background-size: cover;
+}
+
+.museum-building {
+    height: 65%;
+    background-image: url(https://i.imgur.com/BJqakl1.png);
+    background-size: contain;
+    background-position: bottom;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 70px;
+}
+
+.museum .product-level {
+    top: 100px;
+    right: 30px;
+}
+.museum .product3-title{
+    left: inherit;
+}
