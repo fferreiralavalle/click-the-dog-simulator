@@ -124,7 +124,7 @@ export class Laboratory implements Product {
         const lvl:number = level ? level : this.getLevel()
         const tree = GameManager.getInstance().getProductManager().getProduct(ids.treeOfGoodBoys) as Tree
         const discount:number = tree.getBlessing(ids.blessing0A).getBonus()
-        const finalPrice = basePrice.mul(lvl).plus(basePrice.pow(lvl/4)).mul(discount).floor()
+        const finalPrice = basePrice.mul(lvl*0.75).plus(basePrice.pow(lvl/3.5)).mul(discount).floor()
         return {
             currency: new Decimal(0),
             treats: new Decimal(finalPrice)
