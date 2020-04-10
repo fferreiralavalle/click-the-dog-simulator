@@ -71,6 +71,7 @@ function initializeSkins(): DogSkinsList {
         [permaIds.dogSkinBoxer]: new DogSkinMinLevel(permaIds.dogSkinBoxer, ids.archivementClicks),
         [permaIds.dogSkinShiba]: new DogSkinMinLevel(permaIds.dogSkinShiba, ids.product1Level,5),
         [permaIds.dogSkinPug]: new DogSkinMinLevel(permaIds.dogSkinPug, ids.archivementProduct3LevelMilestone),
+        [permaIds.dogSkinYorkshireTerrier]: new DogSkinMinLevel(permaIds.dogSkinYorkshireTerrier, ids.upgradeShop, 5),
         [permaIds.dogSkinPomerian]: new DogSkinMinLevel(permaIds.dogSkinPomerian, ids.product4Level,5),
     }
 }
