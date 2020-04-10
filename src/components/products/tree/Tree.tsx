@@ -87,6 +87,7 @@ class TreeUi extends Component<IRecipeProps, IState> {
     const points = product.getGoodBoyPointsThisGame()
     const previousPoints = product.getUsableGoodBoyPointsPoints()
     const canPickBlessings = product.canPickBlessings()
+    debugger
     return (
       <div className="product tree boxed" onMouseEnter={this.onHover(true)} onMouseLeave={this.onHover(false)}>
         <div className="tree-building">
@@ -212,7 +213,6 @@ class TreeUi extends Component<IRecipeProps, IState> {
     const buyButton = buyMode ? 
       (<div className={"highlight-blessing-options"}>
         <div className={"highlight-field blessing-view-field"}>
-          <span className="highlight-value">{"Have "}</span>
           <span className="highlight-value"> {toFormat(availablePoints)}<div className="gbp-icon"/></span>
         </div>
         <div className={"highlight-store-button"} onClick={this.toogleBlessing(displayedBlessing)}>
@@ -314,6 +314,7 @@ class TreeUi extends Component<IRecipeProps, IState> {
   finishPickingBlessings = (tree: Tree) => {
     const {pickedBlessings} = this.state
     const result = tree.pickBlessings(pickedBlessings)
+    this.toggleBlessingView(false)()
     console.log("Blessing picked successful", result)
   }
 
@@ -324,6 +325,7 @@ class TreeUi extends Component<IRecipeProps, IState> {
   }
 
   toggleBlessingView = (view:boolean) => () => {
+    debugger
     this.setState({
       viewRelics: view
     })

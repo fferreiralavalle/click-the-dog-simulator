@@ -87,7 +87,8 @@ class ParkUI extends Component<IRecipeProps, IState> {
       size: 1.5
     }
     const ppd = this.refs.prodSpecial as ProductPlusDog
-    ppd.addCurrency(plusCurrency)
+    if (ppd)
+      ppd.addCurrency(plusCurrency)
   }
 
   onCurrencyGain = (currency: Currency, product: Park) => {

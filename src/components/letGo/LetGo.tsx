@@ -86,7 +86,7 @@ class DogSkinsUI extends Component<IRecipeProps,IState> {
       if (tree.canLetGo()){
         GameManager.getInstance().letGo()
       }
-    },2500)
+    },5000)
   }
 }
 

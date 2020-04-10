@@ -34,7 +34,9 @@ export class King implements Product {
         const LabLvl = Number(GameManager.getInstance().getVariable(ids.product2Level).getValue())
         const wizLvl = Number(GameManager.getInstance().getVariable(ids.product3Level).getValue())
         const parkLvl = Number(GameManager.getInstance().getVariable(ids.product4Level).getValue())
-        const allLevels = currentLevel + farmLvl + LabLvl + wizLvl + parkLvl;
+        const museumLvl = Number(GameManager.getInstance().getVariable(ids.museum).getValue())
+        const treeLvl = Number(GameManager.getInstance().getVariable(ids.treeOfGoodBoys).getValue())
+        const allLevels = currentLevel + farmLvl + LabLvl + wizLvl + parkLvl + museumLvl + treeLvl;
         const multiplier = this.getCurrencyMultiplier(currentLevel)
         // Tree Blessing
         const tree = GameManager.getInstance().getProductManager().getProduct(ids.treeOfGoodBoys) as Tree

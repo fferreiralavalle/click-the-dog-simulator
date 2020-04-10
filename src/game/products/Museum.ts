@@ -49,7 +49,9 @@ export class Museum implements Product {
         const lvl = level ? level : this.getLevel()
         const king = GameManager.getInstance().getProductManager().getProduct(ids.upgradeShop) as King
         const kingBonus = king.getUpgradeBonus(ids.upgradeProduct7A)
-        const base = 2 * kingBonus
+        const tree = GameManager.getInstance().getProductManager().getProduct(ids.treeOfGoodBoys) as Tree
+        const treeBonus = tree.getBlessing(ids.blessing2C).getBonus()
+        const base = 2 * kingBonus * treeBonus
         const final: Decimal = new Decimal(base * lvl)
         return final
     }
@@ -111,29 +113,29 @@ export class Museum implements Product {
             GameManager.getInstance().getProductManager().updateCurrenciesPerSecond()
             if (this.getLevel()===1){
                 GameManager.getInstance().getNotificationManager().addNotification({
+                  id:'pet-museum-unlock-continue',
+                  title: 'Hsss!',
+                  description:"There is enough human for both dogs and cats! Not that I need their affection or anything...",
+                  image: getBuildingIcon(ids.museum).icon,
+                  background: getBuildingIcon(ids.museum).background,
+                  seen: false,
+                })
+                GameManager.getInstance().getNotificationManager().addNotification({
+                  id:'pet-museum-unlock-doubt',
+                  title: 'A cat???',
+                  description:"Do not worry human, I will take this trespasser down with by DRAGON BREATH! *bark bork*",
+                  image: getBuildingIcon(ids.product4Level).icon,
+                  background: getBuildingIcon(ids.product4Level).background,
+                  seen: false,
+                })
+                GameManager.getInstance().getNotificationManager().addNotification({
                     id:'pet-museum-unlock',
                     title: 'The Museum has been unlocked!',
                     description:'Hsss! Wait, a human? And it has shiny archivements. Allow me to take care of those...',
                     image: getBuildingIcon(ids.museum).icon,
                     background: getBuildingIcon(ids.museum).background,
                     seen: false,
-                  })
-                  GameManager.getInstance().getNotificationManager().addNotification({
-                    id:'pet-museum-unlock-doubt',
-                    title: 'A cat???',
-                    description:"Do not worry human, I will take this trespasser down with by DRAGON BREATH! *bark bork*",
-                    image: getBuildingIcon(ids.product4Level).icon,
-                    background: getBuildingIcon(ids.product4Level).background,
-                    seen: false,
-                  })
-                  GameManager.getInstance().getNotificationManager().addNotification({
-                    id:'pet-museum-unlock-continue',
-                    title: 'Hsss!',
-                    description:"There is enough human for both dogs and cats! Not that I need their affection or anything...",
-                    image: getBuildingIcon(ids.museum).icon,
-                    background: getBuildingIcon(ids.museum).background,
-                    seen: false,
-                  })
+                })
             }
             if (this.getLevel()===15){
                 GameManager.getInstance().getNotificationManager().addNotification({

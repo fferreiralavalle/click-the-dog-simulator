@@ -118,6 +118,8 @@ export const getBlessingIcon = (blessingId: string): BlessingIcon => {
             return new BlessingIcon(getBuildingIcon(ids.upgradeShop).icon)
         case ids.blessing2B:
             return new BlessingIcon(getBuildingIcon(ids.product4Level).icon)
+        case ids.blessing2C:
+            return new BlessingIcon(getBuildingIcon(ids.museum).icon)
     }
 }
 
@@ -129,19 +131,28 @@ export const getArchivementIcon = (archivement: string): ArchivementIcons=>{
             buildingIcon = getBuildingIcon(ids.product0Level)
             return new ArchivementIcons(buildingIcon.icon,archivementDefaultBackground)
         case ids.archivementProduct1LevelMilestone:
+        case ids.archivementProduct1LevelMilestone2:
             buildingIcon = getBuildingIcon(ids.product1Level)
             return new ArchivementIcons(buildingIcon.icon, archivementDefaultBackground)
         case ids.archivementProduct2LevelMilestone:
+        case ids.archivementProduct2LevelMilestone2:
             buildingIcon = getBuildingIcon(ids.product2Level)
             return new ArchivementIcons(buildingIcon.icon, archivementDefaultBackground)
         case ids.archivementProduct3LevelMilestone:
+        case ids.archivementProduct2LevelMilestone2:
             buildingIcon = getBuildingIcon(ids.product3Level)
             return new ArchivementIcons(buildingIcon.icon, archivementDefaultBackground)
         case ids.archivementProduct4LevelMilestone:
+        case ids.archivementProduct4LevelMilestone2:
             buildingIcon = getBuildingIcon(ids.product4Level)
             return new ArchivementIcons(buildingIcon.icon, archivementDefaultBackground)
         case ids.archivementUpgradeShopLevelMilestone:
+        case ids.archivementUpgradeShopLevelMilestone2:
             buildingIcon = getBuildingIcon(ids.upgradeShop)
+            return new ArchivementIcons(buildingIcon.icon, archivementDefaultBackground)
+        case ids.archivementMuseumLevelMilestone:
+        case ids.archivementMuseumLevelMilestone2:
+            buildingIcon = getBuildingIcon(ids.museum)
             return new ArchivementIcons(buildingIcon.icon, archivementDefaultBackground)
     }
 }

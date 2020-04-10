@@ -11,10 +11,13 @@ import ParkMilestone from "./Archivements/ParkMilestone"
 import KingMilestone from "./Archivements/KingMilestone"
 import {actions as uiAction} from '../reducers/uiUtils'
 import { store } from "../App"
+import MuseumMilestone from "./Archivements/MuseumMilestone"
 
 export interface ArchivementList {
     [key: string] : ArchivementInterface
 }
+
+const milestones = [15,30]
 
 export default class ArchivementManager {
     archivementList: ArchivementList
@@ -65,10 +68,17 @@ export default class ArchivementManager {
 function initializeArchivements(): ArchivementList {
     return {
         [variables.archivementClicks]: new Clicks(variables.archivementClicks, 50),
-        [variables.archivementProduct1LevelMilestone]: new FarmMilestone(variables.archivementProduct1LevelMilestone, 15),
-        [variables.archivementProduct2LevelMilestone]: new LabMilestone(variables.archivementProduct2LevelMilestone, 15),
+        [variables.archivementClicks2]: new Clicks(variables.archivementClicks2, 500),
+        [variables.archivementProduct1LevelMilestone]: new FarmMilestone(variables.archivementProduct1LevelMilestone, milestones[0]),
+        [variables.archivementProduct1LevelMilestone2]: new FarmMilestone(variables.archivementProduct1LevelMilestone2, milestones[1]),
+        [variables.archivementProduct2LevelMilestone]: new LabMilestone(variables.archivementProduct2LevelMilestone, milestones[0]),
+        [variables.archivementProduct2LevelMilestone2]: new LabMilestone(variables.archivementProduct2LevelMilestone2, milestones[1]),
         [variables.archivementProduct3LevelMilestone]: new WizPugMilestone(variables.archivementProduct3LevelMilestone, 1),
-        [variables.archivementProduct4LevelMilestone]: new ParkMilestone(variables.archivementProduct4LevelMilestone, 15),
-        [variables.archivementUpgradeShopLevelMilestone]: new KingMilestone(variables.archivementUpgradeShopLevelMilestone, 15),
+        [variables.archivementProduct4LevelMilestone]: new ParkMilestone(variables.archivementProduct4LevelMilestone, milestones[0]),
+        [variables.archivementProduct4LevelMilestone2]: new ParkMilestone(variables.archivementProduct4LevelMilestone2, milestones[1]),
+        [variables.archivementUpgradeShopLevelMilestone]: new KingMilestone(variables.archivementUpgradeShopLevelMilestone, milestones[0]),
+        [variables.archivementUpgradeShopLevelMilestone2]: new KingMilestone(variables.archivementUpgradeShopLevelMilestone2, milestones[1]),
+        [variables.archivementMuseumLevelMilestone]: new MuseumMilestone(variables.archivementMuseumLevelMilestone, milestones[0]),
+        [variables.archivementMuseumLevelMilestone2]: new MuseumMilestone(variables.archivementMuseumLevelMilestone2, milestones[1]),
     }
 }

@@ -89,7 +89,7 @@ class Game extends Component<IRecipeProps> {
             <Dogchivements />
             <DogSkins/>
             <LetGo/>
-            <FadeGame animationDuration={12}/>
+            <FadeGame animationDuration={20}/>
         </div>
         )
     }

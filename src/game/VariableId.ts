@@ -84,11 +84,22 @@ const variables = {
 
     /* Archivements */
     archivementClicks: 'archivementClicks',
+    archivementClicks2: 'archivementClicks2',
+    
+    archivementClicks3: 'archivementClicks3',
     archivementProduct1LevelMilestone: 'archivementProduct1LevelMilestone',
     archivementProduct2LevelMilestone: 'archivementProduct2LevelMilestone',
     archivementProduct3LevelMilestone: 'archivementProduct3LevelMilestone',
     archivementProduct4LevelMilestone: 'archivementProduct4LevelMilestone',
     archivementUpgradeShopLevelMilestone: 'archivementUpgradeShopLevelMilestone',
+    archivementMuseumLevelMilestone: 'archivementMuseumLevelMilestone',
+
+    archivementProduct1LevelMilestone2: 'archivementProduct1LevelMilestone2',
+    archivementProduct2LevelMilestone2: 'archivementProduct2LevelMilestone2',
+    archivementProduct3LevelMilestone2: 'archivementProduct3LevelMilestone2',
+    archivementProduct4LevelMilestone2: 'archivementProduct4LevelMilestone2',
+    archivementUpgradeShopLevelMilestone2: 'archivementUpgradeShopLevelMilestone2',
+    archivementMuseumLevelMilestone2: 'archivementMuseumLevelMilestone2',
 }
 
 export default variables;

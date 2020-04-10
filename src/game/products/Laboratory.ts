@@ -121,10 +121,10 @@ export class Laboratory implements Product {
     }
     getLevelUpPrice(level?:number): Currency {
         const basePrice = new Decimal(2);
-        const lvl:number = level ? level : GameManager.getInstance().getVariable(this.variableId).getValue()
+        const lvl:number = level ? level : this.getLevel()
         const tree = GameManager.getInstance().getProductManager().getProduct(ids.treeOfGoodBoys) as Tree
         const discount:number = tree.getBlessing(ids.blessing0A).getBonus()
-        const finalPrice =basePrice.pow(1+Math.floor(lvl/3)).mul(discount)
+        const finalPrice = basePrice.mul(lvl).plus(basePrice.pow(lvl/4)).mul(discount).floor()
         return {
             currency: new Decimal(0),
             treats: new Decimal(finalPrice)
@@ -157,7 +157,7 @@ export class Laboratory implements Product {
             return false;
         }
     }
-    getLevel(): number { return GameManager.getInstance().getVariable(this.variableId).getValue()}
+    getLevel(): number { return Number(GameManager.getInstance().getVariable(this.variableId).getValue())}
     
     /* UPGRADES */
     getUpgradePrice(upgradeId: string, plusLevels?:number): number{

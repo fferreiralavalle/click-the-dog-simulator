@@ -210,7 +210,7 @@ export const english:Text = {
             blessingsRules: "You can only buy blessings after you Let Go.",
             multiplier: "Multiplier",
             goodBoyPoints: "Good Boy Points",
-            previous: "Previous",
+            previous: "Usable",
             totalLevels: "Per All levels",
             options: "Desitions",
             theDesition: "The Desition",
@@ -384,13 +384,25 @@ export const english:Text = {
                 title: "Hand of Love",
                 description: "Pet your good boy 50 times."
             },
+            [ids.archivementClicks2]: {
+                title: "Hand of Affection",
+                description: "Pet your good boy 500 times."
+            },
             [ids.archivementProduct1LevelMilestone]: {
                 title: "Farm of Love",
                 description: "Reach level 15 in the Farm."
             },
+            [ids.archivementProduct1LevelMilestone2]: {
+                title: "Farm of Affection",
+                description: "Reach level 30 in the Farm."
+            },
             [ids.archivementProduct2LevelMilestone]: {
                 title: "Lab of Love",
                 description: "Reach level 15 in the Lab."
+            },
+            [ids.archivementProduct2LevelMilestone2]: {
+                title: "Lab of Affection & Sciency Science",
+                description: "Reach level 30 in the Lab."
             },
             [ids.archivementProduct3LevelMilestone]: {
                 title: "Wizard of Love & Time",
@@ -400,9 +412,25 @@ export const english:Text = {
                 title: "Park of Love (& Dragons)",
                 description: "Reach level 15 in the Park."
             },
+            [ids.archivementProduct4LevelMilestone2]: {
+                title: "Park of Affection (& cutesy Dragons)",
+                description: "Reach level 30 in the Park."
+            },
             [ids.archivementUpgradeShopLevelMilestone]: {
                 title: "Kingdom of Love",
                 description: "Reach level 15 with King Baby."
+            },
+            [ids.archivementUpgradeShopLevelMilestone2]: {
+                title: "Kingdom of Affection",
+                description: "Reach level 30 with King Baby."
+            },
+            [ids.archivementMuseumLevelMilestone]: {
+                title: "Strange Friendship",
+                description: "Reach level 15 in the Museum."
+            },
+            [ids.archivementMuseumLevelMilestone2]: {
+                title: "Not so Strange Friendship",
+                description: 'Thank you for sharing your treats and Archivements with this lonely cat human... I will forever be greatful.'
             },
         }
     },

@@ -49,7 +49,12 @@ class LaboratoryUI extends Component<IRecipeProps, IState> {
   }
 
   onEventReward = (result:Currency, product: Laboratory)=> {
-    
+    const progressBar = this.refs.progress as ProductProgressBar;
+    if (progressBar){
+      const {text, progress} = this.getUpdatedBarValues(product)
+      progressBar.setNewProgress(progress)
+      progressBar.setNewValue(text)
+    }
     if (result.treats.lessThanOrEqualTo(0) && result.currency.lessThanOrEqualTo(0))
       return
     const x = (10+Math.random() * 30)+"%"
@@ -75,12 +80,7 @@ class LaboratoryUI extends Component<IRecipeProps, IState> {
       currency.addCurrency(plusCurrency)
     }
     
-    const progressBar = this.refs.progress as ProductProgressBar;
-    if (progressBar){
-      const {text, progress} = this.getUpdatedBarValues(product)
-      progressBar.setNewProgress(progress)
-      progressBar.setNewValue(text)
-    }
+    
   }
 
   onCurrencyGain = (currency: Currency) => {
