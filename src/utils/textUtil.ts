@@ -11,6 +11,9 @@ export interface Text {
       title: string;
       description: string;
     };
+    laboratory: {
+      unlock: string;
+    };
     park: {
       title: string;
       description: string;
@@ -162,6 +165,10 @@ export const english: Text = {
       description:
         "Shelters lost pets in a cozy home, it also prepares EVENTS for them",
     },
+    laboratory: {
+      unlock:
+        "Thank you for the treats Friend! Hover over my lab to pupgrade your buildings.",
+    },
     park: {
       title: "Park",
       description:
@@ -175,11 +182,13 @@ export const english: Text = {
         },
         tier1: {
           title: "Dogsploration",
-          description: "Let your good boys explore and find gifts for you.",
+          description:
+            "Let your good boys & girls explore and find gifts for you.",
         },
         tier2: {
           title: "Bigboysploration",
-          description: "Allow your big boys to explore. What will they find?",
+          description:
+            "Allow your big boys & girls to explore. What will they find?",
         },
       },
       relicChance: "Relic Chance",
@@ -212,7 +221,7 @@ export const english: Text = {
       description:
         "Come closer human, I've been watching your work for a while now. You've made these Good Boys very happy, but I need to ask you something.",
       letGoInfo:
-        "Your Good Boys are all grown up, they can take care of each other now. When you are ready, you can let them go and help me raise more dogs.",
+        "Your Good Boys & girls are all grown up, they can take care of each other now. When you are ready, you can let them go and help me raise more dogs.",
       blessingsRules: "You can only buy blessings after you Let Go.",
       multiplier: "Multiplier",
       goodBoyPoints: "Good Boy Points",
@@ -425,11 +434,11 @@ export const english: Text = {
     archivements: {
       [ids.archivementClicks]: {
         title: "Hand of Love",
-        description: "Pet your good boy 50 times.",
+        description: "Pet your good friend 50 times.",
       },
       [ids.archivementClicks2]: {
         title: "Hand of Affection",
-        description: "Pet your good boy 500 times.",
+        description: "Pet your good friend 500 times.",
       },
       [ids.archivementProduct1LevelMilestone]: {
         title: "Farm of Love",

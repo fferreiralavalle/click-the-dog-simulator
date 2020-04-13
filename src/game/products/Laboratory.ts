@@ -7,6 +7,7 @@ import { Park } from "./Park";
 import { King } from "./UpgradeKing";
 import { Tree } from "./Tree";
 import { getBuildingIcon } from "../../utils/uiUtil";
+import { getText } from "../../utils/textUtil";
 
 export interface EventType {
   id: string;
@@ -169,8 +170,7 @@ export class Laboratory implements Product {
           .addNotification({
             id: "lab-unlock",
             background: getBuildingIcon(this.variableId).background,
-            description:
-              "Thank you for the treats mister! Hover over my lab to pupgrade your buildings.",
+            description: getText().products.laboratory.unlock,
             image: getBuildingIcon(this.variableId).icon,
             seen: false,
             title: "Lab Unlocked!",
