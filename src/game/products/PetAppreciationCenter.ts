@@ -246,7 +246,7 @@ export class PetAppreciationCenter implements Product {
       newPtDurations,
       ids.product1EventPettingTrainingDurations
     );
-    if (newPtDurations.length != ptDurations.length) {
+    if (newPtDurations.length !== ptDurations.length) {
       GameManager.getInstance().getProductManager().updateCurrenciesPerSecond();
     }
   }

@@ -6,28 +6,14 @@ import "./tree.css";
 import { selecters } from "../../../reducers/GameVariables";
 import ids from "../../../game/VariableId";
 
-import variableIds from "../../../game/VariableId";
 import { Variable } from "../../../game/Variables";
 import GameManager from "../../../game/GameManager";
 import { Park, events } from "../../../game/products/Park";
 import LevelUpButton from "../LevelUpButton";
-import ProductPlus, { plusCurrency } from "../ProductPlus";
-import { Currency } from "../../../game/products/Product";
-import {
-  toFormat,
-  clearPluses,
-  toFormatTime,
-  getBlessingIcon,
-  toFormatPure,
-} from "../../../utils/uiUtil";
-import {
-  getText,
-  getRelicText,
-  getBlessingText,
-} from "../../../utils/textUtil";
+import { toFormat, getBlessingIcon, toFormatPure } from "../../../utils/uiUtil";
+import { getText, getBlessingText } from "../../../utils/textUtil";
 import { Tree, BlessingTier } from "../../../game/products/Tree";
 import Decimal from "break_infinity.js";
-import permaVariables from "../../../game/PermaVariablesId";
 import { Blessing } from "../../../game/blessings/Blessing";
 import GoodBoyPointsSignUI from "./GoodBoySign";
 import { actions } from "../../../reducers/uiUtils";

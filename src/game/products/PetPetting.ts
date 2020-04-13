@@ -1,7 +1,6 @@
 import { Product, Currency, CurrencySubscriber } from "./Product";
 import ids from "../VariableId";
 import GameManager from "../GameManager";
-import ProductManager from "../ProductManager";
 import { PetAppreciationCenter } from "./PetAppreciationCenter";
 import { Laboratory } from "./Laboratory";
 import Decimal from "break_infinity.js";

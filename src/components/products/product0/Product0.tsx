@@ -8,7 +8,7 @@ import { selecters, actions } from "../../../reducers/GameVariables";
 import { Variable } from "../../../game/Variables";
 import ids from "../../../game/VariableId";
 import GameManager from "../../../game/GameManager";
-import { toFormat, clearPluses } from "../../../utils/uiUtil";
+import { toFormat } from "../../../utils/uiUtil";
 import { PetPetting } from "../../../game/products/PetPetting";
 import { plusCurrency } from "../ProductPlus";
 import { Currency } from "../../../game/products/Product";
